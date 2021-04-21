@@ -1,0 +1,4 @@
+{
+  "type": "text/javascript",
+  "source": "(function(){ logger.debug(\"APICLIENTJWKS starting\"); var apiClients = openidm.query(\"managed/apiClient\", { \"_queryFilter\": \"true\"}, [\"jwksUri\"]); signingKeys = []; apiClients.result.forEach(function(apiClient) { logger.debug(\"APICLIENTJWKS fetching jwksuri \" + apiClient.jwksUri); jwks = openidm.action(\"external/rest\",\"call\",{ \"url\" : apiClient.jwksUri, \"method\": \"GET\" }); jwksObject = JSON.parse(jwks.body); jwksObject.keys.forEach(function(key) { if (key.use == \"sig\") { signingKeys.push(key); } }) }); return { \"keys\" : signingKeys }; })();"
+}

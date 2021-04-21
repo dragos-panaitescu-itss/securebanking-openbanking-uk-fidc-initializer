@@ -1,0 +1,23 @@
+{
+  "name": "AISP Policy",
+  "active": true,
+  "description": "",
+  "resources": [
+    "http://obdemo-rs:8089/openbanking/v3.1/accounts/*",
+    "http://obdemo-rs:8089/openbanking/v3.1/accounts"
+  ],
+  "applicationName": "Open Banking",
+  "actionValues": {
+    "GET": true
+  },
+  "subject": {
+    "type": "JwtClaim",
+    "claimName": "intent_type",
+    "claimValue": "aisp"
+  },
+  "condition": {
+    "type": "Script",
+    "scriptId": "2f1cdd1a-4a4e-4d3d-b570-90be003545b3"
+  },
+  "resourceTypeUuid": "76656a38-5f8e-401b-83aa-4ccb74ce88d2"
+}

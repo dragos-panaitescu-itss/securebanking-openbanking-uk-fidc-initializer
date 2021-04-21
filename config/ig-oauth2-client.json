@@ -1,0 +1,287 @@
+{
+  "coreOAuth2ClientConfig": {
+    "agentgroup": "",
+    "status": {
+      "inherited": false,
+      "value": "Active"
+    },
+    
+    "userpassword": "{{igClientSecret}}",
+    "clientType": {
+      "inherited": false,
+      "value": "Confidential"
+    },
+    "loopbackInterfaceRedirection": {
+      "inherited": true,
+      "value": true
+    },
+    "redirectionUris": {
+      "inherited": false,
+      "value": [
+        "https://httpbin.org/anything"
+      ]
+    },
+    "scopes": {
+      "inherited": false,
+      "value": [
+        "fr:idm:*",
+        "dynamic_client_registration"
+      ]
+    },
+    "defaultScopes": {
+      "inherited": true,
+      "value": [
+        "Unknown Type: any"
+      ]
+    },
+    "clientName": {
+      "inherited": true,
+      "value": [
+        "Unknown Type: any"
+      ]
+    },
+    "authorizationCodeLifetime": {
+      "inherited": true,
+      "value": 0
+    },
+    "refreshTokenLifetime": {
+      "inherited": true,
+      "value": 0
+    },
+    "accessTokenLifetime": {
+      "inherited": true,
+      "value": 0
+    }
+  },
+  "advancedOAuth2ClientConfig": {
+    "name": {
+      "inherited": true,
+      "value": [
+        "Unknown Type: any"
+      ]
+    },
+    "descriptions": {
+      "inherited": true,
+      "value": [
+        "Unknown Type: any"
+      ]
+    },
+    "requestUris": {
+      "inherited": true,
+      "value": [
+        "Unknown Type: any"
+      ]
+    },
+    "responseTypes": {
+      "inherited": true,
+      "value": [
+        "Unknown Type: any"
+      ]
+    },
+    "grantTypes": {
+      "inherited": false,
+      "value": [
+        "client_credentials",
+        "password"
+      ]
+    },
+    "contacts": {
+      "inherited": true,
+      "value": [
+        "Unknown Type: any"
+      ]
+    },
+    "tokenEndpointAuthMethod": {
+      "inherited": true,
+      "value": "string"
+    },
+    "sectorIdentifierUri": {
+      "inherited": true,
+      "value": "string"
+    },
+    "subjectType": {
+      "inherited": true,
+      "value": "string"
+    },
+    "updateAccessToken": {
+      "inherited": true,
+      "value": "string"
+    },
+    "clientUri": {
+      "inherited": true,
+      "value": [
+        "Unknown Type: any"
+      ]
+    },
+    "logoUri": {
+      "inherited": true,
+      "value": [
+        "Unknown Type: any"
+      ]
+    },
+    "policyUri": {
+      "inherited": true,
+      "value": [
+        "Unknown Type: any"
+      ]
+    },
+    "isConsentImplied": {
+      "inherited": true,
+      "value": true
+    },
+    "mixUpMitigation": {
+      "inherited": true,
+      "value": true
+    }
+  },
+  "coreOpenIDClientConfig": {
+    "claims": {
+      "inherited": true,
+      "value": [
+        "Unknown Type: any"
+      ]
+    },
+    "postLogoutRedirectUri": {
+      "inherited": true,
+      "value": [
+        "Unknown Type: any"
+      ]
+    },
+    "clientSessionUri": {
+      "inherited": true,
+      "value": "string"
+    },
+    "defaultMaxAge": {
+      "inherited": true,
+      "value": 0
+    },
+    "defaultMaxAgeEnabled": {
+      "inherited": true,
+      "value": true
+    },
+    "defaultAcrValues": {
+      "inherited": true,
+      "value": [
+        "Unknown Type: any"
+      ]
+    },
+    "jwtTokenLifetime": {
+      "inherited": true,
+      "value": 0
+    }
+  },
+  "signEncOAuth2ClientConfig": {
+    "jwksUri": {
+      "inherited": true,
+      "value": "string"
+    },
+    "jwksCacheTimeout": {
+      "inherited": true,
+      "value": 0
+    },
+    "jwkStoreCacheMissCacheTime": {
+      "inherited": true,
+      "value": 0
+    },
+    "tokenEndpointAuthSigningAlgorithm": {
+      "inherited": true,
+      "value": "string"
+    },
+    "jwkSet": {
+      "inherited": true,
+      "value": "string"
+    },
+    "idTokenSignedResponseAlg": {
+      "inherited": true,
+      "value": "string"
+    },
+    "idTokenEncryptionEnabled": {
+      "inherited": true,
+      "value": true
+    },
+    "idTokenEncryptionAlgorithm": {
+      "inherited": true,
+      "value": "string"
+    },
+    "idTokenEncryptionMethod": {
+      "inherited": true,
+      "value": "string"
+    },
+    "idTokenPublicEncryptionKey": {
+      "inherited": true,
+      "value": "string"
+    },
+    "clientJwtPublicKey": {
+      "inherited": true,
+      "value": "string"
+    },
+    "mTLSTrustedCert": {
+      "inherited": true,
+      "value": "string"
+    },
+    "mTLSSubjectDN": {
+      "inherited": true,
+      "value": "string"
+    },
+    "mTLSCertificateBoundAccessTokens": {
+      "inherited": true,
+      "value": true
+    },
+    "publicKeyLocation": {
+      "inherited": true,
+      "value": "string"
+    },
+    "userinfoResponseFormat": {
+      "inherited": true,
+      "value": "string"
+    },
+    "userinfoSignedResponseAlg": {
+      "inherited": true,
+      "value": "string"
+    },
+    "userinfoEncryptedResponseAlg": {
+      "inherited": true,
+      "value": "string"
+    },
+    "userinfoEncryptedResponseEncryptionAlgorithm": {
+      "inherited": true,
+      "value": "string"
+    },
+    "requestParameterSignedAlg": {
+      "inherited": true,
+      "value": "string"
+    },
+    "requestParameterEncryptedAlg": {
+      "inherited": true,
+      "value": "string"
+    },
+    "requestParameterEncryptedEncryptionAlgorithm": {
+      "inherited": true,
+      "value": "string"
+    },
+    "tokenIntrospectionResponseFormat": {
+      "inherited": true,
+      "value": "string"
+    },
+    "tokenIntrospectionSignedResponseAlg": {
+      "inherited": true,
+      "value": "string"
+    },
+    "tokenIntrospectionEncryptedResponseAlg": {
+      "inherited": true,
+      "value": "string"
+    },
+    "tokenIntrospectionEncryptedResponseEncryptionAlgorithm": {
+      "inherited": true,
+      "value": "string"
+    }
+  },
+  "coreUmaClientConfig": {
+    "claimsRedirectionUris": {
+      "inherited": true,
+      "value": [
+        "Unknown Type: any"
+      ]
+    }
+  }
+}
