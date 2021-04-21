@@ -1,0 +1,25 @@
+{
+  "result": [
+    {
+      "_id": "policy-client",
+      "_rev": "413924328",
+      "coreOAuth2ClientConfig": {
+        "status": "Active",
+        "agentgroup": null
+      }
+    },
+    {
+      "_id": "ig-client",
+      "_rev": "626888082",
+      "coreOAuth2ClientConfig": {
+        "status": "Active",
+        "agentgroup": null
+      }
+    }
+  ],
+  "resultCount": 2,
+  "pagedResultsCookie": null,
+  "totalPagedResultsPolicy": "EXACT",
+  "totalPagedResults": 2,
+  "remainingPagedResults": -1
+}
