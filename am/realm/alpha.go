@@ -72,7 +72,7 @@ type ClientResult struct {
 
 // AlphaClientsExist - Will return true if clients exist in the alpha realm.
 func AlphaClientsExist(clientName string) bool {
-	path := "https://" + viper.GetString("IAM_FQDN") + "/am/json/realms/root/realms/alpha/realm-config/agents/OAuth2Client?_queryFilter=true&_pageSize=10&_fields=coreOAuth2ClientConfig/status,coreOAuth2ClientConfig/agentgroup"
+	path := "/am/json/realms/root/realms/alpha/realm-config/agents/OAuth2Client?_queryFilter=true&_pageSize=10&_fields=coreOAuth2ClientConfig/status,coreOAuth2ClientConfig/agentgroup"
 	result := &ClientResult{}
 	am.Client.Get(path, map[string]string{
 		"Accept":             "application/json",
@@ -91,7 +91,7 @@ func AlphaClientsExist(clientName string) bool {
 
 // ManagedObjectExists - checks if a managed object exists, must supply the object name
 func ManagedObjectExists(objectName string) bool {
-	path := "https://" + viper.GetString("IAM_FQDN") + "/openidm/config/managed"
+	path := "/openidm/config/managed"
 	result := &OBManagedObjects{}
 	am.Client.Get(path, map[string]string{
 		"Accept":           "application/json",

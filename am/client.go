@@ -5,6 +5,7 @@ import (
 
 	"github.com/go-resty/resty/v2"
 	"github.com/secureBankingAcceleratorToolkit/securebanking-openbanking-uk-fidc-initialiszer/common"
+	"github.com/spf13/viper"
 )
 
 type RestReaderWriter interface {
@@ -17,6 +18,7 @@ type RestClient struct {
 	Resty    *resty.Client
 	Cookie   *http.Cookie
 	AuthCode string
+	FQDN     string
 }
 
 var Client RestReaderWriter
@@ -26,11 +28,12 @@ func InitRestReaderWriter(cookie *http.Cookie, authCode string) {
 		Resty:    resty.New().SetRedirectPolicy(resty.NoRedirectPolicy()).SetError(common.RestError{}),
 		Cookie:   cookie,
 		AuthCode: authCode,
+		FQDN:     "https://" + viper.GetString("IAM_FQDN"),
 	}
 }
 
 func (r *RestClient) Get(path string, headers map[string]string, ob interface{}) {
-	_, err := r.constructRestRequest(headers, ob).Get(path)
+	_, err := r.constructRestRequest(headers, ob).Get(r.FQDN + path)
 
 	if err != nil {
 		panic(err)
@@ -46,7 +49,7 @@ func (r *RestClient) constructRestRequest(headers map[string]string, ob interfac
 }
 
 func (r *RestClient) Post(path string, headers map[string]string, ob interface{}) {
-	_, err := r.constructRestRequest(headers, ob).Post(path)
+	_, err := r.constructRestRequest(headers, ob).Post(r.FQDN + path)
 
 	if err != nil {
 		panic(err)
@@ -54,7 +57,7 @@ func (r *RestClient) Post(path string, headers map[string]string, ob interface{}
 }
 
 func (r *RestClient) Patch(path string, headers map[string]string, ob interface{}) {
-	_, err := r.constructRestRequest(headers, ob).Patch(path)
+	_, err := r.constructRestRequest(headers, ob).Patch(r.FQDN + path)
 
 	if err != nil {
 		panic(err)

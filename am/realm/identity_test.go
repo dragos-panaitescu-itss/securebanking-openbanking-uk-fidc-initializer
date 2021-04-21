@@ -11,7 +11,7 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-func TestFindExistingAlphaClient(t *testing.T) {
+func TestServiceIdentityExists(t *testing.T) {
 	mockResultFn := func(args mock.Arguments) {
 		ob := args.Get(2)
 		buffer, _ := ioutil.ReadFile("client-check-test.json")
@@ -23,13 +23,13 @@ func TestFindExistingAlphaClient(t *testing.T) {
 	mockRestReaderWriter.On("Get", mock.Anything, mock.Anything, mock.Anything).
 		Run(mockResultFn)
 
-	b := AlphaClientsExist("ig-client")
+	b := ServiceIdentityExists("ig-client")
 
 	assert.True(t, b)
 	mockRestReaderWriter.AssertCalled(t, "Get", mock.Anything, mock.Anything, mock.Anything)
 }
 
-func TestFalseIfNoClientExists(t *testing.T) {
+func TestServiceIdentityDoesNotExist(t *testing.T) {
 	mockResultFn := func(args mock.Arguments) {
 		ob := args.Get(2)
 		buffer, _ := ioutil.ReadFile("client-check-test.json")
@@ -41,42 +41,8 @@ func TestFalseIfNoClientExists(t *testing.T) {
 	mockRestReaderWriter.On("Get", mock.Anything, mock.Anything, mock.Anything).
 		Run(mockResultFn)
 
-	b := AlphaClientsExist("Doesnt existy")
+	b := ServiceIdentityExists("Doesnt existy")
 
 	assert.False(t, b)
 	mockRestReaderWriter.AssertCalled(t, "Get", mock.Anything, mock.Anything, mock.Anything)
-}
-
-func TestMangedObjectExists(t *testing.T) {
-	mockResultFn := func(args mock.Arguments) {
-		ob := args.Get(2)
-		buffer, _ := ioutil.ReadFile("managed-objects-test.json")
-		_ = json.Unmarshal(buffer, &ob)
-	}
-
-	mockRestReaderWriter := &mocks.RestReaderWriter{}
-	am.Client = mockRestReaderWriter
-	mockRestReaderWriter.On("Get", mock.Anything, mock.Anything, mock.Anything).
-		Run(mockResultFn)
-
-	b := ManagedObjectExists("api_client")
-
-	assert.True(t, b)
-}
-
-func TestWrongObjectDoesntObjectExist(t *testing.T) {
-	mockResultFn := func(args mock.Arguments) {
-		ob := args.Get(2)
-		buffer, _ := ioutil.ReadFile("managed-objects-test.json")
-		_ = json.Unmarshal(buffer, &ob)
-	}
-
-	mockRestReaderWriter := &mocks.RestReaderWriter{}
-	am.Client = mockRestReaderWriter
-	mockRestReaderWriter.On("Get", mock.Anything, mock.Anything, mock.Anything).
-		Run(mockResultFn)
-
-	b := ManagedObjectExists("abcdefg")
-
-	assert.False(t, b)
 }
