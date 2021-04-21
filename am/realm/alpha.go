@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/go-resty/resty/v2"
+	"github.com/secureBankingAcceleratorToolkit/securebanking-openbanking-uk-fidc-initialiszer/am"
 	"github.com/secureBankingAcceleratorToolkit/securebanking-openbanking-uk-fidc-initialiszer/common"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
@@ -34,9 +35,8 @@ func CreateAlphaRealm(cookie *http.Cookie) {
 	zap.S().Infow("Alpha Realm Created", "statusCode", resp.StatusCode())
 }
 
-// CheckAlphaRealm will check if alpha realm exists and if there are any clients within
-//   exit with success code if 200 resonse and clients exist.
-func CheckAlphaRealm(cookie *http.Cookie) bool {
+// AlphaRealmExists will check if alpha realm exists
+func AlphaRealmExists(cookie *http.Cookie) bool {
 	path := "https://" + viper.GetString("IAM_FQDN") + "/am/json/global-config/realms/L2FscGhh"
 	resp, err := client.R().
 		SetHeader("Accept", "application/json").
@@ -54,72 +54,53 @@ func CheckAlphaRealm(cookie *http.Cookie) bool {
 	return false
 }
 
-type resultCount struct {
-	Count int `json:"resultCount"`
+type ClientResult struct {
+	Result []struct {
+		ID                     string `json:"_id"`
+		Rev                    string `json:"_rev"`
+		Coreoauth2Clientconfig struct {
+			Status     string      `json:"status"`
+			Agentgroup interface{} `json:"agentgroup"`
+		} `json:"coreOAuth2ClientConfig"`
+	} `json:"result"`
+	Resultcount             int         `json:"resultCount"`
+	Pagedresultscookie      interface{} `json:"pagedResultsCookie"`
+	Totalpagedresultspolicy string      `json:"totalPagedResultsPolicy"`
+	Totalpagedresults       int         `json:"totalPagedResults"`
+	Remainingpagedresults   int         `json:"remainingPagedResults"`
 }
 
-//https://iam.idhub.cc/am/json/realms/root/realms/alpha/realm-config/agents/OAuth2Client?_queryFilter=true&_pageSize=10&_fields=coreOAuth2ClientConfig/status,coreOAuth2ClientConfig/agentgroup
-func CheckAlphaClients(cookie *http.Cookie) bool {
-	path := "https://" + viper.GetString("IAM_FQDN") + "/am/json/realms/root/realms/alpha/realm-config/agents/OAuth2Client?_queryFilter=true&_pageSize=10&_fields=coreOAuth2ClientConfig/status,coreOAuth2ClientConfig/agentgroup"
-	result := &resultCount{}
-	_, err := client.R().
-		SetHeader("Accept", "application/json").
-		SetHeader("X-Requested-With", "ForgeRock Identity Cloud Postman Collection").
-		SetHeader("Accept-Api-Version", "protocol=2.0,resource=1.0").
-		SetCookie(cookie).
-		SetResult(result).
-		Get(path)
-	if err != nil {
-		panic(err)
-	}
-	if result.Count > 0 {
-		zap.L().Info("Clients exist in the alpha realm, inilialization assummed")
-		return true
+// AlphaClientsExist - Will return true if clients exist in the alpha realm.
+func AlphaClientsExist(clientName string) bool {
+	path := "/am/json/realms/root/realms/alpha/realm-config/agents/OAuth2Client?_queryFilter=true&_pageSize=10&_fields=coreOAuth2ClientConfig/status,coreOAuth2ClientConfig/agentgroup"
+	result := &ClientResult{}
+	am.Client.Get(path, map[string]string{
+		"Accept":             "application/json",
+		"X-Requested-With":   "ForgeRock Identity Cloud Postman Collection",
+		"Accept-Api-Version": "protocol=2.0,resource=1.0",
+	}, result)
+
+	for _, r := range result.Result {
+		if r.ID == clientName {
+			zap.L().Info("Client " + clientName + " exists")
+			return true
+		}
 	}
 	return false
 }
 
-// CheckServiceIdentities will check for service identities in the alpha realm
-//   When CDK is removed, these entities might still be persisted. this gives us
-//   an indication that we do not need to initialize the environment
-func CheckServiceIdentities(cookie *http.Cookie) bool {
-	path := "https://" + viper.GetString("IAM_FQDN") + "/am/json/realms/root/realms/alpha/users?_queryFilter=true&_pageSize=10&_fields=cn,mail,username,inetUserStatus"
-	result := &resultCount{}
-	_, err := client.R().
-		SetHeader("Accept", "application/json").
-		SetHeader("X-Requested-With", "ForgeRock Identity Cloud Postman Collection").
-		SetHeader("Accept-Api-Version", "protocol=2.1, resource=4.0").
-		SetCookie(cookie).
-		SetResult(result).
-		Get(path)
-	if err != nil {
-		panic(err)
-	}
-	if result.Count > 0 {
-		zap.L().Info("Identities exist in the alpha realm, inilialization assummed")
-		return true
-	}
-	return false
-}
-
-// https://iam.idhub.cc/openidm/config/managed
-func CheckObjects(cookie *http.Cookie, accessToken string, objectName string) bool {
-	path := "https://" + viper.GetString("IAM_FQDN") + "/openidm/config/managed"
+// ManagedObjectExists - checks if a managed object exists, must supply the object name
+func ManagedObjectExists(objectName string) bool {
+	path := "/openidm/config/managed"
 	result := &OBManagedObjects{}
-	_, err := client.R().
-		SetHeader("Accept", "application/json").
-		SetHeader("X-Requested-With", "ForgeRock Identity Cloud Postman Collection").
-		SetAuthToken(accessToken).
-		SetCookie(cookie).
-		SetResult(result).
-		Get(path)
-	if err != nil {
-		panic(err)
-	}
+	am.Client.Get(path, map[string]string{
+		"Accept":           "application/json",
+		"X-Requested-With": "ForgeRock Identity Cloud Postman Collection",
+	}, result)
 	for _, o := range result.Objects {
 		zap.S().Infow("checking", "object", o)
-		if strings.Contains(o.Name, "objectName") {
-			zap.L().Info("obTpp found, skipping managed objects")
+		if strings.Contains(o.Name, objectName) {
+			zap.L().Debug("ManagedObject " + objectName + " found")
 			return true
 		}
 	}

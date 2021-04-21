@@ -60,7 +60,7 @@ func CreateIGOAuth2Client(cookie *http.Cookie) {
 		panic(err)
 	}
 	oauth2Client.CoreOAuth2ClientConfig.Userpassword = "password"
-	path := "https://" + viper.GetString("IAM_FQDN") + "/am/json/alpha/realm-config/agents/OAuth2Client/ig-client"
+	path := "https://" + viper.GetString("IAM_FQDN") + "/am/json/alpha/realm-config/agents/OAuth2Client/" + viper.GetString("IG_CLIENT_ID")
 	resp, err := client.R().
 		SetHeader("Accept", "application/json").
 		SetHeader("Content-Type", "application/json").

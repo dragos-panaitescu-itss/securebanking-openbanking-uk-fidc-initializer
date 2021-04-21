@@ -3,6 +3,7 @@ package main
 import (
 	"time"
 
+	"github.com/secureBankingAcceleratorToolkit/securebanking-openbanking-uk-fidc-initialiszer/am"
 	"github.com/secureBankingAcceleratorToolkit/securebanking-openbanking-uk-fidc-initialiszer/am/oauth2"
 	"github.com/secureBankingAcceleratorToolkit/securebanking-openbanking-uk-fidc-initialiszer/am/policy"
 	"github.com/secureBankingAcceleratorToolkit/securebanking-openbanking-uk-fidc-initialiszer/am/realm"
@@ -30,13 +31,15 @@ func main() {
 
 	s := platform.FromAmAdminSession()
 	serviceaccount.CreateIDMAdminClient(s.Cookie)
-	if !realm.CheckAlphaRealm(s.Cookie) {
+	if !realm.AlphaRealmExists(s.Cookie) {
 		realm.CreateAlphaRealm(s.Cookie)
 	}
 
 	s.Authenticate()
 
-	if !realm.CheckAlphaClients(s.Cookie) {
+	am.InitRestReaderWriter(s.Cookie, s.AuthToken.AccessToken)
+
+	if !realm.AlphaClientsExist("policy-client") {
 		oauth2.CreateRemoteConsentService(s.Cookie)
 		oauth2.CreateSoftwarePublisherAgent(s.Cookie)
 		id := oauth2.CreateOIDCClaimsScript(s.Cookie)
@@ -50,19 +53,21 @@ func main() {
 		policy.CreateAISPPolicy(s.Cookie)
 		policy.CreatePISPPolicy(s.Cookie, scriptID)
 		policy.CreatePolicyEngineOAuth2Client(s.Cookie)
+	}
 
+	if !realm.AlphaClientsExist(viper.GetString("IG_CLIENT_ID")) {
 		serviceaccount.CreateIGServiceUser(s.Cookie, s.AuthToken.AccessToken)
 		serviceaccount.CreateIGOAuth2Client(s.Cookie)
 		serviceaccount.CreateIGPolicyAgent(s.Cookie)
 	}
 
 	time.Sleep(5 * time.Second)
-	if !realm.CheckObjects(s.Cookie, s.AuthToken.AccessToken, "apiClient") {
+	if !realm.ManagedObjectExists("apiClient") {
 		idm.AddOBManagedObjects(s.Cookie, s.AuthToken.AccessToken)
 		idm.CreateApiJwksEndpoint(s.Cookie, s.AuthToken.AccessToken)
 	}
-	if (viper.GetString("ENVIRONMENT_TYPE") == "CDK" && 
-			!realm.CheckObjects(s.Cookie, s.AuthToken.AccessToken, "alpha_user")) {
+	if viper.GetString("ENVIRONMENT_TYPE") == "CDK" &&
+		!realm.ManagedObjectExists("alpha_user") {
 		idm.AddAdditionalCDKObjects(s.Cookie, s.AuthToken.AccessToken)
 	}
 }
