@@ -23,28 +23,12 @@ func TestFindExistingAlphaClient(t *testing.T) {
 	mockRestReaderWriter.On("Get", mock.Anything, mock.Anything, mock.Anything).
 		Run(mockResultFn)
 
-	b := AlphaClientsExist("ig-client")
-
-	assert.True(t, b)
-	mockRestReaderWriter.AssertCalled(t, "Get", mock.Anything, mock.Anything, mock.Anything)
-}
-
-func TestFalseIfNoClientExists(t *testing.T) {
-	mockResultFn := func(args mock.Arguments) {
-		ob := args.Get(2)
-		buffer, _ := ioutil.ReadFile("client-check-test.json")
-		_ = json.Unmarshal(buffer, &ob)
-	}
-
-	mockRestReaderWriter := &mocks.RestReaderWriter{}
-	am.Client = mockRestReaderWriter
-	mockRestReaderWriter.On("Get", mock.Anything, mock.Anything, mock.Anything).
-		Run(mockResultFn)
-
 	b := AlphaClientsExist("Doesnt existy")
-
 	assert.False(t, b)
 	mockRestReaderWriter.AssertCalled(t, "Get", mock.Anything, mock.Anything, mock.Anything)
+
+	b = AlphaClientsExist("ig-client")
+	assert.True(t, b)
 }
 
 func TestMangedObjectExists(t *testing.T) {
@@ -60,23 +44,9 @@ func TestMangedObjectExists(t *testing.T) {
 		Run(mockResultFn)
 
 	b := ManagedObjectExists("api_client")
-
 	assert.True(t, b)
-}
+	mockRestReaderWriter.AssertCalled(t, "Get", mock.Anything, mock.Anything, mock.Anything)
 
-func TestWrongObjectDoesntObjectExist(t *testing.T) {
-	mockResultFn := func(args mock.Arguments) {
-		ob := args.Get(2)
-		buffer, _ := ioutil.ReadFile("managed-objects-test.json")
-		_ = json.Unmarshal(buffer, &ob)
-	}
-
-	mockRestReaderWriter := &mocks.RestReaderWriter{}
-	am.Client = mockRestReaderWriter
-	mockRestReaderWriter.On("Get", mock.Anything, mock.Anything, mock.Anything).
-		Run(mockResultFn)
-
-	b := ManagedObjectExists("abcdefg")
-
+	b = ManagedObjectExists("xyz")
 	assert.False(t, b)
 }
