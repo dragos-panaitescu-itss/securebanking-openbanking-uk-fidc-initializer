@@ -53,7 +53,9 @@ func main() {
 		policy.CreateAISPPolicy(s.Cookie)
 		policy.CreatePISPPolicy(s.Cookie, scriptID)
 		policy.CreatePolicyEngineOAuth2Client(s.Cookie)
+	}
 
+	if !realm.AlphaClientsExist(viper.GetString("IG_CLIENT_ID")) {
 		serviceaccount.CreateIGServiceUser(s.Cookie, s.AuthToken.AccessToken)
 		serviceaccount.CreateIGOAuth2Client(s.Cookie)
 		serviceaccount.CreateIGPolicyAgent(s.Cookie)
