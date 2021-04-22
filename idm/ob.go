@@ -1,108 +1,114 @@
 package idm
 
 import (
+	"encoding/json"
 	"io/ioutil"
-	"net/http"
+	"strings"
 
-	"github.com/go-resty/resty/v2"
-	"github.com/secureBankingAcceleratorToolkit/securebanking-openbanking-uk-fidc-initialiszer/common"
+	"github.com/secureBankingAcceleratorToolkit/securebanking-openbanking-uk-fidc-initialiszer/am"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 )
 
-var client = resty.New().SetRedirectPolicy(resty.NoRedirectPolicy()).SetError(common.RestError{})
+// ManagedObjectExists - checks if a managed object exists, must supply the object name
+func ManagedObjectExists(objectName string) bool {
+	path := "/openidm/config/managed"
+	result := &OBManagedObjects{}
+	b := am.Client.Get(path, map[string]string{
+		"Accept":           "application/json",
+		"X-Requested-With": "ForgeRock Identity Cloud Postman Collection",
+	})
+
+	err := json.Unmarshal(b, result)
+	if err != nil {
+		panic(err)
+	}
+
+	for _, o := range result.Objects {
+		zap.S().Infow("checking", "object", o)
+		if strings.Contains(o.Name, objectName) {
+			zap.L().Debug("ManagedObject " + objectName + " found")
+			return true
+		}
+	}
+	return false
+}
+
+// OBManagedObjects model
+type OBManagedObjects struct {
+	ID      string `json:"_id"`
+	Objects []struct {
+		Name string `json:"name"`
+	} `json:"objects"`
+}
 
 // AddOBManagedObjects -
-func AddOBManagedObjects(cookie *http.Cookie, accessToken string) {
+func AddOBManagedObjects() {
 	zap.L().Debug("Adding OB managed objects")
 	b, err := ioutil.ReadFile(viper.GetString("REQUEST_BODY_PATH") + "ob-managed-objects.json")
 	if err != nil {
 		panic(err)
 	}
 
-	path := "https://" + viper.GetString("IAM_FQDN") + "/openidm/config/managed"
-	resp, err := client.R().
-		SetHeader("Accept", "*/*").
-		SetHeader("Content-Type", "application/json").
-		SetHeader("Connection", "keep-alive").
-		SetContentLength(true).
-		SetAuthToken(accessToken).
-		SetCookie(cookie).
-		SetBody(b).
-		Patch(path)
+	path := "/openidm/config/managed"
+	s := am.Client.Patch(path, b, map[string]string{
+		"Accept":       "*/*",
+		"Content-Type": "application/json",
+		"Connection":   "keep-alive",
+	})
 
-	common.RaiseForStatus(err, resp.Error())
-
-	zap.S().Infow("OpenBanking Managed Objects", "statusCode", resp.StatusCode())
+	zap.S().Infow("OpenBanking Managed Objects", "statusCode", s)
 }
 
-func AddAdditionalCDKObjects(cookie *http.Cookie, accessToken string) {
+func AddAdditionalCDKObjects() {
 	zap.L().Debug("Adding OB managed objects")
 	b, err := ioutil.ReadFile(viper.GetString("REQUEST_BODY_PATH") + "cdk-additional-objects.json")
 	if err != nil {
 		panic(err)
 	}
 
-	path := "https://" + viper.GetString("IAM_FQDN") + "/openidm/config/managed"
-	resp, err := client.R().
-		SetHeader("Accept", "*/*").
-		SetHeader("Content-Type", "application/json").
-		SetHeader("Connection", "keep-alive").
-		SetContentLength(true).
-		SetAuthToken(accessToken).
-		SetCookie(cookie).
-		SetBody(b).
-		Patch(path)
+	path := "/openidm/config/managed"
+	s := am.Client.Patch(path, b, map[string]string{
+		"Accept":       "*/*",
+		"Content-Type": "application/json",
+		"Connection":   "keep-alive",
+	})
 
-	common.RaiseForStatus(err, resp.Error())
-
-	zap.S().Infow("OpenBanking Managed Objects", "statusCode", resp.StatusCode())
+	zap.S().Infow("OpenBanking Managed Objects", "statusCode", s)
 }
 
-func CreateApiJwksEndpoint(cookie *http.Cookie, accessToken string) {
+func CreateApiJwksEndpoint() {
 	zap.L().Debug("Adding OB managed objects")
 	b, err := ioutil.ReadFile(viper.GetString("REQUEST_BODY_PATH") + "create-jwks-endpoint.json")
 	if err != nil {
 		panic(err)
 	}
 
-	path := "https://" + viper.GetString("IAM_FQDN") + "/openidm/config/endpoint/apiclientjwks"
-	resp, err := client.R().
-		SetHeader("Accept", "*/*").
-		SetHeader("Content-Type", "application/json").
-		SetHeader("Connection", "keep-alive").
-		SetContentLength(true).
-		SetAuthToken(accessToken).
-		SetCookie(cookie).
-		SetBody(b).
-		Put(path)
+	path := "/openidm/config/endpoint/apiclientjwks"
+	s := am.Client.Put(path, b, map[string]string{
+		"Accept":       "*/*",
+		"Content-Type": "application/json",
+		"Connection":   "keep-alive",
+	})
 
-	common.RaiseForStatus(err, resp.Error())
-
-	zap.S().Infow("JWKS endpoint", "statusCode", resp.StatusCode())
+	zap.S().Infow("JWKS endpoint", "statusCode", s)
 }
 
 // CreateUser will create a user that will allow us to create new identities
 //    in the alpha realm
-func CreateUser(cookie *http.Cookie, accessToken string) {
+func CreateUser() {
 	zap.L().Debug("Creating new user")
 	b, err := ioutil.ReadFile(viper.GetString("REQUEST_BODY_PATH") + "create-user.json")
 	if err != nil {
 		panic(err)
 	}
 
-	path := "https://" + viper.GetString("IAM_FQDN") + "/openidm/config/managed"
-	resp, err := client.R().
-		SetHeader("Accept", "*/*").
-		SetHeader("Content-Type", "application/json").
-		SetHeader("Connection", "keep-alive").
-		SetContentLength(true).
-		SetAuthToken(accessToken).
-		SetCookie(cookie).
-		SetBody(b).
-		Patch(path)
+	path := "/openidm/config/managed"
+	s := am.Client.Patch(path, b, map[string]string{
+		"Accept":       "*/*",
+		"Content-Type": "application/json",
+		"Connection":   "keep-alive",
+	})
 
-	common.RaiseForStatus(err, resp.Error())
-
-	zap.S().Infow("User created", "statusCode", resp.StatusCode())
+	zap.S().Infow("User created", "statusCode", s)
 }

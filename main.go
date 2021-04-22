@@ -36,39 +36,38 @@ func main() {
 	}
 
 	s.Authenticate()
-
 	am.InitRestReaderWriter(s.Cookie, s.AuthToken.AccessToken)
 
 	if !realm.AlphaClientsExist("policy-client") {
-		oauth2.CreateRemoteConsentService(s.Cookie)
-		oauth2.CreateSoftwarePublisherAgent(s.Cookie)
+		oauth2.CreateRemoteConsentService()
+		oauth2.CreateSoftwarePublisherAgent()
 		id := oauth2.CreateOIDCClaimsScript(s.Cookie)
-		oauth2.UpdateOAuth2Provider(s.Cookie, id)
+		oauth2.UpdateOAuth2Provider(id)
 
 		time.Sleep(5 * time.Second)
 
-		policy.CreatePolicyServiceUser(s.Cookie, s.AuthToken.AccessToken)
+		policy.CreatePolicyServiceUser()
 		scriptID := policy.CreatePolicyEvaluationScript(s.Cookie)
-		policy.CreateOpenBankingPolicySet(s.Cookie)
-		policy.CreateAISPPolicy(s.Cookie)
-		policy.CreatePISPPolicy(s.Cookie, scriptID)
-		policy.CreatePolicyEngineOAuth2Client(s.Cookie)
+		policy.CreateOpenBankingPolicySet()
+		policy.CreateAISPPolicy()
+		policy.CreatePISPPolicy(scriptID)
+		policy.CreatePolicyEngineOAuth2Client()
 	}
 
 	if !realm.AlphaClientsExist(viper.GetString("IG_CLIENT_ID")) {
-		serviceaccount.CreateIGServiceUser(s.Cookie, s.AuthToken.AccessToken)
-		serviceaccount.CreateIGOAuth2Client(s.Cookie)
-		serviceaccount.CreateIGPolicyAgent(s.Cookie)
+		serviceaccount.CreateIGServiceUser()
+		serviceaccount.CreateIGOAuth2Client()
+		serviceaccount.CreateIGPolicyAgent()
 	}
 
 	time.Sleep(5 * time.Second)
-	if !realm.ManagedObjectExists("apiClient") {
-		idm.AddOBManagedObjects(s.Cookie, s.AuthToken.AccessToken)
-		idm.CreateApiJwksEndpoint(s.Cookie, s.AuthToken.AccessToken)
+	if !idm.ManagedObjectExists("apiClient") {
+		idm.AddOBManagedObjects()
+		idm.CreateApiJwksEndpoint()
 	}
 	if viper.GetString("ENVIRONMENT_TYPE") == "CDK" &&
-		!realm.ManagedObjectExists("alpha_user") {
-		idm.AddAdditionalCDKObjects(s.Cookie, s.AuthToken.AccessToken)
+		!idm.ManagedObjectExists("alpha_user") {
+		idm.AddAdditionalCDKObjects()
 	}
 }
 

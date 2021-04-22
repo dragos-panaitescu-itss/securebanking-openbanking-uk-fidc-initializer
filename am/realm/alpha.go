@@ -1,9 +1,9 @@
 package realm
 
 import (
+	"encoding/json"
 	"io/ioutil"
 	"net/http"
-	"strings"
 
 	"github.com/go-resty/resty/v2"
 	"github.com/secureBankingAcceleratorToolkit/securebanking-openbanking-uk-fidc-initialiszer/am"
@@ -74,11 +74,16 @@ type ClientResult struct {
 func AlphaClientsExist(clientName string) bool {
 	path := "/am/json/realms/root/realms/alpha/realm-config/agents/OAuth2Client?_queryFilter=true&_pageSize=10&_fields=coreOAuth2ClientConfig/status,coreOAuth2ClientConfig/agentgroup"
 	result := &ClientResult{}
-	am.Client.Get(path, map[string]string{
+	b := am.Client.Get(path, map[string]string{
 		"Accept":             "application/json",
 		"X-Requested-With":   "ForgeRock Identity Cloud Postman Collection",
 		"Accept-Api-Version": "protocol=2.0,resource=1.0",
-	}, result)
+	})
+
+	err := json.Unmarshal(b, result)
+	if err != nil {
+		panic(err)
+	}
 
 	for _, r := range result.Result {
 		if r.ID == clientName {
@@ -87,30 +92,4 @@ func AlphaClientsExist(clientName string) bool {
 		}
 	}
 	return false
-}
-
-// ManagedObjectExists - checks if a managed object exists, must supply the object name
-func ManagedObjectExists(objectName string) bool {
-	path := "/openidm/config/managed"
-	result := &OBManagedObjects{}
-	am.Client.Get(path, map[string]string{
-		"Accept":           "application/json",
-		"X-Requested-With": "ForgeRock Identity Cloud Postman Collection",
-	}, result)
-	for _, o := range result.Objects {
-		zap.S().Infow("checking", "object", o)
-		if strings.Contains(o.Name, objectName) {
-			zap.L().Debug("ManagedObject " + objectName + " found")
-			return true
-		}
-	}
-	return false
-}
-
-// OBManagedObjects model
-type OBManagedObjects struct {
-	ID      string `json:"_id"`
-	Objects []struct {
-		Name string `json:"name"`
-	} `json:"objects"`
 }

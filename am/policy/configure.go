@@ -15,26 +15,19 @@ import (
 var client = resty.New().SetRedirectPolicy(resty.NoRedirectPolicy()).SetError(common.RestError{})
 
 // CreatePolicyServiceUser -
-func CreatePolicyServiceUser(cookie *http.Cookie, accessToken string) {
-	zap.S().Debugw("Creating policy service user", "accessToken", accessToken)
+func CreatePolicyServiceUser() {
 	b, err := ioutil.ReadFile(viper.GetString("REQUEST_BODY_PATH") + "create-policy-service-user.json")
 	if err != nil {
 		panic(err)
 	}
-	path := "https://" + viper.GetString("IAM_FQDN") + "/openidm/managed/user/?_action=create"
-	resp, err := client.R().
-		SetHeader("Accept", "*/*").
-		SetHeader("Content-Type", "application/json").
-		SetHeader("Connection", "keep-alive").
-		SetAuthToken(accessToken).
-		SetContentLength(true).
-		SetCookie(cookie).
-		SetBody(b).
-		Post(path)
+	path := "/openidm/managed/user/?_action=create"
+	s := am.Client.Post(path, b, map[string]string{
+		"Accept":       "*/*",
+		"Content-Type": "application/json",
+		"Connection":   "keep-alive",
+	})
 
-	common.RaiseForStatus(err, resp.Error())
-
-	zap.S().Infow("Policy Service User", "statusCode", resp.StatusCode())
+	zap.S().Infow("Policy Service User", "statusCode", s)
 }
 
 // CreatePolicyEvaluationScript - and returns the created ID
@@ -64,7 +57,7 @@ func CreatePolicyEvaluationScript(cookie *http.Cookie) string {
 }
 
 // CreateOpenBankingPolicySet -
-func CreateOpenBankingPolicySet(cookie *http.Cookie) {
+func CreateOpenBankingPolicySet() {
 	zap.L().Debug("Creating Open Banking policy set")
 	b, err := ioutil.ReadFile(viper.GetString("REQUEST_BODY_PATH") + "ob-policy-set.json")
 	if err != nil {
@@ -77,47 +70,37 @@ func CreateOpenBankingPolicySet(cookie *http.Cookie) {
 	}
 	ps.Realm = "/alpha"
 	zap.S().Debugw("Open Banking Policy set unmarshaled", "policy-set", ps)
-	path := "https://" + viper.GetString("IAM_FQDN") + "/am/json/alpha/applications/?_action=create"
-	resp, err := client.R().
-		SetHeader("Accept", "*/*").
-		SetHeader("Content-Type", "application/json").
-		SetHeader("Connection", "keep-alive").
-		SetHeader("Accept-API-Version", "protocol=1.0,resource=2.0").
-		SetContentLength(true).
-		SetCookie(cookie).
-		SetBody(ps).
-		Post(path)
+	path := "/am/json/alpha/applications/?_action=create"
+	s := am.Client.Post(path, ps, map[string]string{
+		"Accept":             "*/*",
+		"Content-Type":       "application/json",
+		"Connection":         "keep-alive",
+		"Accept-API-Version": "protocol=1.0,resource=2.0",
+	})
 
-	common.RaiseForStatus(err, resp.Error())
-
-	zap.S().Infow("Open Banking Policy Set", "statusCode", resp.StatusCode())
+	zap.S().Infow("Open Banking Policy Set", "statusCode", s)
 }
 
 // CreateAISPPolicy -
-func CreateAISPPolicy(cookie *http.Cookie) {
+func CreateAISPPolicy() {
 	zap.L().Debug("Creating AISP policy")
 	b, err := ioutil.ReadFile(viper.GetString("REQUEST_BODY_PATH") + "aisp-policy.json")
 	if err != nil {
 		panic(err)
 	}
-	path := "https://" + viper.GetString("IAM_FQDN") + "/am/json/alpha/policies/?_action=create"
-	resp, err := client.R().
-		SetHeader("Accept", "*/*").
-		SetHeader("Content-Type", "application/json").
-		SetHeader("Connection", "keep-alive").
-		SetHeader("Accept-API-Version", "protocol=1.0,resource=2.0").
-		SetContentLength(true).
-		SetCookie(cookie).
-		SetBody(b).
-		Post(path)
+	path := "/am/json/alpha/policies/?_action=create"
+	s := am.Client.Post(path, b, map[string]string{
+		"Accept":             "*/*",
+		"Content-Type":       "application/json",
+		"Connection":         "keep-alive",
+		"Accept-API-Version": "protocol=1.0,resource=2.0",
+	})
 
-	common.RaiseForStatus(err, resp.Error())
-
-	zap.S().Infow("AISP policy", "statusCode", resp.StatusCode())
+	zap.S().Infow("AISP policy", "statusCode", s)
 }
 
 // CreatePISPPolicy -
-func CreatePISPPolicy(cookie *http.Cookie, policyScriptId string) {
+func CreatePISPPolicy(policyScriptId string) {
 	zap.L().Debug("Creating PISP policy")
 	b, err := ioutil.ReadFile(viper.GetString("REQUEST_BODY_PATH") + "pisp-policy.json")
 	if err != nil {
@@ -130,24 +113,19 @@ func CreatePISPPolicy(cookie *http.Cookie, policyScriptId string) {
 	}
 	pisp.Condition.ScriptID = policyScriptId
 	zap.S().Debugw("PISP Policy", "policy", pisp)
-	path := "https://" + viper.GetString("IAM_FQDN") + "/am/json/alpha/policies/?_action=create"
-	resp, err := client.R().
-		SetHeader("Accept", "*/*").
-		SetHeader("Content-Type", "application/json").
-		SetHeader("Connection", "keep-alive").
-		SetHeader("Accept-API-Version", "protocol=1.0,resource=2.0").
-		SetContentLength(true).
-		SetCookie(cookie).
-		SetBody(pisp).
-		Post(path)
+	path := "/am/json/alpha/policies/?_action=create"
+	s := am.Client.Post(path, pisp, map[string]string{
+		"Accept":             "*/*",
+		"Content-Type":       "application/json",
+		"Connection":         "keep-alive",
+		"Accept-API-Version": "protocol=1.0,resource=2.0",
+	})
 
-	common.RaiseForStatus(err, resp.Error())
-
-	zap.S().Infow("PISP policy", "statusCode", resp.StatusCode())
+	zap.S().Infow("PISP policy", "statusCode", s)
 }
 
 // CreatePolicyEngineOAuth2Client -
-func CreatePolicyEngineOAuth2Client(cookie *http.Cookie) {
+func CreatePolicyEngineOAuth2Client() {
 	zap.L().Debug("Creating policy engine oauth2 client")
 	b, err := ioutil.ReadFile(viper.GetString("REQUEST_BODY_PATH") + "create-policy-engine-oauth2-client.json")
 	if err != nil {
@@ -160,18 +138,13 @@ func CreatePolicyEngineOAuth2Client(cookie *http.Cookie) {
 	}
 	engineClient.CoreOAuth2ClientConfig.Userpassword = "password"
 	zap.S().Debugw("Engine client body", "engine", engineClient)
-	path := "https://" + viper.GetString("IAM_FQDN") + "/am/json/alpha/realm-config/agents/OAuth2Client/policy-client"
-	resp, err := client.R().
-		SetHeader("Accept", "application/json").
-		SetHeader("Content-Type", "application/json").
-		SetHeader("Connection", "keep-alive").
-		SetHeader("X-Requested-With", "ForgeRock Identity Cloud Postman Collection").
-		SetContentLength(true).
-		SetCookie(cookie).
-		SetBody(engineClient).
-		Put(path)
+	path := "/am/json/alpha/realm-config/agents/OAuth2Client/policy-client"
+	s := am.Client.Put(path, engineClient, map[string]string{
+		"Accept":           "application/json",
+		"Content-Type":     "application/json",
+		"Connection":       "keep-alive",
+		"X-Requested-With": "ForgeRock Identity Cloud Postman Collection",
+	})
 
-	common.RaiseForStatus(err, resp.Error())
-
-	zap.S().Infow("Policy engine OAuth2 client", "statusCode", resp.StatusCode())
+	zap.S().Infow("Policy engine OAuth2 client", "statusCode", s)
 }

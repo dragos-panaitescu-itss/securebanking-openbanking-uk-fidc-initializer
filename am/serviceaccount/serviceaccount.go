@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/go-resty/resty/v2"
+	"github.com/secureBankingAcceleratorToolkit/securebanking-openbanking-uk-fidc-initialiszer/am"
 	"github.com/secureBankingAcceleratorToolkit/securebanking-openbanking-uk-fidc-initialiszer/common"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
@@ -15,7 +16,7 @@ import (
 var client = resty.New().SetRedirectPolicy(resty.NoRedirectPolicy()).SetError(common.RestError{})
 
 // CreateIGServiceUser -
-func CreateIGServiceUser(cookie *http.Cookie, accessToken string) {
+func CreateIGServiceUser() {
 	zap.L().Debug("Creating IG service user")
 
 	user := &common.ServiceUser{
@@ -30,24 +31,18 @@ func CreateIGServiceUser(cookie *http.Cookie, accessToken string) {
 			},
 		},
 	}
-	path := "https://" + viper.GetString("IAM_FQDN") + "/openidm/managed/user/?_action=create"
-	resp, err := client.R().
-		SetHeader("Accept", "*/*").
-		SetHeader("Content-Type", "application/json").
-		SetHeader("Connection", "keep-alive").
-		SetContentLength(true).
-		SetAuthToken(accessToken).
-		SetCookie(cookie).
-		SetBody(user).
-		Post(path)
+	path := "/openidm/managed/user/?_action=create"
+	s := am.Client.Post(path, user, map[string]string{
+		"Accept":       "*/*",
+		"Content-Type": "application/json",
+		"Connection":   "keep-alive",
+	})
 
-	common.RaiseForStatus(err, resp.Error())
-
-	zap.S().Infow("IG Service User", "statusCode", resp.StatusCode())
+	zap.S().Infow("IG Service User", "statusCode", s)
 }
 
 // CreateIGOAuth2Client -
-func CreateIGOAuth2Client(cookie *http.Cookie) {
+func CreateIGOAuth2Client() {
 	zap.L().Debug("Creating IG OAuth2 client")
 	b, err := ioutil.ReadFile(viper.GetString("REQUEST_BODY_PATH") + "ig-oauth2-client.json")
 	if err != nil {
@@ -60,24 +55,19 @@ func CreateIGOAuth2Client(cookie *http.Cookie) {
 		panic(err)
 	}
 	oauth2Client.CoreOAuth2ClientConfig.Userpassword = "password"
-	path := "https://" + viper.GetString("IAM_FQDN") + "/am/json/alpha/realm-config/agents/OAuth2Client/" + viper.GetString("IG_CLIENT_ID")
-	resp, err := client.R().
-		SetHeader("Accept", "application/json").
-		SetHeader("Content-Type", "application/json").
-		SetHeader("Connection", "keep-alive").
-		SetHeader("X-Requested-With", "ForgeRock Identity Cloud Postman Collection").
-		SetContentLength(true).
-		SetCookie(cookie).
-		SetBody(oauth2Client).
-		Put(path)
+	path := "/am/json/alpha/realm-config/agents/OAuth2Client/" + viper.GetString("IG_CLIENT_ID")
+	s := am.Client.Put(path, oauth2Client, map[string]string{
+		"Accept":           "application/json",
+		"Content-Type":     "application/json",
+		"Connection":       "keep-alive",
+		"X-Requested-With": "ForgeRock Identity Cloud Postman Collection",
+	})
 
-	common.RaiseForStatus(err, resp.Error())
-
-	zap.S().Infow("IG OAuth2 Client", "statusCode", resp.StatusCode())
+	zap.S().Infow("IG OAuth2 Client", "statusCode", s)
 }
 
 // CreateIGPolicyAgent -
-func CreateIGPolicyAgent(cookie *http.Cookie) {
+func CreateIGPolicyAgent() {
 	zap.L().Debug("Creating IG Policy agent")
 	policyAgent := &PolicyAgent{
 		Userpassword: "password",
@@ -86,20 +76,15 @@ func CreateIGPolicyAgent(cookie *http.Cookie) {
 			Inherited: false,
 		},
 	}
-	path := "https://" + viper.GetString("IAM_FQDN") + "/am/json/alpha/realm-config/agents/IdentityGatewayAgent/ig-agent"
-	resp, err := client.R().
-		SetHeader("Accept", "application/json").
-		SetHeader("Content-Type", "application/json").
-		SetHeader("Connection", "keep-alive").
-		SetHeader("X-Requested-With", "ForgeRock Identity Cloud Postman Collection").
-		SetContentLength(true).
-		SetCookie(cookie).
-		SetBody(policyAgent).
-		Put(path)
+	path := "/am/json/alpha/realm-config/agents/IdentityGatewayAgent/ig-agent"
+	s := am.Client.Put(path, policyAgent, map[string]string{
+		"Accept":           "application/json",
+		"Content-Type":     "application/json",
+		"Connection":       "keep-alive",
+		"X-Requested-With": "ForgeRock Identity Cloud Postman Collection",
+	})
 
-	common.RaiseForStatus(err, resp.Error())
-
-	zap.S().Infow("IG Policy Agent", "statusCode", resp.StatusCode())
+	zap.S().Infow("IG Policy Agent", "statusCode", s)
 }
 
 func CreateIDMAdminClient(cookie *http.Cookie) {
@@ -112,7 +97,7 @@ func CreateIDMAdminClient(cookie *http.Cookie) {
 	json.Unmarshal(b, config)
 	var redirect string
 	for _, uri := range config.CoreOAuth2ClientConfig.RedirectionUris.Value {
-		redirect = strings.ReplaceAll(uri, "IAM_FQDN", viper.GetString("IAM_FQDN"))
+		redirect = strings.ReplaceAll(uri, "{{IAM_FQDN}}", viper.GetString("IAM_FQDN"))
 	}
 	config.CoreOAuth2ClientConfig.RedirectionUris.Value = []string{redirect}
 	zap.S().Debugw("Admin client request", "body", config)
