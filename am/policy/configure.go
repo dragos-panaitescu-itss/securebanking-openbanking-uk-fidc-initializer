@@ -15,8 +15,7 @@ import (
 var client = resty.New().SetRedirectPolicy(resty.NoRedirectPolicy()).SetError(common.RestError{})
 
 // CreatePolicyServiceUser -
-func CreatePolicyServiceUser(cookie *http.Cookie, accessToken string) {
-	zap.S().Debugw("Creating policy service user", "accessToken", accessToken)
+func CreatePolicyServiceUser() {
 	b, err := ioutil.ReadFile(viper.GetString("REQUEST_BODY_PATH") + "create-policy-service-user.json")
 	if err != nil {
 		panic(err)
@@ -58,7 +57,7 @@ func CreatePolicyEvaluationScript(cookie *http.Cookie) string {
 }
 
 // CreateOpenBankingPolicySet -
-func CreateOpenBankingPolicySet(cookie *http.Cookie) {
+func CreateOpenBankingPolicySet() {
 	zap.L().Debug("Creating Open Banking policy set")
 	b, err := ioutil.ReadFile(viper.GetString("REQUEST_BODY_PATH") + "ob-policy-set.json")
 	if err != nil {
@@ -83,7 +82,7 @@ func CreateOpenBankingPolicySet(cookie *http.Cookie) {
 }
 
 // CreateAISPPolicy -
-func CreateAISPPolicy(cookie *http.Cookie) {
+func CreateAISPPolicy() {
 	zap.L().Debug("Creating AISP policy")
 	b, err := ioutil.ReadFile(viper.GetString("REQUEST_BODY_PATH") + "aisp-policy.json")
 	if err != nil {
@@ -101,7 +100,7 @@ func CreateAISPPolicy(cookie *http.Cookie) {
 }
 
 // CreatePISPPolicy -
-func CreatePISPPolicy(cookie *http.Cookie, policyScriptId string) {
+func CreatePISPPolicy(policyScriptId string) {
 	zap.L().Debug("Creating PISP policy")
 	b, err := ioutil.ReadFile(viper.GetString("REQUEST_BODY_PATH") + "pisp-policy.json")
 	if err != nil {
@@ -126,7 +125,7 @@ func CreatePISPPolicy(cookie *http.Cookie, policyScriptId string) {
 }
 
 // CreatePolicyEngineOAuth2Client -
-func CreatePolicyEngineOAuth2Client(cookie *http.Cookie) {
+func CreatePolicyEngineOAuth2Client() {
 	zap.L().Debug("Creating policy engine oauth2 client")
 	b, err := ioutil.ReadFile(viper.GetString("REQUEST_BODY_PATH") + "create-policy-engine-oauth2-client.json")
 	if err != nil {

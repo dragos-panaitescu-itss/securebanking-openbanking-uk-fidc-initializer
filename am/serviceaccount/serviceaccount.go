@@ -16,7 +16,7 @@ import (
 var client = resty.New().SetRedirectPolicy(resty.NoRedirectPolicy()).SetError(common.RestError{})
 
 // CreateIGServiceUser -
-func CreateIGServiceUser(cookie *http.Cookie, accessToken string) {
+func CreateIGServiceUser() {
 	zap.L().Debug("Creating IG service user")
 
 	user := &common.ServiceUser{
@@ -42,7 +42,7 @@ func CreateIGServiceUser(cookie *http.Cookie, accessToken string) {
 }
 
 // CreateIGOAuth2Client -
-func CreateIGOAuth2Client(cookie *http.Cookie) {
+func CreateIGOAuth2Client() {
 	zap.L().Debug("Creating IG OAuth2 client")
 	b, err := ioutil.ReadFile(viper.GetString("REQUEST_BODY_PATH") + "ig-oauth2-client.json")
 	if err != nil {
@@ -67,7 +67,7 @@ func CreateIGOAuth2Client(cookie *http.Cookie) {
 }
 
 // CreateIGPolicyAgent -
-func CreateIGPolicyAgent(cookie *http.Cookie) {
+func CreateIGPolicyAgent() {
 	zap.L().Debug("Creating IG Policy agent")
 	policyAgent := &PolicyAgent{
 		Userpassword: "password",
@@ -101,13 +101,18 @@ func CreateIDMAdminClient(cookie *http.Cookie) {
 	}
 	config.CoreOAuth2ClientConfig.RedirectionUris.Value = []string{redirect}
 	zap.S().Debugw("Admin client request", "body", config)
-	path := "/am/json/realm-config/agents/OAuth2Client/idmAdminClient"
-	s := am.Client.Put(path, config, map[string]string{
-		"Accept":           "application/json",
-		"Content-Type":     "application/json",
-		"Connection":       "keep-alive",
-		"X-Requested-With": "ForgeRock Identity Cloud Postman Collection",
-	})
+	path := "https://" + viper.GetString("IAM_FQDN") + "/am/json/realm-config/agents/OAuth2Client/idmAdminClient"
+	resp, err := client.R().
+		SetHeader("Accept", "application/json").
+		SetHeader("Content-Type", "application/json").
+		SetHeader("Connection", "keep-alive").
+		SetHeader("X-Requested-With", "ForgeRock Identity Cloud Postman Collection").
+		SetContentLength(true).
+		SetCookie(cookie).
+		SetBody(config).
+		Put(path)
 
-	zap.S().Infow("IDM Admin Client", "statusCode", s, "redirect", config.CoreOAuth2ClientConfig.RedirectionUris.Value)
+	common.RaiseForStatus(err, resp.Error())
+
+	zap.S().Infow("IDM Admin Client", "statusCode", resp.StatusCode(), "redirect", config.CoreOAuth2ClientConfig.RedirectionUris.Value)
 }

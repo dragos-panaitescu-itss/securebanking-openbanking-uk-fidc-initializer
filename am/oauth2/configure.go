@@ -12,10 +12,10 @@ import (
 	"go.uber.org/zap"
 )
 
-var client = resty.New().SetRedirectPolicy(resty.NoRedirectPolicy()).SetError(&common.RestError{})
+var client = resty.New().SetRedirectPolicy(resty.NoRedirectPolicy()).SetError(common.RestError{})
 
 // CreateRemoteConsentService -
-func CreateRemoteConsentService(cookie *http.Cookie) {
+func CreateRemoteConsentService() {
 	zap.L().Debug("Creating remote consent service")
 	rc := &RemoteConsent{
 		RemoteConsentRequestEncryptionAlgorithm: InheritedValueString{
@@ -91,7 +91,7 @@ func CreateRemoteConsentService(cookie *http.Cookie) {
 }
 
 // CreateSoftwarePublisherAgent -
-func CreateSoftwarePublisherAgent(cookie *http.Cookie) {
+func CreateSoftwarePublisherAgent() {
 	zap.L().Debug("Creating software publisher agent")
 	pa := PublisherAgent{
 		PublicKeyLocation: InheritedValueString{
@@ -140,21 +140,27 @@ func CreateOIDCClaimsScript(cookie *http.Cookie) string {
 		panic(err)
 	}
 
-	path := "/am/json/alpha/scripts/?_action=create"
+	path := "https://" + viper.GetString("IAM_FQDN") + "/am/json/alpha/scripts/?_action=create"
 	claimsScript := &am.RequestScript{}
-	s := am.Client.Post(path, b, map[string]string{
-		"Accept":             "*/*",
-		"Content-Type":       "application/json",
-		"Connection":         "keep-alive",
-		"Accept-API-Version": "protocol=2.0,resource=1.0",
-	})
+	resp, err := client.R().
+		SetHeader("Accept", "*/*").
+		SetHeader("Content-Type", "application/json").
+		SetHeader("Connection", "keep-alive").
+		SetHeader("Accept-API-Version", "protocol=2.0,resource=1.0").
+		SetContentLength(true).
+		SetCookie(cookie).
+		SetResult(claimsScript).
+		SetBody(b).
+		Post(path)
 
-	zap.S().Infow("OIDC claims script", "statusCode", s, "claimsScriptID", claimsScript.ID, "createdBy", claimsScript.CreatedBy)
+	common.RaiseForStatus(err, resp.Error())
+
+	zap.S().Infow("OIDC claims script", "statusCode", resp.StatusCode(), "claimsScriptID", claimsScript.ID, "createdBy", claimsScript.CreatedBy)
 	return claimsScript.ID
 }
 
 // UpdateOAuth2Provider - update the oauth 2 provider, must supply the claimScript ID
-func UpdateOAuth2Provider(cookie *http.Cookie, claimsScriptID string) {
+func UpdateOAuth2Provider(claimsScriptID string) {
 	b, err := ioutil.ReadFile(viper.GetString("REQUEST_BODY_PATH") + "oauth2provider.json")
 	if err != nil {
 		panic(err)
