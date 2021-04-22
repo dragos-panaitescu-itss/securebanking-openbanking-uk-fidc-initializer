@@ -1,4 +1,4 @@
-package realm
+package idm
 
 import (
 	"io/ioutil"
@@ -10,17 +10,17 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-func TestFindExistingAlphaClient(t *testing.T) {
+func TestMangedObjectExists(t *testing.T) {
 	mockRestReaderWriter := &mocks.RestReaderWriter{}
 	am.Client = mockRestReaderWriter
-	buffer, _ := ioutil.ReadFile("client-check-test.json")
+	buffer, _ := ioutil.ReadFile("managed-objects-test.json")
 	mockRestReaderWriter.On("Get", mock.Anything, mock.Anything).
 		Return(buffer)
 
-	b := AlphaClientsExist("Doesnt existy")
-	assert.False(t, b)
+	b := ManagedObjectExists("api_client")
+	assert.True(t, b)
 	mockRestReaderWriter.AssertCalled(t, "Get", mock.Anything, mock.Anything)
 
-	b = AlphaClientsExist("ig-client")
-	assert.True(t, b)
+	b = ManagedObjectExists("xyz")
+	assert.False(t, b)
 }

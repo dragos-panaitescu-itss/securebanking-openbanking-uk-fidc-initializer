@@ -61,12 +61,12 @@ func main() {
 	}
 
 	time.Sleep(5 * time.Second)
-	if !realm.ManagedObjectExists("apiClient") {
+	if !idm.ManagedObjectExists("apiClient") {
 		idm.AddOBManagedObjects()
 		idm.CreateApiJwksEndpoint()
 	}
 	if viper.GetString("ENVIRONMENT_TYPE") == "CDK" &&
-		!realm.ManagedObjectExists("alpha_user") {
+		!idm.ManagedObjectExists("alpha_user") {
 		idm.AddAdditionalCDKObjects()
 	}
 }
