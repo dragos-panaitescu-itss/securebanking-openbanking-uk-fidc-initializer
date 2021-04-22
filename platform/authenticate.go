@@ -7,7 +7,7 @@ import (
 	"go.uber.org/zap"
 
 	"github.com/go-resty/resty/v2"
-	"github.com/secureBankingAcceleratorToolkit/securebanking-openbanking-uk-fidc-initialiszer/common"
+	"github.com/secureBankingAccessToolkit/securebanking-openbanking-uk-fidc-initialiszer/common"
 	"github.com/spf13/viper"
 )
 

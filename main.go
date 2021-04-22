@@ -3,13 +3,8 @@ package main
 import (
 	"time"
 
-	"github.com/secureBankingAcceleratorToolkit/securebanking-openbanking-uk-fidc-initialiszer/am"
-	"github.com/secureBankingAcceleratorToolkit/securebanking-openbanking-uk-fidc-initialiszer/am/oauth2"
-	"github.com/secureBankingAcceleratorToolkit/securebanking-openbanking-uk-fidc-initialiszer/am/policy"
-	"github.com/secureBankingAcceleratorToolkit/securebanking-openbanking-uk-fidc-initialiszer/am/realm"
-	"github.com/secureBankingAcceleratorToolkit/securebanking-openbanking-uk-fidc-initialiszer/am/serviceaccount"
-	"github.com/secureBankingAcceleratorToolkit/securebanking-openbanking-uk-fidc-initialiszer/idm"
-	"github.com/secureBankingAcceleratorToolkit/securebanking-openbanking-uk-fidc-initialiszer/platform"
+	"github.com/secureBankingAccessToolkit/securebanking-openbanking-uk-fidc-initialiszer/am"
+	"github.com/secureBankingAccessToolkit/securebanking-openbanking-uk-fidc-initialiszer/platform"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 )
@@ -30,44 +25,44 @@ func main() {
 	}
 
 	s := platform.FromAmAdminSession()
-	serviceaccount.CreateIDMAdminClient(s.Cookie)
-	if !realm.AlphaRealmExists(s.Cookie) {
-		realm.CreateAlphaRealm(s.Cookie)
+	am.CreateIDMAdminClient(s.Cookie)
+	if !am.AlphaRealmExists(s.Cookie) {
+		am.CreateAlphaRealm(s.Cookie)
 	}
 
 	s.Authenticate()
 	am.InitRestReaderWriter(s.Cookie, s.AuthToken.AccessToken)
 
-	if !realm.AlphaClientsExist("policy-client") {
-		oauth2.CreateRemoteConsentService()
-		oauth2.CreateSoftwarePublisherAgent()
-		id := oauth2.CreateOIDCClaimsScript(s.Cookie)
-		oauth2.UpdateOAuth2Provider(id)
+	if !am.AlphaClientsExist("policy-client") {
+		am.CreateRemoteConsentService()
+		am.CreateSoftwarePublisherAgent()
+		id := am.CreateOIDCClaimsScript(s.Cookie)
+		am.UpdateOAuth2Provider(id)
 
 		time.Sleep(5 * time.Second)
 
-		policy.CreatePolicyServiceUser()
-		scriptID := policy.CreatePolicyEvaluationScript(s.Cookie)
-		policy.CreateOpenBankingPolicySet()
-		policy.CreateAISPPolicy()
-		policy.CreatePISPPolicy(scriptID)
-		policy.CreatePolicyEngineOAuth2Client()
+		am.CreatePolicyServiceUser()
+		scriptID := am.CreatePolicyEvaluationScript(s.Cookie)
+		am.CreateOpenBankingPolicySet()
+		am.CreateAISPPolicy()
+		am.CreatePISPPolicy(scriptID)
+		am.CreatePolicyEngineOAuth2Client()
 	}
 
-	if !realm.AlphaClientsExist(viper.GetString("IG_CLIENT_ID")) {
-		serviceaccount.CreateIGServiceUser()
-		serviceaccount.CreateIGOAuth2Client()
-		serviceaccount.CreateIGPolicyAgent()
+	if !am.AlphaClientsExist(viper.GetString("IG_CLIENT_ID")) {
+		am.CreateIGServiceUser()
+		am.CreateIGOAuth2Client()
+		am.CreateIGPolicyAgent()
 	}
 
 	time.Sleep(5 * time.Second)
-	if !idm.ManagedObjectExists("apiClient") {
-		idm.AddOBManagedObjects()
-		idm.CreateApiJwksEndpoint()
+	if !am.ManagedObjectExists("apiClient") {
+		am.AddOBManagedObjects()
+		am.CreateApiJwksEndpoint()
 	}
 	if viper.GetString("ENVIRONMENT_TYPE") == "CDK" &&
-		!idm.ManagedObjectExists("alpha_user") {
-		idm.AddAdditionalCDKObjects()
+		!am.ManagedObjectExists("alpha_user") {
+		am.AddAdditionalCDKObjects()
 	}
 }
 

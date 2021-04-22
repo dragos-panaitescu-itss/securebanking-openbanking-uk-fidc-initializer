@@ -1,9 +1,8 @@
-package realm
+package am
 
 import (
 	"encoding/json"
 
-	"github.com/secureBankingAcceleratorToolkit/securebanking-openbanking-uk-fidc-initialiszer/am"
 	"go.uber.org/zap"
 )
 
@@ -31,7 +30,7 @@ type Result struct {
 func ServiceIdentityExists(identity string) bool {
 	path := "/am/json/realms/root/realms/alpha/users?_queryFilter=true&_pageSize=10&_fields=cn,mail,username,inetUserStatus"
 	serviceIdentity := &ServiceIdentity{}
-	b := am.Client.Get(path, map[string]string{
+	b := Client.Get(path, map[string]string{
 		"Accept":             "application/json",
 		"X-Requested-With":   "ForgeRock Identity Cloud Postman Collection",
 		"Accept-Api-Version": "protocol=2.1, resource=4.0",

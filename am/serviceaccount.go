@@ -1,4 +1,4 @@
-package serviceaccount
+package am
 
 import (
 	"encoding/json"
@@ -7,8 +7,7 @@ import (
 	"strings"
 
 	"github.com/go-resty/resty/v2"
-	"github.com/secureBankingAcceleratorToolkit/securebanking-openbanking-uk-fidc-initialiszer/am"
-	"github.com/secureBankingAcceleratorToolkit/securebanking-openbanking-uk-fidc-initialiszer/common"
+	"github.com/secureBankingAccessToolkit/securebanking-openbanking-uk-fidc-initialiszer/common"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 )
@@ -32,7 +31,7 @@ func CreateIGServiceUser() {
 		},
 	}
 	path := "/openidm/managed/user/?_action=create"
-	s := am.Client.Post(path, user, map[string]string{
+	s := Client.Post(path, user, map[string]string{
 		"Accept":       "*/*",
 		"Content-Type": "application/json",
 		"Connection":   "keep-alive",
@@ -56,7 +55,7 @@ func CreateIGOAuth2Client() {
 	}
 	oauth2Client.CoreOAuth2ClientConfig.Userpassword = "password"
 	path := "/am/json/alpha/realm-config/agents/OAuth2Client/" + viper.GetString("IG_CLIENT_ID")
-	s := am.Client.Put(path, oauth2Client, map[string]string{
+	s := Client.Put(path, oauth2Client, map[string]string{
 		"Accept":           "application/json",
 		"Content-Type":     "application/json",
 		"Connection":       "keep-alive",
@@ -77,7 +76,7 @@ func CreateIGPolicyAgent() {
 		},
 	}
 	path := "/am/json/alpha/realm-config/agents/IdentityGatewayAgent/ig-agent"
-	s := am.Client.Put(path, policyAgent, map[string]string{
+	s := Client.Put(path, policyAgent, map[string]string{
 		"Accept":           "application/json",
 		"Content-Type":     "application/json",
 		"Connection":       "keep-alive",

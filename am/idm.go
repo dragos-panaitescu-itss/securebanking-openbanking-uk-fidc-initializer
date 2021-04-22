@@ -1,11 +1,10 @@
-package idm
+package am
 
 import (
 	"encoding/json"
 	"io/ioutil"
 	"strings"
 
-	"github.com/secureBankingAcceleratorToolkit/securebanking-openbanking-uk-fidc-initialiszer/am"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 )
@@ -14,7 +13,7 @@ import (
 func ManagedObjectExists(objectName string) bool {
 	path := "/openidm/config/managed"
 	result := &OBManagedObjects{}
-	b := am.Client.Get(path, map[string]string{
+	b := Client.Get(path, map[string]string{
 		"Accept":           "application/json",
 		"X-Requested-With": "ForgeRock Identity Cloud Postman Collection",
 	})
@@ -51,7 +50,7 @@ func AddOBManagedObjects() {
 	}
 
 	path := "/openidm/config/managed"
-	s := am.Client.Patch(path, b, map[string]string{
+	s := Client.Patch(path, b, map[string]string{
 		"Accept":       "*/*",
 		"Content-Type": "application/json",
 		"Connection":   "keep-alive",
@@ -68,7 +67,7 @@ func AddAdditionalCDKObjects() {
 	}
 
 	path := "/openidm/config/managed"
-	s := am.Client.Patch(path, b, map[string]string{
+	s := Client.Patch(path, b, map[string]string{
 		"Accept":       "*/*",
 		"Content-Type": "application/json",
 		"Connection":   "keep-alive",
@@ -85,7 +84,7 @@ func CreateApiJwksEndpoint() {
 	}
 
 	path := "/openidm/config/endpoint/apiclientjwks"
-	s := am.Client.Put(path, b, map[string]string{
+	s := Client.Put(path, b, map[string]string{
 		"Accept":       "*/*",
 		"Content-Type": "application/json",
 		"Connection":   "keep-alive",
@@ -104,7 +103,7 @@ func CreateUser() {
 	}
 
 	path := "/openidm/config/managed"
-	s := am.Client.Patch(path, b, map[string]string{
+	s := Client.Patch(path, b, map[string]string{
 		"Accept":       "*/*",
 		"Content-Type": "application/json",
 		"Connection":   "keep-alive",

@@ -1,4 +1,4 @@
-module github.com/secureBankingAcceleratorToolkit/securebanking-openbanking-uk-fidc-initialiszer
+module github.com/secureBankingAccessToolkit/securebanking-openbanking-uk-fidc-initialiszer
 
 go 1.15
 
