@@ -1,18 +1,14 @@
-package policy
+package am
 
 import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
 
-	"github.com/go-resty/resty/v2"
-	"github.com/secureBankingAcceleratorToolkit/securebanking-openbanking-uk-fidc-initialiszer/am"
-	"github.com/secureBankingAcceleratorToolkit/securebanking-openbanking-uk-fidc-initialiszer/common"
+	"github.com/secureBankingAccessToolkit/securebanking-openbanking-uk-fidc-initialiszer/common"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 )
-
-var client = resty.New().SetRedirectPolicy(resty.NoRedirectPolicy()).SetError(common.RestError{})
 
 // CreatePolicyServiceUser -
 func CreatePolicyServiceUser() {
@@ -21,7 +17,7 @@ func CreatePolicyServiceUser() {
 		panic(err)
 	}
 	path := "/openidm/managed/user/?_action=create"
-	s := am.Client.Post(path, b, map[string]string{
+	s := Client.Post(path, b, map[string]string{
 		"Accept":       "*/*",
 		"Content-Type": "application/json",
 		"Connection":   "keep-alive",
@@ -38,7 +34,7 @@ func CreatePolicyEvaluationScript(cookie *http.Cookie) string {
 		panic(err)
 	}
 	path := "https://" + viper.GetString("IAM_FQDN") + "/am/json/alpha/scripts/?_action=create"
-	scriptBody := &am.RequestScript{}
+	scriptBody := &RequestScript{}
 	resp, err := client.R().
 		SetHeader("Accept", "*/*").
 		SetHeader("Content-Type", "application/json").
@@ -71,7 +67,7 @@ func CreateOpenBankingPolicySet() {
 	ps.Realm = "/alpha"
 	zap.S().Debugw("Open Banking Policy set unmarshaled", "policy-set", ps)
 	path := "/am/json/alpha/applications/?_action=create"
-	s := am.Client.Post(path, ps, map[string]string{
+	s := Client.Post(path, ps, map[string]string{
 		"Accept":             "*/*",
 		"Content-Type":       "application/json",
 		"Connection":         "keep-alive",
@@ -89,7 +85,7 @@ func CreateAISPPolicy() {
 		panic(err)
 	}
 	path := "/am/json/alpha/policies/?_action=create"
-	s := am.Client.Post(path, b, map[string]string{
+	s := Client.Post(path, b, map[string]string{
 		"Accept":             "*/*",
 		"Content-Type":       "application/json",
 		"Connection":         "keep-alive",
@@ -114,7 +110,7 @@ func CreatePISPPolicy(policyScriptId string) {
 	pisp.Condition.ScriptID = policyScriptId
 	zap.S().Debugw("PISP Policy", "policy", pisp)
 	path := "/am/json/alpha/policies/?_action=create"
-	s := am.Client.Post(path, pisp, map[string]string{
+	s := Client.Post(path, pisp, map[string]string{
 		"Accept":             "*/*",
 		"Content-Type":       "application/json",
 		"Connection":         "keep-alive",
@@ -139,7 +135,7 @@ func CreatePolicyEngineOAuth2Client() {
 	engineClient.CoreOAuth2ClientConfig.Userpassword = "password"
 	zap.S().Debugw("Engine client body", "engine", engineClient)
 	path := "/am/json/alpha/realm-config/agents/OAuth2Client/policy-client"
-	s := am.Client.Put(path, engineClient, map[string]string{
+	s := Client.Put(path, engineClient, map[string]string{
 		"Accept":           "application/json",
 		"Content-Type":     "application/json",
 		"Connection":       "keep-alive",

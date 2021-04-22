@@ -1,4 +1,4 @@
-package serviceaccount
+package am
 
 // OAuth2Client model
 type OAuth2Client struct {

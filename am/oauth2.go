@@ -1,18 +1,14 @@
-package oauth2
+package am
 
 import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
 
-	"github.com/go-resty/resty/v2"
-	"github.com/secureBankingAcceleratorToolkit/securebanking-openbanking-uk-fidc-initialiszer/am"
-	"github.com/secureBankingAcceleratorToolkit/securebanking-openbanking-uk-fidc-initialiszer/common"
+	"github.com/secureBankingAccessToolkit/securebanking-openbanking-uk-fidc-initialiszer/common"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 )
-
-var client = resty.New().SetRedirectPolicy(resty.NoRedirectPolicy()).SetError(common.RestError{})
 
 // CreateRemoteConsentService -
 func CreateRemoteConsentService() {
@@ -81,7 +77,7 @@ func CreateRemoteConsentService() {
 	}
 	path := "/am/json/realms/root/realms/alpha/realm-config/agents/RemoteConsentAgent/forgerock-rcs"
 
-	s := am.Client.Put(path, rc, map[string]string{
+	s := Client.Put(path, rc, map[string]string{
 		"Accept":             "*/*",
 		"Connection":         "keep-alive",
 		"Accept-API-Version": "protocol=2.0,resource=1.0",
@@ -123,7 +119,7 @@ func CreateSoftwarePublisherAgent() {
 		},
 	}
 	path := "/am/json/realms/root/realms/alpha/realm-config/agents/SoftwarePublisher/OBRI"
-	s := am.Client.Put(path, pa, map[string]string{
+	s := Client.Put(path, pa, map[string]string{
 		"Accept":             "*/*",
 		"Connection":         "keep-alive",
 		"Accept-API-Version": "protocol=2.0,resource=1.0",
@@ -141,7 +137,7 @@ func CreateOIDCClaimsScript(cookie *http.Cookie) string {
 	}
 
 	path := "https://" + viper.GetString("IAM_FQDN") + "/am/json/alpha/scripts/?_action=create"
-	claimsScript := &am.RequestScript{}
+	claimsScript := &RequestScript{}
 	resp, err := client.R().
 		SetHeader("Accept", "*/*").
 		SetHeader("Content-Type", "application/json").
@@ -174,7 +170,7 @@ func UpdateOAuth2Provider(claimsScriptID string) {
 	oauth2Provider.CoreOIDCConfig.OidcClaimsScript = claimsScriptID
 	zap.S().Infow("Updating OAuth2 provider", "claimScriptId", oauth2Provider.CoreOIDCConfig.OidcClaimsScript)
 	path := "/am/json/alpha/realm-config/services/oauth-oidc"
-	s := am.Client.Put(path, oauth2Provider, map[string]string{
+	s := Client.Put(path, oauth2Provider, map[string]string{
 		"Accept":           "*/*",
 		"Content-Type":     "application/json",
 		"Connection":       "keep-alive",
