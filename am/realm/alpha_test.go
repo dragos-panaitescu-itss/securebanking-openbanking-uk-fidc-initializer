@@ -1,7 +1,6 @@
 package realm
 
 import (
-	"encoding/json"
 	"io/ioutil"
 	"testing"
 
@@ -12,40 +11,30 @@ import (
 )
 
 func TestFindExistingAlphaClient(t *testing.T) {
-	mockResultFn := func(args mock.Arguments) {
-		ob := args.Get(2)
-		buffer, _ := ioutil.ReadFile("client-check-test.json")
-		_ = json.Unmarshal(buffer, &ob)
-	}
-
 	mockRestReaderWriter := &mocks.RestReaderWriter{}
 	am.Client = mockRestReaderWriter
-	mockRestReaderWriter.On("Get", mock.Anything, mock.Anything, mock.Anything).
-		Run(mockResultFn)
+	buffer, _ := ioutil.ReadFile("client-check-test.json")
+	mockRestReaderWriter.On("Get", mock.Anything, mock.Anything).
+		Return(buffer)
 
 	b := AlphaClientsExist("Doesnt existy")
 	assert.False(t, b)
-	mockRestReaderWriter.AssertCalled(t, "Get", mock.Anything, mock.Anything, mock.Anything)
+	mockRestReaderWriter.AssertCalled(t, "Get", mock.Anything, mock.Anything)
 
 	b = AlphaClientsExist("ig-client")
 	assert.True(t, b)
 }
 
 func TestMangedObjectExists(t *testing.T) {
-	mockResultFn := func(args mock.Arguments) {
-		ob := args.Get(2)
-		buffer, _ := ioutil.ReadFile("managed-objects-test.json")
-		_ = json.Unmarshal(buffer, &ob)
-	}
-
 	mockRestReaderWriter := &mocks.RestReaderWriter{}
 	am.Client = mockRestReaderWriter
-	mockRestReaderWriter.On("Get", mock.Anything, mock.Anything, mock.Anything).
-		Run(mockResultFn)
+	buffer, _ := ioutil.ReadFile("managed-objects-test.json")
+	mockRestReaderWriter.On("Get", mock.Anything, mock.Anything).
+		Return(buffer)
 
 	b := ManagedObjectExists("api_client")
 	assert.True(t, b)
-	mockRestReaderWriter.AssertCalled(t, "Get", mock.Anything, mock.Anything, mock.Anything)
+	mockRestReaderWriter.AssertCalled(t, "Get", mock.Anything, mock.Anything)
 
 	b = ManagedObjectExists("xyz")
 	assert.False(t, b)

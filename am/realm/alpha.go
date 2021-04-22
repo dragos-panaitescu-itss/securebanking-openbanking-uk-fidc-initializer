@@ -1,6 +1,7 @@
 package realm
 
 import (
+	"encoding/json"
 	"io/ioutil"
 	"net/http"
 	"strings"
@@ -74,11 +75,16 @@ type ClientResult struct {
 func AlphaClientsExist(clientName string) bool {
 	path := "/am/json/realms/root/realms/alpha/realm-config/agents/OAuth2Client?_queryFilter=true&_pageSize=10&_fields=coreOAuth2ClientConfig/status,coreOAuth2ClientConfig/agentgroup"
 	result := &ClientResult{}
-	am.Client.Get(path, map[string]string{
+	b := am.Client.Get(path, map[string]string{
 		"Accept":             "application/json",
 		"X-Requested-With":   "ForgeRock Identity Cloud Postman Collection",
 		"Accept-Api-Version": "protocol=2.0,resource=1.0",
-	}, result)
+	})
+
+	err := json.Unmarshal(b, result)
+	if err != nil {
+		panic(err)
+	}
 
 	for _, r := range result.Result {
 		if r.ID == clientName {
@@ -93,10 +99,16 @@ func AlphaClientsExist(clientName string) bool {
 func ManagedObjectExists(objectName string) bool {
 	path := "/openidm/config/managed"
 	result := &OBManagedObjects{}
-	am.Client.Get(path, map[string]string{
+	b := am.Client.Get(path, map[string]string{
 		"Accept":           "application/json",
 		"X-Requested-With": "ForgeRock Identity Cloud Postman Collection",
-	}, result)
+	})
+
+	err := json.Unmarshal(b, result)
+	if err != nil {
+		panic(err)
+	}
+
 	for _, o := range result.Objects {
 		zap.S().Infow("checking", "object", o)
 		if strings.Contains(o.Name, objectName) {

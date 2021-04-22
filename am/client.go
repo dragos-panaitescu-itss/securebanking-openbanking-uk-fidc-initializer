@@ -9,9 +9,10 @@ import (
 )
 
 type RestReaderWriter interface {
-	Get(string, map[string]string, interface{})
-	Patch(string, map[string]string, interface{})
-	Post(string, map[string]string, interface{})
+	Get(string, map[string]string) []byte
+	Patch(string, interface{}, map[string]string) int
+	Post(string, interface{}, map[string]string) int
+	Put(string, interface{}, map[string]string) int
 }
 
 type RestClient struct {
@@ -32,34 +33,60 @@ func InitRestReaderWriter(cookie *http.Cookie, authCode string) {
 	}
 }
 
-func (r *RestClient) Get(path string, headers map[string]string, ob interface{}) {
-	_, err := r.constructRestRequest(headers, ob).Get(r.FQDN + path)
+func (r *RestClient) Get(path string, headers map[string]string) []byte {
+	resp, err := r.request(headers).
+		Get(r.FQDN + path)
+
+	common.RaiseForStatus(err, resp.Error())
 
 	if err != nil {
 		panic(err)
 	}
+
+	return resp.Body()
 }
 
-func (r *RestClient) constructRestRequest(headers map[string]string, ob interface{}) *resty.Request {
+func (r *RestClient) request(headers map[string]string) *resty.Request {
 	return r.Resty.R().
 		SetHeaders(headers).
 		SetCookie(r.Cookie).
-		SetAuthToken(r.AuthCode).
-		SetResult(ob)
+		SetAuthToken(r.AuthCode)
 }
 
-func (r *RestClient) Post(path string, headers map[string]string, ob interface{}) {
-	_, err := r.constructRestRequest(headers, ob).Post(r.FQDN + path)
+func (r *RestClient) Post(path string, ob interface{}, headers map[string]string) int {
+	resp, err := r.request(headers).
+		SetBody(ob).
+		SetContentLength(true).
+		Post(r.FQDN + path)
 
+	common.RaiseForStatus(err, resp.Error())
 	if err != nil {
 		panic(err)
 	}
+	return resp.StatusCode()
 }
 
-func (r *RestClient) Patch(path string, headers map[string]string, ob interface{}) {
-	_, err := r.constructRestRequest(headers, ob).Patch(r.FQDN + path)
+func (r *RestClient) Patch(path string, ob interface{}, headers map[string]string) int {
+	resp, err := r.request(headers).
+		SetBody(ob).
+		Patch(r.FQDN + path)
 
+	common.RaiseForStatus(err, resp.Error())
 	if err != nil {
 		panic(err)
 	}
+	return resp.StatusCode()
+}
+
+func (r *RestClient) Put(path string, ob interface{}, headers map[string]string) int {
+	resp, err := r.request(headers).
+		SetBody(ob).
+		SetContentLength(true).
+		Put(r.FQDN + path)
+
+	common.RaiseForStatus(err, resp.Error())
+	if err != nil {
+		panic(err)
+	}
+	return resp.StatusCode()
 }

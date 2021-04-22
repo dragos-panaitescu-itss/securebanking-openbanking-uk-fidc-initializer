@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/go-resty/resty/v2"
+	"github.com/secureBankingAcceleratorToolkit/securebanking-openbanking-uk-fidc-initialiszer/am"
 	"github.com/secureBankingAcceleratorToolkit/securebanking-openbanking-uk-fidc-initialiszer/common"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
@@ -20,20 +21,14 @@ func AddOBManagedObjects(cookie *http.Cookie, accessToken string) {
 		panic(err)
 	}
 
-	path := "https://" + viper.GetString("IAM_FQDN") + "/openidm/config/managed"
-	resp, err := client.R().
-		SetHeader("Accept", "*/*").
-		SetHeader("Content-Type", "application/json").
-		SetHeader("Connection", "keep-alive").
-		SetContentLength(true).
-		SetAuthToken(accessToken).
-		SetCookie(cookie).
-		SetBody(b).
-		Patch(path)
+	path := "/openidm/config/managed"
+	s := am.Client.Patch(path, b, map[string]string{
+		"Accept":       "*/*",
+		"Content-Type": "application/json",
+		"Connection":   "keep-alive",
+	})
 
-	common.RaiseForStatus(err, resp.Error())
-
-	zap.S().Infow("OpenBanking Managed Objects", "statusCode", resp.StatusCode())
+	zap.S().Infow("OpenBanking Managed Objects", "statusCode", s)
 }
 
 func AddAdditionalCDKObjects(cookie *http.Cookie, accessToken string) {
@@ -43,20 +38,14 @@ func AddAdditionalCDKObjects(cookie *http.Cookie, accessToken string) {
 		panic(err)
 	}
 
-	path := "https://" + viper.GetString("IAM_FQDN") + "/openidm/config/managed"
-	resp, err := client.R().
-		SetHeader("Accept", "*/*").
-		SetHeader("Content-Type", "application/json").
-		SetHeader("Connection", "keep-alive").
-		SetContentLength(true).
-		SetAuthToken(accessToken).
-		SetCookie(cookie).
-		SetBody(b).
-		Patch(path)
+	path := "/openidm/config/managed"
+	s := am.Client.Patch(path, b, map[string]string{
+		"Accept":       "*/*",
+		"Content-Type": "application/json",
+		"Connection":   "keep-alive",
+	})
 
-	common.RaiseForStatus(err, resp.Error())
-
-	zap.S().Infow("OpenBanking Managed Objects", "statusCode", resp.StatusCode())
+	zap.S().Infow("OpenBanking Managed Objects", "statusCode", s)
 }
 
 func CreateApiJwksEndpoint(cookie *http.Cookie, accessToken string) {
@@ -66,20 +55,14 @@ func CreateApiJwksEndpoint(cookie *http.Cookie, accessToken string) {
 		panic(err)
 	}
 
-	path := "https://" + viper.GetString("IAM_FQDN") + "/openidm/config/endpoint/apiclientjwks"
-	resp, err := client.R().
-		SetHeader("Accept", "*/*").
-		SetHeader("Content-Type", "application/json").
-		SetHeader("Connection", "keep-alive").
-		SetContentLength(true).
-		SetAuthToken(accessToken).
-		SetCookie(cookie).
-		SetBody(b).
-		Put(path)
+	path := "/openidm/config/endpoint/apiclientjwks"
+	s := am.Client.Put(path, b, map[string]string{
+		"Accept":       "*/*",
+		"Content-Type": "application/json",
+		"Connection":   "keep-alive",
+	})
 
-	common.RaiseForStatus(err, resp.Error())
-
-	zap.S().Infow("JWKS endpoint", "statusCode", resp.StatusCode())
+	zap.S().Infow("JWKS endpoint", "statusCode", s)
 }
 
 // CreateUser will create a user that will allow us to create new identities
@@ -91,18 +74,12 @@ func CreateUser(cookie *http.Cookie, accessToken string) {
 		panic(err)
 	}
 
-	path := "https://" + viper.GetString("IAM_FQDN") + "/openidm/config/managed"
-	resp, err := client.R().
-		SetHeader("Accept", "*/*").
-		SetHeader("Content-Type", "application/json").
-		SetHeader("Connection", "keep-alive").
-		SetContentLength(true).
-		SetAuthToken(accessToken).
-		SetCookie(cookie).
-		SetBody(b).
-		Patch(path)
+	path := "/openidm/config/managed"
+	s := am.Client.Patch(path, b, map[string]string{
+		"Accept":       "*/*",
+		"Content-Type": "application/json",
+		"Connection":   "keep-alive",
+	})
 
-	common.RaiseForStatus(err, resp.Error())
-
-	zap.S().Infow("User created", "statusCode", resp.StatusCode())
+	zap.S().Infow("User created", "statusCode", s)
 }

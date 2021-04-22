@@ -79,17 +79,15 @@ func CreateRemoteConsentService(cookie *http.Cookie) {
 			Collection: true,
 		},
 	}
-	path := "https://" + viper.GetString("IAM_FQDN") + "/am/json/realms/root/realms/alpha/realm-config/agents/RemoteConsentAgent/forgerock-rcs"
-	resp, err := client.R().
-		SetHeader("Accept", "*/*").
-		SetHeader("Connection", "keep-alive").
-		SetHeader("Accept-API-Version", "protocol=2.0,resource=1.0").
-		SetContentLength(true).
-		SetCookie(cookie).
-		SetBody(rc).
-		Put(path)
-	common.RaiseForStatus(err, resp.Error())
-	zap.S().Infow("Remote Consent Service", "statusCode", resp.StatusCode())
+	path := "/am/json/realms/root/realms/alpha/realm-config/agents/RemoteConsentAgent/forgerock-rcs"
+
+	s := am.Client.Put(path, rc, map[string]string{
+		"Accept":             "*/*",
+		"Connection":         "keep-alive",
+		"Accept-API-Version": "protocol=2.0,resource=1.0",
+	})
+
+	zap.S().Infow("Remote Consent Service", "statusCode", s)
 }
 
 // CreateSoftwarePublisherAgent -
@@ -124,17 +122,14 @@ func CreateSoftwarePublisherAgent(cookie *http.Cookie) {
 			Value:     "https://service.directory.ob.forgerock.financial/api/directory/keys/jwk_uri",
 		},
 	}
-	path := "https://" + viper.GetString("IAM_FQDN") + "/am/json/realms/root/realms/alpha/realm-config/agents/SoftwarePublisher/OBRI"
-	resp, err := client.R().
-		SetHeader("Accept", "*/*").
-		SetHeader("Connection", "keep-alive").
-		SetHeader("Accept-API-Version", "protocol=2.0,resource=1.0").
-		SetContentLength(true).
-		SetCookie(cookie).
-		SetBody(pa).
-		Put(path)
-	common.RaiseForStatus(err, resp.Error())
-	zap.S().Infow("Software Publisher Agent", "statusCode", resp.StatusCode())
+	path := "/am/json/realms/root/realms/alpha/realm-config/agents/SoftwarePublisher/OBRI"
+	s := am.Client.Put(path, pa, map[string]string{
+		"Accept":             "*/*",
+		"Connection":         "keep-alive",
+		"Accept-API-Version": "protocol=2.0,resource=1.0",
+	})
+
+	zap.S().Infow("Software Publisher Agent", "statusCode", s)
 }
 
 // CreateOIDCClaimsScript -
@@ -145,22 +140,16 @@ func CreateOIDCClaimsScript(cookie *http.Cookie) string {
 		panic(err)
 	}
 
-	path := "https://" + viper.GetString("IAM_FQDN") + "/am/json/alpha/scripts/?_action=create"
+	path := "/am/json/alpha/scripts/?_action=create"
 	claimsScript := &am.RequestScript{}
-	resp, err := client.R().
-		SetHeader("Accept", "*/*").
-		SetHeader("Content-Type", "application/json").
-		SetHeader("Connection", "keep-alive").
-		SetHeader("Accept-API-Version", "protocol=2.0,resource=1.0").
-		SetContentLength(true).
-		SetCookie(cookie).
-		SetResult(claimsScript).
-		SetBody(b).
-		Post(path)
+	s := am.Client.Post(path, b, map[string]string{
+		"Accept":             "*/*",
+		"Content-Type":       "application/json",
+		"Connection":         "keep-alive",
+		"Accept-API-Version": "protocol=2.0,resource=1.0",
+	})
 
-	common.RaiseForStatus(err, resp.Error())
-
-	zap.S().Infow("OIDC claims script", "statusCode", resp.StatusCode(), "claimsScriptID", claimsScript.ID, "createdBy", claimsScript.CreatedBy)
+	zap.S().Infow("OIDC claims script", "statusCode", s, "claimsScriptID", claimsScript.ID, "createdBy", claimsScript.CreatedBy)
 	return claimsScript.ID
 }
 
@@ -179,17 +168,12 @@ func UpdateOAuth2Provider(cookie *http.Cookie, claimsScriptID string) {
 	oauth2Provider.CoreOIDCConfig.OidcClaimsScript = claimsScriptID
 	zap.S().Infow("Updating OAuth2 provider", "claimScriptId", oauth2Provider.CoreOIDCConfig.OidcClaimsScript)
 	path := "https://" + viper.GetString("IAM_FQDN") + "/am/json/alpha/realm-config/services/oauth-oidc"
-	resp, err := client.R().
-		SetHeader("Accept", "*/*").
-		SetHeader("Content-Type", "application/json").
-		SetHeader("Connection", "keep-alive").
-		SetHeader("X-Requested-With", "ForgeRock Identity Cloud Postman Collection").
-		SetContentLength(true).
-		SetCookie(cookie).
-		SetBody(oauth2Provider).
-		Put(path)
+	s := am.Client.Put(path, oauth2Provider, map[string]string{
+		"Accept":           "*/*",
+		"Content-Type":     "application/json",
+		"Connection":       "keep-alive",
+		"X-Requested-With": "ForgeRock Identity Cloud Postman Collection",
+	})
 
-	common.RaiseForStatus(err, resp.Error())
-
-	zap.S().Infow("OAuth2 provider", "statusCode", resp.StatusCode())
+	zap.S().Infow("OAuth2 provider", "statusCode", s)
 }

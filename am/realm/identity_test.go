@@ -1,7 +1,6 @@
 package realm
 
 import (
-	"encoding/json"
 	"io/ioutil"
 	"testing"
 
@@ -12,21 +11,16 @@ import (
 )
 
 func TestServiceIdentityExists(t *testing.T) {
-	mockResultFn := func(args mock.Arguments) {
-		ob := args.Get(2)
-		buffer, _ := ioutil.ReadFile("client-check-test.json")
-		_ = json.Unmarshal(buffer, &ob)
-	}
-
 	mockRestReaderWriter := &mocks.RestReaderWriter{}
 	am.Client = mockRestReaderWriter
-	mockRestReaderWriter.On("Get", mock.Anything, mock.Anything, mock.Anything).
-		Run(mockResultFn)
+	buffer, _ := ioutil.ReadFile("client-check-test.json")
+	mockRestReaderWriter.On("Get", mock.Anything, mock.Anything).
+		Return(buffer)
 
 	b := ServiceIdentityExists("ig-client")
 
 	assert.True(t, b)
-	mockRestReaderWriter.AssertCalled(t, "Get", mock.Anything, mock.Anything, mock.Anything)
+	mockRestReaderWriter.AssertCalled(t, "Get", mock.Anything, mock.Anything)
 
 	b = ServiceIdentityExists("Doesnt existy")
 	assert.False(t, b)

@@ -107,7 +107,6 @@ func (s *Session) GetIDMAdminAuthCode() {
 	zap.S().Debugw("Got Location header from IDM", "Location", v)
 	authCode := v["https://"+viper.GetString("IAM_FQDN")+"/platform/appAuthHelperRedirect.html?code"][0]
 	s.authCode = authCode
-	zap.S().Infow("Got auth code", "authCode", s.authCode, "cookie", resp.Cookies())
 }
 
 // GetIDMAdminToken - get admin token from IDM
@@ -130,5 +129,4 @@ func (s *Session) GetIDMAdminToken() {
 		Post(path)
 	common.RaiseForStatus(err, resp.Error())
 	s.AuthToken = *token
-	zap.S().Infow("Got admin token", "token", s.AuthToken)
 }
