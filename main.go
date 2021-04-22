@@ -36,7 +36,6 @@ func main() {
 	}
 
 	s.Authenticate()
-
 	am.InitRestReaderWriter(s.Cookie, s.AuthToken.AccessToken)
 
 	if !realm.AlphaClientsExist("policy-client") {

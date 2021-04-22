@@ -138,7 +138,7 @@ func CreatePolicyEngineOAuth2Client() {
 	}
 	engineClient.CoreOAuth2ClientConfig.Userpassword = "password"
 	zap.S().Debugw("Engine client body", "engine", engineClient)
-	path := "https://" + viper.GetString("IAM_FQDN") + "/am/json/alpha/realm-config/agents/OAuth2Client/policy-client"
+	path := "/am/json/alpha/realm-config/agents/OAuth2Client/policy-client"
 	s := am.Client.Put(path, engineClient, map[string]string{
 		"Accept":           "application/json",
 		"Content-Type":     "application/json",

@@ -173,7 +173,7 @@ func UpdateOAuth2Provider(claimsScriptID string) {
 	}
 	oauth2Provider.CoreOIDCConfig.OidcClaimsScript = claimsScriptID
 	zap.S().Infow("Updating OAuth2 provider", "claimScriptId", oauth2Provider.CoreOIDCConfig.OidcClaimsScript)
-	path := "https://" + viper.GetString("IAM_FQDN") + "/am/json/alpha/realm-config/services/oauth-oidc"
+	path := "/am/json/alpha/realm-config/services/oauth-oidc"
 	s := am.Client.Put(path, oauth2Provider, map[string]string{
 		"Accept":           "*/*",
 		"Content-Type":     "application/json",
