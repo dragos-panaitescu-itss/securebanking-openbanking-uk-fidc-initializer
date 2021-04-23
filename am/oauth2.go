@@ -88,6 +88,11 @@ func CreateRemoteConsentService() {
 
 // CreateSoftwarePublisherAgent -
 func CreateSoftwarePublisherAgent() {
+	if SoftwarePublisherAgentExists("OBRI") {
+		zap.L().Info("Skipping creation of Software publisher agent")
+		return
+	}
+
 	zap.L().Debug("Creating software publisher agent")
 	pa := PublisherAgent{
 		PublicKeyLocation: InheritedValueString{
@@ -126,6 +131,35 @@ func CreateSoftwarePublisherAgent() {
 	})
 
 	zap.S().Infow("Software Publisher Agent", "statusCode", s)
+}
+
+type SoftwarePublisherAgent struct {
+	Result []struct {
+		ID string `json:"_id"`
+	} `json:"result"`
+}
+
+func SoftwarePublisherAgentExists(name string) bool {
+	path := "/am/json/realms/root/realms/alpha/realm-config/agents/SoftwarePublisher?_queryFilter=true&_pageSize=10&_fields=agentgroup"
+	agent := &SoftwarePublisherAgent{}
+	b := Client.Get(path, map[string]string{
+		"Accept":             "application/json",
+		"X-Requested-With":   "ForgeRock Identity Cloud Postman Collection",
+		"Accept-Api-Version": "protocol=2.0,resource=1.0",
+	})
+
+	err := json.Unmarshal(b, agent)
+	if err != nil {
+		panic(err)
+	}
+
+	for _, r := range agent.Result {
+		if r.ID == name {
+			zap.L().Info("Software publisher agent " + name + " exists")
+			return true
+		}
+	}
+	return false
 }
 
 // CreateOIDCClaimsScript -
