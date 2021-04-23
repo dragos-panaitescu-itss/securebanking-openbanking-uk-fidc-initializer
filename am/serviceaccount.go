@@ -16,6 +16,11 @@ var client = resty.New().SetRedirectPolicy(resty.NoRedirectPolicy()).SetError(co
 
 // CreateIGServiceUser -
 func CreateIGServiceUser() {
+	if ServiceIdentityExists(viper.GetString("IG_IDM_USER")) {
+		zap.L().Info("Skipping creation of IG service user")
+		return
+	}
+
 	zap.L().Debug("Creating IG service user")
 
 	user := &common.ServiceUser{
@@ -42,6 +47,11 @@ func CreateIGServiceUser() {
 
 // CreateIGOAuth2Client -
 func CreateIGOAuth2Client() {
+	if AlphaClientsExist(viper.GetString("IG_CLIENT_ID")) {
+		zap.L().Info("Skipping creation of IG oauth2 client")
+		return
+	}
+
 	zap.L().Debug("Creating IG OAuth2 client")
 	b, err := ioutil.ReadFile(viper.GetString("REQUEST_BODY_PATH") + "ig-oauth2-client.json")
 	if err != nil {
@@ -67,6 +77,10 @@ func CreateIGOAuth2Client() {
 
 // CreateIGPolicyAgent -
 func CreateIGPolicyAgent() {
+	if ServiceIdentityExists("service_account.policy") {
+		zap.L().Info("Skipping creation of IG policy agent")
+		return
+	}
 	zap.L().Debug("Creating IG Policy agent")
 	policyAgent := &PolicyAgent{
 		Userpassword: "password",
@@ -114,4 +128,48 @@ func CreateIDMAdminClient(cookie *http.Cookie) {
 	common.RaiseForStatus(err, resp.Error())
 
 	zap.S().Infow("IDM Admin Client", "statusCode", resp.StatusCode(), "redirect", config.CoreOAuth2ClientConfig.RedirectionUris.Value)
+}
+
+type ServiceIdentity struct {
+	Result                  []Result    `json:"result"`
+	Resultcount             int         `json:"resultCount"`
+	Pagedresultscookie      interface{} `json:"pagedResultsCookie"`
+	Totalpagedresultspolicy string      `json:"totalPagedResultsPolicy"`
+	Totalpagedresults       int         `json:"totalPagedResults"`
+	Remainingpagedresults   int         `json:"remainingPagedResults"`
+}
+
+type Result struct {
+	ID             string   `json:"_id"`
+	Rev            string   `json:"_rev"`
+	Cn             []string `json:"cn"`
+	Mail           []string `json:"mail"`
+	Username       string   `json:"username"`
+	Inetuserstatus []string `json:"inetUserStatus"`
+}
+
+// ServiceIdentityExists will check for service identities in the alpha realm
+//   When CDK is removed, these entities might still be persisted. this gives us
+//   an indication that we do not need to initialize the environment
+func ServiceIdentityExists(identity string) bool {
+	path := "/am/json/realms/root/realms/alpha/users?_queryFilter=true&_pageSize=10&_fields=cn,mail,username,inetUserStatus"
+	serviceIdentity := &ServiceIdentity{}
+	b := Client.Get(path, map[string]string{
+		"Accept":             "application/json",
+		"X-Requested-With":   "ForgeRock Identity Cloud Postman Collection",
+		"Accept-Api-Version": "protocol=2.1, resource=4.0",
+	})
+
+	err := json.Unmarshal(b, serviceIdentity)
+	if err != nil {
+		panic(err)
+	}
+
+	for _, r := range serviceIdentity.Result {
+		if r.Username == identity {
+			zap.L().Info("Identity " + identity + " exists")
+			return true
+		}
+	}
+	return false
 }

@@ -49,11 +49,9 @@ func main() {
 		am.CreatePolicyEngineOAuth2Client()
 	}
 
-	if !am.AlphaClientsExist(viper.GetString("IG_CLIENT_ID")) {
-		am.CreateIGServiceUser()
-		am.CreateIGOAuth2Client()
-		am.CreateIGPolicyAgent()
-	}
+	am.CreateIGServiceUser()
+	am.CreateIGOAuth2Client()
+	am.CreateIGPolicyAgent()
 
 	time.Sleep(5 * time.Second)
 	if !am.ManagedObjectExists("apiClient") {
