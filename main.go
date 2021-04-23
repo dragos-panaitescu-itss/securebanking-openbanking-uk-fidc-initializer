@@ -33,21 +33,20 @@ func main() {
 	s.Authenticate()
 	am.InitRestReaderWriter(s.Cookie, s.AuthToken.AccessToken)
 
-	if !am.AlphaClientsExist("policy-client") {
-		am.CreateRemoteConsentService()
-		am.CreateSoftwarePublisherAgent()
-		id := am.CreateOIDCClaimsScript(s.Cookie)
-		am.UpdateOAuth2Provider(id)
+	am.CreateRemoteConsentService()
+	am.CreateSoftwarePublisherAgent()
 
-		time.Sleep(5 * time.Second)
+	id := am.CreateOIDCClaimsScript(s.Cookie)
+	am.UpdateOAuth2Provider(id)
 
-		am.CreatePolicyServiceUser()
-		scriptID := am.CreatePolicyEvaluationScript(s.Cookie)
-		am.CreateOpenBankingPolicySet()
-		am.CreateAISPPolicy()
-		am.CreatePISPPolicy(scriptID)
-		am.CreatePolicyEngineOAuth2Client()
-	}
+	time.Sleep(5 * time.Second)
+
+	am.CreatePolicyServiceUser()
+	scriptID := am.CreatePolicyEvaluationScript(s.Cookie)
+	am.CreateOpenBankingPolicySet()
+	am.CreateAISPPolicy()
+	am.CreatePISPPolicy(scriptID)
+	am.CreatePolicyEngineOAuth2Client()
 
 	am.CreateIGServiceUser()
 	am.CreateIGOAuth2Client()

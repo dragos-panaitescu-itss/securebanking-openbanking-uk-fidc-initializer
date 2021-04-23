@@ -12,6 +12,11 @@ import (
 
 // CreatePolicyServiceUser -
 func CreatePolicyServiceUser() {
+	if ServiceIdentityExists("service_account.policy") {
+		zap.L().Info("Skipping creation of Policy service user")
+		return
+	}
+
 	b, err := ioutil.ReadFile(viper.GetString("REQUEST_BODY_PATH") + "create-policy-service-user.json")
 	if err != nil {
 		panic(err)
@@ -28,6 +33,12 @@ func CreatePolicyServiceUser() {
 
 // CreatePolicyEvaluationScript - and returns the created ID
 func CreatePolicyEvaluationScript(cookie *http.Cookie) string {
+	id := GetScriptIdByName("Open Banking Dynamic Policy")
+	if id != "" {
+		zap.L().Info("Script exists")
+		return id
+	}
+
 	zap.L().Debug("Creating policy evaluation script")
 	b, err := ioutil.ReadFile(viper.GetString("REQUEST_BODY_PATH") + "policy-evaluation-script.json")
 	if err != nil {
@@ -54,6 +65,11 @@ func CreatePolicyEvaluationScript(cookie *http.Cookie) string {
 
 // CreateOpenBankingPolicySet -
 func CreateOpenBankingPolicySet() {
+	if PolicySetExists("Open Banking") {
+		zap.L().Info("Skipping policy set creation")
+		return
+	}
+
 	zap.L().Debug("Creating Open Banking policy set")
 	b, err := ioutil.ReadFile(viper.GetString("REQUEST_BODY_PATH") + "ob-policy-set.json")
 	if err != nil {
@@ -77,8 +93,70 @@ func CreateOpenBankingPolicySet() {
 	zap.S().Infow("Open Banking Policy Set", "statusCode", s)
 }
 
+type PolicySet struct {
+	Result []struct {
+		Name string `json:"name"`
+	} `json:"result"`
+}
+
+func PolicySetExists(name string) bool {
+	path := "/am/json/alpha/applications?_pageSize=20&_sortKeys=name&_queryFilter=name+eq+%22%5E(%3F!sunAMDelegationService%24).*%22&_pagedResultsOffset=0"
+	serviceIdentity := &PolicySet{}
+	b := Client.Get(path, map[string]string{
+		"Accept":             "application/json",
+		"X-Requested-With":   "ForgeRock Identity Cloud Postman Collection",
+		"Accept-Api-Version": "protocol=1.0,resource=2.0",
+	})
+
+	err := json.Unmarshal(b, serviceIdentity)
+	if err != nil {
+		panic(err)
+	}
+
+	for _, r := range serviceIdentity.Result {
+		if r.Name == name {
+			zap.L().Info("Policy set " + name + " exists")
+			return true
+		}
+	}
+	return false
+}
+
+type Policy struct {
+	Result []struct {
+		Name string `json:"name"`
+	} `json:"result"`
+}
+
+func PolicyExists(name string) bool {
+	path := "/am/json/alpha/policies?_pageSize=20&_sortKeys=name&_queryFilter=applicationName+eq+%22Open%20Banking%22&_pagedResultsOffset=0"
+	serviceIdentity := &PolicySet{}
+	b := Client.Get(path, map[string]string{
+		"Accept":             "application/json",
+		"X-Requested-With":   "ForgeRock Identity Cloud Postman Collection",
+		"Accept-Api-Version": "protocol=1.0,resource=2.0",
+	})
+
+	err := json.Unmarshal(b, serviceIdentity)
+	if err != nil {
+		panic(err)
+	}
+
+	for _, r := range serviceIdentity.Result {
+		if r.Name == name {
+			zap.L().Info("Policy " + name + " exists")
+			return true
+		}
+	}
+	return false
+}
+
 // CreateAISPPolicy -
 func CreateAISPPolicy() {
+	if PolicyExists("AISP Policy") {
+		zap.L().Info("Skipping creation of AISP policy")
+		return
+	}
 	zap.L().Debug("Creating AISP policy")
 	b, err := ioutil.ReadFile(viper.GetString("REQUEST_BODY_PATH") + "aisp-policy.json")
 	if err != nil {
@@ -97,6 +175,10 @@ func CreateAISPPolicy() {
 
 // CreatePISPPolicy -
 func CreatePISPPolicy(policyScriptId string) {
+	if PolicyExists("PISP Policy") {
+		zap.L().Info("Skipping creation of PISP policy")
+		return
+	}
 	zap.L().Debug("Creating PISP policy")
 	b, err := ioutil.ReadFile(viper.GetString("REQUEST_BODY_PATH") + "pisp-policy.json")
 	if err != nil {
@@ -122,6 +204,11 @@ func CreatePISPPolicy(policyScriptId string) {
 
 // CreatePolicyEngineOAuth2Client -
 func CreatePolicyEngineOAuth2Client() {
+	if AlphaClientsExist("policy-client") {
+		zap.L().Info("Skipping creation of policy engine oauth2 client")
+		return
+	}
+
 	zap.L().Debug("Creating policy engine oauth2 client")
 	b, err := ioutil.ReadFile(viper.GetString("REQUEST_BODY_PATH") + "create-policy-engine-oauth2-client.json")
 	if err != nil {

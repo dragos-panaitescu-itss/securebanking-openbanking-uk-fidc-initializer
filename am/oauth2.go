@@ -12,6 +12,10 @@ import (
 
 // CreateRemoteConsentService -
 func CreateRemoteConsentService() {
+	if RemoteConsentExists("forgerock-rcs") {
+		zap.L().Info("Remote consent exists. skipping")
+		return
+	}
 	zap.L().Debug("Creating remote consent service")
 	rc := &RemoteConsent{
 		RemoteConsentRequestEncryptionAlgorithm: InheritedValueString{
@@ -84,6 +88,35 @@ func CreateRemoteConsentService() {
 	})
 
 	zap.S().Infow("Remote Consent Service", "statusCode", s)
+}
+
+type R struct {
+	Result []struct {
+		ID string `json:"_id"`
+	} `json:"result"`
+}
+
+func RemoteConsentExists(name string) bool {
+	path := "/am/json/realms/root/realms/alpha/realm-config/agents/RemoteConsentAgent?_queryFilter=true&_pageSize=10&_fields=agentgroup"
+	consent := &R{}
+	b := Client.Get(path, map[string]string{
+		"Accept":             "application/json",
+		"X-Requested-With":   "ForgeRock Identity Cloud Postman Collection",
+		"Accept-Api-Version": "protocol=2.0,resource=1.0",
+	})
+
+	err := json.Unmarshal(b, consent)
+	if err != nil {
+		panic(err)
+	}
+
+	for _, r := range consent.Result {
+		if r.ID == name {
+			zap.L().Info("Remote consent " + name + " exists")
+			return true
+		}
+	}
+	return false
 }
 
 // CreateSoftwarePublisherAgent -
@@ -164,6 +197,11 @@ func SoftwarePublisherAgentExists(name string) bool {
 
 // CreateOIDCClaimsScript -
 func CreateOIDCClaimsScript(cookie *http.Cookie) string {
+	id := GetScriptIdByName("Open Banking OIDC Claims Script")
+	if id != "" {
+		zap.L().Info("Script exists")
+		return id
+	}
 	zap.L().Debug("Creating OIDC claims script")
 	b, err := ioutil.ReadFile(viper.GetString("REQUEST_BODY_PATH") + "oidc.json")
 	if err != nil {
@@ -189,8 +227,42 @@ func CreateOIDCClaimsScript(cookie *http.Cookie) string {
 	return claimsScript.ID
 }
 
+type Script struct {
+	Result []struct {
+		ID   string `json:"_id"`
+		Name string `json:"name"`
+	} `json:"result"`
+}
+
+func GetScriptIdByName(name string) string {
+	path := "/am/json/alpha/scripts?_pageSize=20&_sortKeys=name&_queryFilter=true&_pagedResultsOffset=0"
+	consent := &Script{}
+	b := Client.Get(path, map[string]string{
+		"Accept":             "application/json",
+		"X-Requested-With":   "ForgeRock Identity Cloud Postman Collection",
+		"Accept-Api-Version": "protocol=1.0,resource=1.0",
+	})
+
+	err := json.Unmarshal(b, consent)
+	if err != nil {
+		panic(err)
+	}
+
+	for _, r := range consent.Result {
+		if r.Name == name {
+			zap.L().Info("Script " + name + " exists")
+			return r.ID
+		}
+	}
+	return ""
+}
+
 // UpdateOAuth2Provider - update the oauth 2 provider, must supply the claimScript ID
 func UpdateOAuth2Provider(claimsScriptID string) {
+	if Oauth2ProviderExists("oauth-oidc") {
+		zap.L().Info("OAuth2 provider exists")
+		return
+	}
 	b, err := ioutil.ReadFile(viper.GetString("REQUEST_BODY_PATH") + "oauth2provider.json")
 	if err != nil {
 		panic(err)
@@ -212,4 +284,27 @@ func UpdateOAuth2Provider(claimsScriptID string) {
 	})
 
 	zap.S().Infow("OAuth2 provider", "statusCode", s)
+}
+
+func Oauth2ProviderExists(id string) bool {
+	path := "/am/json/realms/root/realms/alpha/realm-config/services?_queryFilter=true"
+	r := &R{}
+	b := Client.Get(path, map[string]string{
+		"Accept":             "application/json",
+		"X-Requested-With":   "ForgeRock Identity Cloud Postman Collection",
+		"Accept-Api-Version": "protocol=1.0,resource=1.0",
+	})
+
+	err := json.Unmarshal(b, r)
+	if err != nil {
+		panic(err)
+	}
+
+	for _, r := range r.Result {
+		if r.ID == id {
+			zap.L().Info("OAuth2 provider " + id + " exists")
+			return true
+		}
+	}
+	return false
 }

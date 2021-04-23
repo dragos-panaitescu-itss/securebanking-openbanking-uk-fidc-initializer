@@ -1,0 +1,21 @@
+{
+  "result": [
+    {
+      "displayName": "Open Banking",
+      "description": null,
+      "attributeNames": [],
+      "conditions": [
+        "Script",
+        "AMIdentityMembership",
+        "IPv6",
+        "IPv4"
+      ],
+      "name": "Open Banking"
+    }
+  ],
+  "resultCount": 1,
+  "pagedResultsCookie": null,
+  "totalPagedResultsPolicy": "NONE",
+  "totalPagedResults": -1,
+  "remainingPagedResults": 0
+}
