@@ -12,11 +12,11 @@ import (
 func TestServiceIdentityExists(t *testing.T) {
 	mockRestReaderWriter := &mocks.RestReaderWriter{}
 	Client = mockRestReaderWriter
-	buffer, _ := ioutil.ReadFile("client-check-test.json")
+	buffer, _ := ioutil.ReadFile("serviceaccount-test.json")
 	mockRestReaderWriter.On("Get", mock.Anything, mock.Anything).
 		Return(buffer)
 
-	b := ServiceIdentityExists("ig-client")
+	b := ServiceIdentityExists("service_account.ig")
 
 	assert.True(t, b)
 	mockRestReaderWriter.AssertCalled(t, "Get", mock.Anything, mock.Anything)

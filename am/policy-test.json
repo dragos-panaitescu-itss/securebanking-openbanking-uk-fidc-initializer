@@ -1,0 +1,31 @@
+{
+  "result": [
+    {
+      "name": "AISP Policy",
+      "active": true,
+      "description": "",
+      "resources": [
+        "http://obdemo-rs:8089/openbanking/v3.1/accounts/*",
+        "http://obdemo-rs:8089/openbanking/v3.1/accounts"
+      ],
+      "applicationName": "Open Banking"
+    },
+    {
+      "name": "PISP Policy",
+      "active": true,
+      "description": "",
+      "resources": [
+        "http://obdemo-rs:8089/openbanking/v3.1/domestic-payments"
+      ],
+      "applicationName": "Open Banking",
+      "actionValues": {
+        "GET": false
+      }
+    }
+  ],
+  "resultCount": 2,
+  "pagedResultsCookie": null,
+  "totalPagedResultsPolicy": "NONE",
+  "totalPagedResults": -1,
+  "remainingPagedResults": 0
+}

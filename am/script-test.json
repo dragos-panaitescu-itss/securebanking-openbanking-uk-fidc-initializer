@@ -1,0 +1,13 @@
+{
+  "result": [
+    {
+      "_id": "123",
+      "name": "test script"
+    }
+  ],
+  "resultCount": 20,
+  "pagedResultsCookie": null,
+  "totalPagedResultsPolicy": "NONE",
+  "totalPagedResults": -1,
+  "remainingPagedResults": 6
+}

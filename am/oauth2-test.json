@@ -1,0 +1,14 @@
+{
+  "result": [
+    {
+      "_id": "OBRI",
+      "_rev": "-1024354422",
+      "agentgroup": null
+    }
+  ],
+  "resultCount": 1,
+  "pagedResultsCookie": null,
+  "totalPagedResultsPolicy": "EXACT",
+  "totalPagedResults": 1,
+  "remainingPagedResults": -1
+}

@@ -39,10 +39,6 @@ func (r *RestClient) Get(path string, headers map[string]string) []byte {
 
 	common.RaiseForStatus(err, resp.Error())
 
-	if err != nil {
-		panic(err)
-	}
-
 	return resp.Body()
 }
 
@@ -60,9 +56,7 @@ func (r *RestClient) Post(path string, ob interface{}, headers map[string]string
 		Post(r.FQDN + path)
 
 	common.RaiseForStatus(err, resp.Error())
-	if err != nil {
-		panic(err)
-	}
+
 	return resp.StatusCode()
 }
 
@@ -72,9 +66,7 @@ func (r *RestClient) Patch(path string, ob interface{}, headers map[string]strin
 		Patch(r.FQDN + path)
 
 	common.RaiseForStatus(err, resp.Error())
-	if err != nil {
-		panic(err)
-	}
+
 	return resp.StatusCode()
 }
 
@@ -85,8 +77,6 @@ func (r *RestClient) Put(path string, ob interface{}, headers map[string]string)
 		Put(r.FQDN + path)
 
 	common.RaiseForStatus(err, resp.Error())
-	if err != nil {
-		panic(err)
-	}
+
 	return resp.StatusCode()
 }
