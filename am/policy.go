@@ -112,12 +112,6 @@ func PolicySetExists(name string) bool {
 	})
 }
 
-type Policy struct {
-	Result []struct {
-		Name string `json:"name"`
-	} `json:"result"`
-}
-
 func PolicyExists(name string) bool {
 	path := "/am/json/alpha/policies?_pageSize=20&_sortKeys=name&_queryFilter=applicationName+eq+%22Open%20Banking%22&_pagedResultsOffset=0"
 	serviceIdentity := &AmResult{}

@@ -207,13 +207,6 @@ func CreateOIDCClaimsScript(cookie *http.Cookie) string {
 	return claimsScript.ID
 }
 
-type Script struct {
-	Result []struct {
-		ID   string `json:"_id"`
-		Name string `json:"name"`
-	} `json:"result"`
-}
-
 func GetScriptIdByName(name string) string {
 	path := "/am/json/alpha/scripts?_pageSize=20&_sortKeys=name&_queryFilter=true&_pagedResultsOffset=0"
 	consent := &AmResult{}
