@@ -93,15 +93,9 @@ func CreateOpenBankingPolicySet() {
 	zap.S().Infow("Open Banking Policy Set", "statusCode", s)
 }
 
-type PolicySet struct {
-	Result []struct {
-		Name string `json:"name"`
-	} `json:"result"`
-}
-
 func PolicySetExists(name string) bool {
 	path := "/am/json/alpha/applications?_pageSize=20&_sortKeys=name&_queryFilter=name+eq+%22%5E(%3F!sunAMDelegationService%24).*%22&_pagedResultsOffset=0"
-	serviceIdentity := &PolicySet{}
+	serviceIdentity := &AmResult{}
 	b := Client.Get(path, map[string]string{
 		"Accept":             "application/json",
 		"X-Requested-With":   "ForgeRock Identity Cloud Postman Collection",
@@ -113,13 +107,9 @@ func PolicySetExists(name string) bool {
 		panic(err)
 	}
 
-	for _, r := range serviceIdentity.Result {
-		if r.Name == name {
-			zap.L().Info("Policy set " + name + " exists")
-			return true
-		}
-	}
-	return false
+	return Find(name, serviceIdentity, func(r *Result) string {
+		return r.Name
+	})
 }
 
 type Policy struct {
@@ -130,7 +120,7 @@ type Policy struct {
 
 func PolicyExists(name string) bool {
 	path := "/am/json/alpha/policies?_pageSize=20&_sortKeys=name&_queryFilter=applicationName+eq+%22Open%20Banking%22&_pagedResultsOffset=0"
-	serviceIdentity := &PolicySet{}
+	serviceIdentity := &AmResult{}
 	b := Client.Get(path, map[string]string{
 		"Accept":             "application/json",
 		"X-Requested-With":   "ForgeRock Identity Cloud Postman Collection",
@@ -142,13 +132,9 @@ func PolicyExists(name string) bool {
 		panic(err)
 	}
 
-	for _, r := range serviceIdentity.Result {
-		if r.Name == name {
-			zap.L().Info("Policy " + name + " exists")
-			return true
-		}
-	}
-	return false
+	return Find(name, serviceIdentity, func(r *Result) string {
+		return r.Name
+	})
 }
 
 // CreateAISPPolicy -
