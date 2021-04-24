@@ -7,6 +7,9 @@ mod:
 build: clean
 	go build -o setup
 
+test:
+	go test ./...
+
 clean:
 	rm -f setup
 

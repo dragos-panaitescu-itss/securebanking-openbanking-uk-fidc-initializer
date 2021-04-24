@@ -1,0 +1,24 @@
+name: pr
+
+on:
+  pull_request:
+    branches: [ master ]
+    paths-ignore:
+      - README.md
+
+env:
+  SERVICE_NAME: securebanking-openbanking-uk-fidc-inilializer
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+          token: ${{ secrets.BOT_TOKEN }}
+
+      - name: Run Tests
+        run: |
+          make test
