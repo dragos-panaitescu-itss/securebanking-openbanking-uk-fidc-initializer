@@ -90,15 +90,9 @@ func CreateRemoteConsentService() {
 	zap.S().Infow("Remote Consent Service", "statusCode", s)
 }
 
-type R struct {
-	Result []struct {
-		ID string `json:"_id"`
-	} `json:"result"`
-}
-
 func RemoteConsentExists(name string) bool {
 	path := "/am/json/realms/root/realms/alpha/realm-config/agents/RemoteConsentAgent?_queryFilter=true&_pageSize=10&_fields=agentgroup"
-	consent := &R{}
+	consent := &AmResult{}
 	b := Client.Get(path, map[string]string{
 		"Accept":             "application/json",
 		"X-Requested-With":   "ForgeRock Identity Cloud Postman Collection",
@@ -110,13 +104,9 @@ func RemoteConsentExists(name string) bool {
 		panic(err)
 	}
 
-	for _, r := range consent.Result {
-		if r.ID == name {
-			zap.L().Info("Remote consent " + name + " exists")
-			return true
-		}
-	}
-	return false
+	return Find(name, consent, func(r *Result) string {
+		return r.ID
+	})
 }
 
 // CreateSoftwarePublisherAgent -
@@ -166,15 +156,9 @@ func CreateSoftwarePublisherAgent() {
 	zap.S().Infow("Software Publisher Agent", "statusCode", s)
 }
 
-type SoftwarePublisherAgent struct {
-	Result []struct {
-		ID string `json:"_id"`
-	} `json:"result"`
-}
-
 func SoftwarePublisherAgentExists(name string) bool {
 	path := "/am/json/realms/root/realms/alpha/realm-config/agents/SoftwarePublisher?_queryFilter=true&_pageSize=10&_fields=agentgroup"
-	agent := &SoftwarePublisherAgent{}
+	agent := &AmResult{}
 	b := Client.Get(path, map[string]string{
 		"Accept":             "application/json",
 		"X-Requested-With":   "ForgeRock Identity Cloud Postman Collection",
@@ -186,13 +170,9 @@ func SoftwarePublisherAgentExists(name string) bool {
 		panic(err)
 	}
 
-	for _, r := range agent.Result {
-		if r.ID == name {
-			zap.L().Info("Software publisher agent " + name + " exists")
-			return true
-		}
-	}
-	return false
+	return Find(name, agent, func(r *Result) string {
+		return r.ID
+	})
 }
 
 // CreateOIDCClaimsScript -
@@ -227,16 +207,9 @@ func CreateOIDCClaimsScript(cookie *http.Cookie) string {
 	return claimsScript.ID
 }
 
-type Script struct {
-	Result []struct {
-		ID   string `json:"_id"`
-		Name string `json:"name"`
-	} `json:"result"`
-}
-
 func GetScriptIdByName(name string) string {
 	path := "/am/json/alpha/scripts?_pageSize=20&_sortKeys=name&_queryFilter=true&_pagedResultsOffset=0"
-	consent := &Script{}
+	consent := &AmResult{}
 	b := Client.Get(path, map[string]string{
 		"Accept":             "application/json",
 		"X-Requested-With":   "ForgeRock Identity Cloud Postman Collection",
@@ -248,13 +221,9 @@ func GetScriptIdByName(name string) string {
 		panic(err)
 	}
 
-	for _, r := range consent.Result {
-		if r.Name == name {
-			zap.L().Info("Script " + name + " exists")
-			return r.ID
-		}
-	}
-	return ""
+	return FindIdByName(name, consent, func(r *Result) string {
+		return r.Name
+	})
 }
 
 // UpdateOAuth2Provider - update the oauth 2 provider, must supply the claimScript ID
@@ -288,7 +257,7 @@ func UpdateOAuth2Provider(claimsScriptID string) {
 
 func Oauth2ProviderExists(id string) bool {
 	path := "/am/json/realms/root/realms/alpha/realm-config/services?_queryFilter=true"
-	r := &R{}
+	r := &AmResult{}
 	b := Client.Get(path, map[string]string{
 		"Accept":             "application/json",
 		"X-Requested-With":   "ForgeRock Identity Cloud Postman Collection",
@@ -300,11 +269,7 @@ func Oauth2ProviderExists(id string) bool {
 		panic(err)
 	}
 
-	for _, r := range r.Result {
-		if r.ID == id {
-			zap.L().Info("OAuth2 provider " + id + " exists")
-			return true
-		}
-	}
-	return false
+	return Find(id, r, func(r *Result) string {
+		return r.ID
+	})
 }

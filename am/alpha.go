@@ -50,26 +50,10 @@ func AlphaRealmExists(cookie *http.Cookie) bool {
 	return false
 }
 
-type ClientResult struct {
-	Result []struct {
-		ID                     string `json:"_id"`
-		Rev                    string `json:"_rev"`
-		Coreoauth2Clientconfig struct {
-			Status     string      `json:"status"`
-			Agentgroup interface{} `json:"agentgroup"`
-		} `json:"coreOAuth2ClientConfig"`
-	} `json:"result"`
-	Resultcount             int         `json:"resultCount"`
-	Pagedresultscookie      interface{} `json:"pagedResultsCookie"`
-	Totalpagedresultspolicy string      `json:"totalPagedResultsPolicy"`
-	Totalpagedresults       int         `json:"totalPagedResults"`
-	Remainingpagedresults   int         `json:"remainingPagedResults"`
-}
-
 // AlphaClientsExist - Will return true if clients exist in the alpha realm.
 func AlphaClientsExist(clientName string) bool {
 	path := "/am/json/realms/root/realms/alpha/realm-config/agents/OAuth2Client?_queryFilter=true&_pageSize=10&_fields=coreOAuth2ClientConfig/status,coreOAuth2ClientConfig/agentgroup"
-	result := &ClientResult{}
+	result := &AmResult{}
 	b := Client.Get(path, map[string]string{
 		"Accept":             "application/json",
 		"X-Requested-With":   "ForgeRock Identity Cloud Postman Collection",
@@ -81,11 +65,7 @@ func AlphaClientsExist(clientName string) bool {
 		panic(err)
 	}
 
-	for _, r := range result.Result {
-		if r.ID == clientName {
-			zap.L().Info("Client " + clientName + " exists")
-			return true
-		}
-	}
-	return false
+	return Find(clientName, result, func(r *Result) string {
+		return r.ID
+	})
 }
