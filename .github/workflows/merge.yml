@@ -1,0 +1,33 @@
+name: merge
+
+on:
+  push:
+    branches: [ master ]
+    paths-ignore:
+      - README.md
+
+env:
+  SERVICE_NAME: securebanking-openbanking-uk-fidc-inilializer
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Run Tests
+        run: |
+          make test
+
+      - uses: google-github-actions/setup-gcloud@master
+        with:
+          service_account_key: ${{ secrets.GCR_KEY }}
+        # Configure docker to use the gcloud command-line tool as a credential helper
+      - run: |
+          gcloud auth configure-docker
+      
+      - name: docker build
+        run: |
+          make docker
+          docker push eu.gcr.io/${{ secrets.DEV_REPO }}/securebanking/$SERVICE_NAME:latest
