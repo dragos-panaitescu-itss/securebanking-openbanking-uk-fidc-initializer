@@ -9,8 +9,21 @@ import (
 	"go.uber.org/zap"
 )
 
-// ManagedObjectExists - checks if a managed object exists, must supply the object name
-func ManagedObjectExists(objectName string) bool {
+var managedObjectNames = []string{
+	"accountAccessIntent",
+	"domesticPaymentIntent",
+	"apiClient",
+	"apiClientOrg",
+}
+
+var additionalManagedObjectNames = []string{
+	"alpha_user",
+	"alpha_role",
+	"alpha_usermeta",
+	"alpha_organization",
+}
+
+func MissingObjects(objectNames []string) []string {
 	path := "/openidm/config/managed"
 	result := &OBManagedObjects{}
 	b := Client.Get(path, map[string]string{
@@ -23,14 +36,18 @@ func ManagedObjectExists(objectName string) bool {
 		panic(err)
 	}
 
+	var missingObjects []string = objectNames
 	for _, o := range result.Objects {
-		zap.S().Infow("checking", "object", o)
-		if strings.Contains(o.Name, objectName) {
-			zap.L().Debug("ManagedObject " + objectName + " found")
-			return true
+		for i, objectName := range missingObjects {
+			zap.S().Debugw("checking", "object", o)
+			if strings.Contains(o.Name, objectName) {
+				zap.S().Infow("ManagedObject found", "name", objectName)
+				missingObjects = append(missingObjects[:i], missingObjects[i+1:]...)
+				break
+			}
 		}
 	}
-	return false
+	return missingObjects
 }
 
 // OBManagedObjects model
@@ -43,8 +60,15 @@ type OBManagedObjects struct {
 
 // AddOBManagedObjects -
 func AddOBManagedObjects() {
-	zap.L().Debug("Adding OB managed objects")
-	b, err := ioutil.ReadFile(viper.GetString("REQUEST_BODY_PATH") + "ob-managed-objects.json")
+	missingObjects := MissingObjects(managedObjectNames)
+
+	for _, o := range missingObjects {
+		AddManagedObject(o)
+	}
+}
+
+func AddManagedObject(name string) {
+	b, err := ioutil.ReadFile(viper.GetString("REQUEST_BODY_PATH") + "managed-objects/" + name + ".json")
 	if err != nil {
 		panic(err)
 	}
@@ -56,28 +80,19 @@ func AddOBManagedObjects() {
 		"Connection":   "keep-alive",
 	})
 
-	zap.S().Infow("OpenBanking Managed Objects", "statusCode", s)
+	zap.S().Infow("Managed object patched", "statusCode", s, "name", name)
 }
 
 func AddAdditionalCDKObjects() {
-	zap.L().Debug("Adding OB managed objects")
-	b, err := ioutil.ReadFile(viper.GetString("REQUEST_BODY_PATH") + "cdk-additional-objects.json")
-	if err != nil {
-		panic(err)
+	missingObjects := MissingObjects(additionalManagedObjectNames)
+
+	for _, o := range missingObjects {
+		AddManagedObject(o)
 	}
-
-	path := "/openidm/config/managed"
-	s := Client.Patch(path, b, map[string]string{
-		"Accept":       "*/*",
-		"Content-Type": "application/json",
-		"Connection":   "keep-alive",
-	})
-
-	zap.S().Infow("OpenBanking Managed Objects", "statusCode", s)
 }
 
 func CreateApiJwksEndpoint() {
-	zap.L().Debug("Adding OB managed objects")
+	zap.L().Debug("Creating API JWKS Endpoint")
 	b, err := ioutil.ReadFile(viper.GetString("REQUEST_BODY_PATH") + "create-jwks-endpoint.json")
 	if err != nil {
 		panic(err)
