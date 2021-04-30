@@ -1,0 +1,16 @@
+[
+  {
+    "operation": "add",
+    "field": "objects/-",
+    "value":      {
+      "name": "alpha_usermeta",
+      "schema": {
+          "icon": "fa-database",
+          "mat-icon": null,
+          "title": "Alpha realm - metadata for user",
+          "description": null,
+          "properties": { }
+      }
+    }
+  }
+]

@@ -53,12 +53,11 @@ func main() {
 	am.CreateIGPolicyAgent()
 
 	time.Sleep(5 * time.Second)
-	if !am.ManagedObjectExists("apiClient") {
-		am.AddOBManagedObjects()
-		am.CreateApiJwksEndpoint()
-	}
-	if viper.GetString("ENVIRONMENT_TYPE") == "CDK" &&
-		!am.ManagedObjectExists("alpha_user") {
+	am.AddOBManagedObjects()
+
+	am.CreateApiJwksEndpoint()
+
+	if viper.GetString("ENVIRONMENT_TYPE") == "CDK" {
 		am.AddAdditionalCDKObjects()
 	}
 }
