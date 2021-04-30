@@ -1,6 +1,7 @@
 package main
 
 import (
+	"strings"
 	"time"
 
 	"github.com/secureBankingAccessToolkit/securebanking-openbanking-uk-fidc-initialiszer/am"
@@ -19,6 +20,10 @@ func main() {
 
 	undo := zap.ReplaceGlobals(logger)
 	defer undo()
+
+	if !strings.HasSuffix(viper.GetString("REQUEST_BODY_PATH"), "/") {
+		zap.S().Fatalw("REQUEST_BODY_PATH must have a trailing slash /", "REQUEST_BODY_PATH", viper.GetString("REQUEST_BODY_PATH"))
+	}
 
 	if !platform.IsValidX509() {
 		zap.L().Fatal("No Valid SSL certificate present in the cdk")

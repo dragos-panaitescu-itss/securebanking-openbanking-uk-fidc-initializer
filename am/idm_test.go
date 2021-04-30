@@ -44,3 +44,20 @@ func TestWillReturnNoMissingObjects(t *testing.T) {
 	allMissing := MissingObjects([]string{"anotherObject", "api_client"})
 	assert.Equal(t, expectedMissing, allMissing)
 }
+
+func TestWillReturnObjectNamesFromPath(t *testing.T) {
+	names := ObjectNames("testconfig/")
+	expectedNames := []string{"test.user.1", "test1", "test2", "test3"}
+
+	assert.Equal(t, expectedNames, names)
+}
+
+func TestManagedObjectDirectoriesExist(t *testing.T) {
+	_, err := ioutil.ReadDir("../config/managed-objects/additional")
+
+	assert.Nil(t, err, "The managed object directory additional/ should exist")
+
+	_, err = ioutil.ReadDir("../config/managed-objects/openbanking")
+
+	assert.Nil(t, err, "The managed object config directory config/managed-objects/openbanking/ should exist")
+}
