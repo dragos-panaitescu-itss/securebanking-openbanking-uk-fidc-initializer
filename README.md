@@ -13,7 +13,7 @@ A POC that configures AM and IDM of your CDK deployment, used primarily for test
 | VERBOSE               | turn on verbose logging | `true` |
 | STRICT                | turn on strict mode, will exit early is invalid statuses are detected | `false` |
 | OPEN_AM_PASSWORD      | The plain text AM password | `password` |
-| CONFIG_DIRECTORY_PATH | path to the directory containing the json requests | `config/` |
+| CONFIG_DIRECTORY_PATH | path to the directory containing the json requests. **Must have a trailing slash** | `config/defaults/` |
 
 ## Json configuration
 IDM managed object JSON configuration can be added to the config/managed-objects directory under either the [additional](./config/managed-objects/additional) or [openbanking](./config/managed-objects/openbanking) path. The files must be json and the filenames must match the name of the managed object.
@@ -26,9 +26,9 @@ You can override all internal configuration with config predefined within a kube
 `managed-objects/additional`
 `managed-objects/openbanking`
 
-If `CONFIG_DIRECTORY_PATH` is set to the default relative path of `config/` then default prebaked managedObjects will be used and not your mounted ConfigMap
+If `CONFIG_DIRECTORY_PATH` is set to the default relative path of `config/defaults/` then default prebaked managedObjects will be used and not your mounted ConfigMap
 
-The `/additional` path will only be called if `ENVIRONMENT_TYPE` is set to `CDK` - This is used primarily for testing.
+The `/additional` path will only be called if `ENVIRONMENT_TYPE` is set to `CDK` - This is used primarily for testing and development.
 
 ### ConfigMap mount example
 

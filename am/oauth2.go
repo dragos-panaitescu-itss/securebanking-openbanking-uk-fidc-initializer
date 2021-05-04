@@ -183,7 +183,7 @@ func CreateOIDCClaimsScript(cookie *http.Cookie) string {
 		return id
 	}
 	zap.L().Debug("Creating OIDC claims script")
-	b, err := ioutil.ReadFile(viper.GetString("REQUEST_BODY_PATH") + "oidc.json")
+	b, err := ioutil.ReadFile(common.ConfigDirectoryPath() + "oidc.json")
 	if err != nil {
 		panic(err)
 	}
@@ -232,7 +232,7 @@ func UpdateOAuth2Provider(claimsScriptID string) {
 		zap.L().Info("OAuth2 provider exists")
 		return
 	}
-	b, err := ioutil.ReadFile(viper.GetString("REQUEST_BODY_PATH") + "oauth2provider.json")
+	b, err := ioutil.ReadFile(common.ConfigDirectoryPath() + "oauth2provider.json")
 	if err != nil {
 		panic(err)
 	}

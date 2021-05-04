@@ -21,8 +21,8 @@ func main() {
 	undo := zap.ReplaceGlobals(logger)
 	defer undo()
 
-	if !strings.HasSuffix(viper.GetString("REQUEST_BODY_PATH"), "/") {
-		zap.S().Fatalw("REQUEST_BODY_PATH must have a trailing slash /", "REQUEST_BODY_PATH", viper.GetString("REQUEST_BODY_PATH"))
+	if !strings.HasSuffix(viper.GetString("CONFIG_DIRECTORY_PATH"), "/") {
+		zap.S().Fatalw("CONFIG_DIRECTORY_PATH must have a trailing slash /", "CONFIG_DIRECTORY_PATH", viper.GetString("CONFIG_DIRECTORY_PATH"))
 	}
 
 	if !platform.IsValidX509() {
@@ -94,5 +94,5 @@ func configureVariables() {
 	viper.SetDefault("IG_IDM_PASSWORD", "0penBanking!")
 	viper.SetDefault("IG_AGENT_ID", "ig-agent")
 	viper.SetDefault("OPEN_AM_PASSWORD", "password")
-	viper.SetDefault("REQUEST_BODY_PATH", "config/")
+	viper.SetDefault("CONFIG_DIRECTORY_PATH", "config/defaults/")
 }

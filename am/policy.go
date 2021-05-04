@@ -17,7 +17,7 @@ func CreatePolicyServiceUser() {
 		return
 	}
 
-	b, err := ioutil.ReadFile(viper.GetString("REQUEST_BODY_PATH") + "create-policy-service-user.json")
+	b, err := ioutil.ReadFile(common.ConfigDirectoryPath() + "create-policy-service-user.json")
 	if err != nil {
 		panic(err)
 	}
@@ -40,7 +40,7 @@ func CreatePolicyEvaluationScript(cookie *http.Cookie) string {
 	}
 
 	zap.L().Debug("Creating policy evaluation script")
-	b, err := ioutil.ReadFile(viper.GetString("REQUEST_BODY_PATH") + "policy-evaluation-script.json")
+	b, err := ioutil.ReadFile(common.ConfigDirectoryPath() + "policy-evaluation-script.json")
 	if err != nil {
 		panic(err)
 	}
@@ -71,7 +71,7 @@ func CreateOpenBankingPolicySet() {
 	}
 
 	zap.L().Debug("Creating Open Banking policy set")
-	b, err := ioutil.ReadFile(viper.GetString("REQUEST_BODY_PATH") + "ob-policy-set.json")
+	b, err := ioutil.ReadFile(common.ConfigDirectoryPath() + "ob-policy-set.json")
 	if err != nil {
 		panic(err)
 	}
@@ -138,7 +138,7 @@ func CreateAISPPolicy() {
 		return
 	}
 	zap.L().Debug("Creating AISP policy")
-	b, err := ioutil.ReadFile(viper.GetString("REQUEST_BODY_PATH") + "aisp-policy.json")
+	b, err := ioutil.ReadFile(common.ConfigDirectoryPath() + "aisp-policy.json")
 	if err != nil {
 		panic(err)
 	}
@@ -160,7 +160,7 @@ func CreatePISPPolicy(policyScriptId string) {
 		return
 	}
 	zap.L().Debug("Creating PISP policy")
-	b, err := ioutil.ReadFile(viper.GetString("REQUEST_BODY_PATH") + "pisp-policy.json")
+	b, err := ioutil.ReadFile(common.ConfigDirectoryPath() + "pisp-policy.json")
 	if err != nil {
 		panic(err)
 	}
@@ -190,7 +190,7 @@ func CreatePolicyEngineOAuth2Client() {
 	}
 
 	zap.L().Debug("Creating policy engine oauth2 client")
-	b, err := ioutil.ReadFile(viper.GetString("REQUEST_BODY_PATH") + "create-policy-engine-oauth2-client.json")
+	b, err := ioutil.ReadFile(common.ConfigDirectoryPath() + "create-policy-engine-oauth2-client.json")
 	if err != nil {
 		panic(err)
 	}
