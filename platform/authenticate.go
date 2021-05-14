@@ -35,14 +35,14 @@ func (s *Session) Authenticate() (*http.Cookie, string) {
 	return s.Cookie, s.AuthToken.AccessToken
 }
 
-// FromAmAdminSession - get a session token from AM for authentication
+// FromUserSession - get a session token from AM for authentication
 //    returns the Session object with embedded session cookie
-func FromAmAdminSession() *Session {
+func FromUserSession() *Session {
 	zap.L().Debug("Getting an admin session from AM")
 	path := "https://" + viper.GetString("IAM_FQDN") + "/am/json/realms/root/authenticate"
 	resp, err := client.R().
 		SetHeader("Accept", "application/json").
-		SetHeader("X-OpenAM-Username", "amadmin").
+		SetHeader("X-OpenAM-Username", viper.GetString("OPEN_AM_USERNAME")).
 		SetHeader("X-OpenAM-Password", viper.GetString("OPEN_AM_PASSWORD")).
 		Post(path)
 	common.RaiseForStatus(err, resp.Error())
