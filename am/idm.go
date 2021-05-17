@@ -5,24 +5,28 @@ import (
 	"io/ioutil"
 	"strings"
 
-	"github.com/spf13/viper"
+	"github.com/secureBankingAccessToolkit/securebanking-openbanking-uk-fidc-initialiszer/common"
 	"go.uber.org/zap"
 )
 
-var managedObjectNames = []string{
-	"accountAccessIntent",
-	"domesticPaymentIntent",
-	"apiClient",
-	"apiClientOrg",
+//ObjectNames - retrieve filenames from a path. the .json extension will be trimed and
+//  a list of filenames will be returned
+func ObjectNames(relativePath string) []string {
+	files, err := ioutil.ReadDir(relativePath)
+	if err != nil {
+		zap.L().Fatal(err.Error())
+	}
+
+	var names []string
+	for _, f := range files {
+		name := strings.TrimSuffix(f.Name(), ".json")
+		names = append(names, name)
+	}
+	return names
 }
 
-var additionalManagedObjectNames = []string{
-	"alpha_user",
-	"alpha_role",
-	"alpha_usermeta",
-	"alpha_organization",
-}
-
+//MissingObjects - return a list of missing managed object names in idm.
+//  supply an array of managed object names to query against.
 func MissingObjects(objectNames []string) []string {
 	path := "/openidm/config/managed"
 	result := &OBManagedObjects{}
@@ -58,17 +62,30 @@ type OBManagedObjects struct {
 	} `json:"objects"`
 }
 
-// AddOBManagedObjects -
+// AddOBManagedObjects - Add managed objects to IDM. This will look for json in the managed objects OB config directory
+//  and add them to IDM if they dont already exist.
 func AddOBManagedObjects() {
-	missingObjects := MissingObjects(managedObjectNames)
+	path := managedObjectsObDirectory()
+	managedObjectFilenames := ObjectNames(path)
+	missingObjects := MissingObjects(managedObjectFilenames)
 
 	for _, o := range missingObjects {
-		AddManagedObject(o)
+		AddManagedObject(o, path)
 	}
 }
 
-func AddManagedObject(name string) {
-	b, err := ioutil.ReadFile(viper.GetString("REQUEST_BODY_PATH") + "managed-objects/" + name + ".json")
+func managedObjectsObDirectory() string {
+	return common.ManagedObjectsDirectoryPath() + "openbanking/"
+}
+
+func managedObjectsAdditionalDirectory() string {
+	return common.ManagedObjectsDirectoryPath() + "additional/"
+}
+
+// AddManagedObject - Will add a managed object in IDM. retrieve a filename (minus the suffix) in a supplied directory
+//  and apply patch to idm.
+func AddManagedObject(name string, objectFolderPath string) {
+	b, err := ioutil.ReadFile(objectFolderPath + name + ".json")
 	if err != nil {
 		panic(err)
 	}
@@ -84,16 +101,18 @@ func AddManagedObject(name string) {
 }
 
 func AddAdditionalCDKObjects() {
-	missingObjects := MissingObjects(additionalManagedObjectNames)
+	path := managedObjectsAdditionalDirectory()
+	managedObjectFilenames := ObjectNames(path)
+	missingObjects := MissingObjects(managedObjectFilenames)
 
 	for _, o := range missingObjects {
-		AddManagedObject(o)
+		AddManagedObject(o, path)
 	}
 }
 
 func CreateApiJwksEndpoint() {
 	zap.L().Debug("Creating API JWKS Endpoint")
-	b, err := ioutil.ReadFile(viper.GetString("REQUEST_BODY_PATH") + "create-jwks-endpoint.json")
+	b, err := ioutil.ReadFile(common.IamDirectoryPath() + "create-jwks-endpoint.json")
 	if err != nil {
 		panic(err)
 	}
@@ -112,7 +131,7 @@ func CreateApiJwksEndpoint() {
 //    in the alpha realm
 func CreateUser() {
 	zap.L().Debug("Creating new user")
-	b, err := ioutil.ReadFile(viper.GetString("REQUEST_BODY_PATH") + "create-user.json")
+	b, err := ioutil.ReadFile(common.IamDirectoryPath() + "create-user.json")
 	if err != nil {
 		panic(err)
 	}

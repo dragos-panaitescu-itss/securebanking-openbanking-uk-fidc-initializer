@@ -12,8 +12,8 @@ import (
 
 // CreateAlphaRealm creates the alpha realm for a new deployment of CDK
 func CreateAlphaRealm(cookie *http.Cookie) {
-	zap.L().Debug("Creating Alpha Realm")
-	b, err := ioutil.ReadFile(viper.GetString("REQUEST_BODY_PATH") + "alpha-realm.json")
+	zap.L().Info("Creating Alpha Realm")
+	b, err := ioutil.ReadFile(common.IamDirectoryPath() + "alpha-realm.json")
 	if err != nil {
 		panic(err)
 	}

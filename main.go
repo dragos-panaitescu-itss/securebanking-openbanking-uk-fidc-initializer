@@ -1,6 +1,7 @@
 package main
 
 import (
+	"strings"
 	"time"
 
 	"github.com/secureBankingAccessToolkit/securebanking-openbanking-uk-fidc-initialiszer/am"
@@ -19,6 +20,10 @@ func main() {
 
 	undo := zap.ReplaceGlobals(logger)
 	defer undo()
+
+	if !strings.HasSuffix(viper.GetString("CONFIG_DIRECTORY_PATH"), "/") {
+		zap.S().Fatalw("CONFIG_DIRECTORY_PATH must have a trailing slash /", "CONFIG_DIRECTORY_PATH", viper.GetString("CONFIG_DIRECTORY_PATH"))
+	}
 
 	if !platform.IsValidX509() {
 		zap.L().Fatal("No Valid SSL certificate present in the cdk")
@@ -90,5 +95,6 @@ func configureVariables() {
 	viper.SetDefault("IG_AGENT_ID", "ig-agent")
 	viper.SetDefault("OPEN_AM_USERNAME", "amadmin")
 	viper.SetDefault("OPEN_AM_PASSWORD", "password")
-	viper.SetDefault("REQUEST_BODY_PATH", "config/")
+	viper.SetDefault("MANAGED_OBJECTS_DIRECTORY_PATH", "config/defaults/managed-objects/")
+	viper.SetDefault("IAM_DIRECTORY_PATH", "config/defaults/")
 }

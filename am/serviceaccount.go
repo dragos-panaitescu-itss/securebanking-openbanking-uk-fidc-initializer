@@ -53,7 +53,7 @@ func CreateIGOAuth2Client() {
 	}
 
 	zap.L().Debug("Creating IG OAuth2 client")
-	b, err := ioutil.ReadFile(viper.GetString("REQUEST_BODY_PATH") + "ig-oauth2-client.json")
+	b, err := ioutil.ReadFile(common.IamDirectoryPath() + "ig-oauth2-client.json")
 	if err != nil {
 		panic(err)
 	}
@@ -102,7 +102,7 @@ func CreateIGPolicyAgent() {
 
 func CreateIDMAdminClient(cookie *http.Cookie) {
 	zap.L().Debug("Creating IDM admin oauth2 client")
-	b, err := ioutil.ReadFile(viper.GetString("REQUEST_BODY_PATH") + "idm-admin-client.json")
+	b, err := ioutil.ReadFile(common.IamDirectoryPath() + "idm-admin-client.json")
 	if err != nil {
 		panic(err)
 	}
