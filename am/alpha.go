@@ -13,7 +13,7 @@ import (
 // CreateAlphaRealm creates the alpha realm for a new deployment of CDK
 func CreateAlphaRealm(cookie *http.Cookie) {
 	zap.L().Info("Creating Alpha Realm")
-	b, err := ioutil.ReadFile(common.ConfigDirectoryPath() + "alpha-realm.json")
+	b, err := ioutil.ReadFile(common.IamDirectoryPath() + "alpha-realm.json")
 	if err != nil {
 		panic(err)
 	}

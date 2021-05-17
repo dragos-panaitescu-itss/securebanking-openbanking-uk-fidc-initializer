@@ -75,11 +75,11 @@ func AddOBManagedObjects() {
 }
 
 func managedObjectsObDirectory() string {
-	return common.ConfigDirectoryPath() + "managed-objects/openbanking/"
+	return common.ManagedObjectsDirectoryPath() + "openbanking/"
 }
 
 func managedObjectsAdditionalDirectory() string {
-	return common.ConfigDirectoryPath() + "managed-objects/additional/"
+	return common.ManagedObjectsDirectoryPath() + "additional/"
 }
 
 // AddManagedObject - Will add a managed object in IDM. retrieve a filename (minus the suffix) in a supplied directory
@@ -112,7 +112,7 @@ func AddAdditionalCDKObjects() {
 
 func CreateApiJwksEndpoint() {
 	zap.L().Debug("Creating API JWKS Endpoint")
-	b, err := ioutil.ReadFile(common.ConfigDirectoryPath() + "create-jwks-endpoint.json")
+	b, err := ioutil.ReadFile(common.IamDirectoryPath() + "create-jwks-endpoint.json")
 	if err != nil {
 		panic(err)
 	}
@@ -131,7 +131,7 @@ func CreateApiJwksEndpoint() {
 //    in the alpha realm
 func CreateUser() {
 	zap.L().Debug("Creating new user")
-	b, err := ioutil.ReadFile(common.ConfigDirectoryPath() + "create-user.json")
+	b, err := ioutil.ReadFile(common.IamDirectoryPath() + "create-user.json")
 	if err != nil {
 		panic(err)
 	}

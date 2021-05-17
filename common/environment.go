@@ -2,6 +2,10 @@ package common
 
 import "github.com/spf13/viper"
 
-func ConfigDirectoryPath() string {
-	return viper.GetString("CONFIG_DIRECTORY_PATH")
+func IamDirectoryPath() string {
+	return viper.GetString("IAM_DIRECTORY_PATH")
+}
+
+func ManagedObjectsDirectoryPath() string {
+	return viper.GetString("MANAGED_OBJECTS_DIRECTORY_PATH")
 }
