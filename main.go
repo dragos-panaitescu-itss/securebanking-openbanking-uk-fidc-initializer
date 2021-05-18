@@ -21,8 +21,8 @@ func main() {
 	undo := zap.ReplaceGlobals(logger)
 	defer undo()
 
-	if !strings.HasSuffix(viper.GetString("CONFIG_DIRECTORY_PATH"), "/") {
-		zap.S().Fatalw("CONFIG_DIRECTORY_PATH must have a trailing slash /", "CONFIG_DIRECTORY_PATH", viper.GetString("CONFIG_DIRECTORY_PATH"))
+	if !strings.HasSuffix(viper.GetString("MANAGED_OBJECTS_DIRECTORY_PATH"), "/") {
+		zap.S().Fatalw("MANAGED_OBJECTS_DIRECTORY_PATH must have a trailing slash /", "MANAGED_OBJECTS_DIRECTORY_PATH", viper.GetString("MANAGED_OBJECTS_DIRECTORY_PATH"))
 	}
 
 	if !platform.IsValidX509() {
