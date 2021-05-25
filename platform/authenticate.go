@@ -42,7 +42,7 @@ func (s *Session) Authenticate() (*http.Cookie, string) {
 
 func GetCookieNameFromAm() string {
 	zap.L().Debug("Getting Cookie name from AM")
-	path := "https://" + viper.GetString("IAM_FQDN") + "/am/json/serverinfo/*"
+	path := viper.GetString("SCHEME") + "://" + viper.GetString("IAM_FQDN") + "/am/json/serverinfo/*"
 
 	result := &ServerInfo{}
 	resp, err := client.R().

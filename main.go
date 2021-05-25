@@ -87,7 +87,7 @@ func configureVariables() {
 	viper.SetDefault("STRICT", true)
 	viper.SetDefault("ENVIRONMENT_TYPE", "CDK")
 	viper.SetDefault("FQDN", "obdemo-bank.idhub.cc")
-	viper.SetDefault("IAM_FQDN", "iam.idhub.cc")
+	viper.SetDefault("IAM_FQDN", "localhost")
 	viper.SetDefault("AM_REALM", "alpha")
 	viper.SetDefault("IG_CLIENT_ID", "ig-client")
 	viper.SetDefault("IG_CLIENT_SECRET", "password")
@@ -98,4 +98,5 @@ func configureVariables() {
 	viper.SetDefault("OPEN_AM_PASSWORD", "password")
 	viper.SetDefault("MANAGED_OBJECTS_DIRECTORY_PATH", "config/defaults/managed-objects/")
 	viper.SetDefault("IAM_DIRECTORY_PATH", "config/defaults/")
+	viper.SetDefault("SCHEME", "https")
 }
