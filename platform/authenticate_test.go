@@ -19,15 +19,6 @@ func TestConsumer(t *testing.T) {
 	}
 	defer pact.Teardown()
 
-	var test = func() (err error) {
-		viper.SetDefault("IAM_FQDN", "localhost:"+strconv.Itoa(pact.Server.Port))
-		viper.SetDefault("SCHEME", "http")
-		cookie := GetCookieNameFromAm()
-
-		assert.Equal(t, "iPlanetDirectory", cookie)
-		return nil
-	}
-
 	// Set up our expected interactions.
 	pact.
 		AddInteraction().
@@ -44,6 +35,14 @@ func TestConsumer(t *testing.T) {
 			Body:    dsl.MapMatcher{"cookieName": dsl.String("iPlanetDirectory")},
 		})
 
+	var test = func() (err error) {
+		viper.SetDefault("IAM_FQDN", "localhost:"+strconv.Itoa(pact.Server.Port))
+		viper.SetDefault("SCHEME", "http")
+		cookie := GetCookieNameFromAm()
+
+		assert.Equal(t, "iPlanetDirectory", cookie)
+		return nil
+	}
 	// Run the test, verify it did what we expected and capture the contract
 	if err := pact.Verify(test); err != nil {
 		log.Fatalf("Error on Verify: %v", err)
