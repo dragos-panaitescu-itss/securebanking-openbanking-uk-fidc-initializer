@@ -29,7 +29,8 @@ func main() {
 		zap.L().Fatal("No Valid SSL certificate present in the cdk")
 	}
 
-	s := platform.FromUserSession()
+	c := platform.GetCookieNameFromAm()
+	s := platform.FromUserSession(c)
 	am.CreateIDMAdminClient(s.Cookie)
 	if !am.AlphaRealmExists(s.Cookie) {
 		am.CreateAlphaRealm(s.Cookie)

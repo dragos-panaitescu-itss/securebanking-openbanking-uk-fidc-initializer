@@ -26,6 +26,11 @@ type Session struct {
 	Cookie    *http.Cookie
 }
 
+type ServerInfo struct {
+	Cookiename   string `json:"cookieName"`
+	Securecookie bool   `json:"secureCookie"`
+}
+
 var client = resty.New().SetRedirectPolicy(resty.NoRedirectPolicy()).SetError(common.RestError{})
 
 // Authenticate user against platform, returns the iPlanetDomainPro cookie and access token
@@ -35,9 +40,27 @@ func (s *Session) Authenticate() (*http.Cookie, string) {
 	return s.Cookie, s.AuthToken.AccessToken
 }
 
+func GetCookieNameFromAm() string {
+	zap.L().Debug("Getting Cookie name from AM")
+	path := "https://" + viper.GetString("IAM_FQDN") + "/am/json/serverinfo/*"
+
+	result := &ServerInfo{}
+	resp, err := client.R().
+		SetHeader("Accept", "application/json").
+		SetResult(result).
+		Get(path)
+	common.RaiseForStatus(err, resp.Error())
+
+	cookieName := result.Cookiename
+
+	zap.S().Infow("Got cookie from am",
+		zap.String("cookieName", cookieName))
+	return cookieName
+}
+
 // FromUserSession - get a session token from AM for authentication
 //    returns the Session object with embedded session cookie
-func FromUserSession() *Session {
+func FromUserSession(cookieName string) *Session {
 	zap.L().Debug("Getting an admin session from AM")
 	path := "https://" + viper.GetString("IAM_FQDN") + "/am/json/realms/root/authenticate"
 	resp, err := client.R().
@@ -50,19 +73,20 @@ func FromUserSession() *Session {
 	var cookieValue string = ""
 	for _, cookie := range resp.Cookies() {
 		zap.S().Debugw("Cookie found", "cookie", cookie)
-		if cookie.Name == "iPlanetDirectoryPro" {
+		if cookie.Name == cookieName {
 			cookieValue = cookie.Value
 		}
 	}
 	if cookieValue == "" {
-		zap.S().Fatalw("Cannot find iPlanetDirectoryPro cookie",
+		zap.S().Fatalw("Cannot find cookie",
 			"statusCode", resp.StatusCode(),
+			"cookieName", cookieName,
 			"advice", `Calling this method twice might result in this error,
 				 AM will not react well to successive session requests`,
 			"error", resp.Error())
 	}
-	iPlanetDirCookie := &http.Cookie{
-		Name:     "iPlanetDirectoryPro",
+	c := &http.Cookie{
+		Name:     cookieName,
 		Value:    cookieValue,
 		Path:     "/",
 		HttpOnly: true,
@@ -70,7 +94,7 @@ func FromUserSession() *Session {
 		Domain:   viper.GetString("IAM_FQDN"),
 	}
 	s := &Session{}
-	s.Cookie = iPlanetDirCookie
+	s.Cookie = c
 	zap.S().Infow("New AM session created", "cookie", s.Cookie)
 	return s
 }
