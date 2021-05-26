@@ -8,7 +8,7 @@ build: clean
 	go build -o setup
 
 test:
-	PACT_DISABLE_TOOL_VALIDITY_CHECK=true go test ./...
+	go test ./...
 
 test-ci: mod
 	$(eval localPath=$(shell pwd))
