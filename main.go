@@ -39,7 +39,8 @@ func main() {
 	am.InitRestReaderWriter(s.Cookie, s.AuthToken.AccessToken)
 
 	am.CreateRemoteConsentService()
-	am.CreateSoftwarePublisherAgent()
+	am.CreateSoftwarePublisherAgentOBRI()
+	am.CreateSoftwarePublisherAgentTestPublisher()
 
 	id := am.CreateOIDCClaimsScript(s.Cookie)
 	am.UpdateOAuth2Provider(id)
@@ -90,6 +91,8 @@ func configureVariables() {
 	viper.SetDefault("AM_REALM", "alpha")
 	viper.SetDefault("IG_CLIENT_ID", "ig-client")
 	viper.SetDefault("IG_CLIENT_SECRET", "password")
+	viper.SetDefault("IG_RCS_SECRET", "password")
+	viper.SetDefault("IG_SSA_SECRET", "password")
 	viper.SetDefault("IG_IDM_USER", "service_account.ig")
 	viper.SetDefault("IG_IDM_PASSWORD", "0penBanking!")
 	viper.SetDefault("IG_AGENT_ID", "ig-agent")

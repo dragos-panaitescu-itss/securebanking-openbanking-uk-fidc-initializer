@@ -28,7 +28,7 @@ func CreateIGServiceUser() {
 		SN:        "Service Account",
 		GivenName: "IG",
 		Mail:      "ig@acme.com",
-		Password:  viper.GetString("OPEN_AM_PASSWORD"),
+		Password:  viper.GetString("IG_IDM_PASSWORD"),
 		AuthzRole: []common.AuthzRole{
 			{
 				Ref: "internal/role/openidm-admin",

@@ -17,7 +17,10 @@ func TestFindSoftwarePublisherAgent(t *testing.T) {
 		Return(buffer)
 
 	b := SoftwarePublisherAgentExists("OBRI")
+	assert.True(t, b)
+	mockRestReaderWriter.AssertCalled(t, "Get", mock.Anything, mock.Anything)
 
+	b = SoftwarePublisherAgentExists("test-publisher")
 	assert.True(t, b)
 	mockRestReaderWriter.AssertCalled(t, "Get", mock.Anything, mock.Anything)
 

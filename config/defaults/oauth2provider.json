@@ -43,7 +43,8 @@
     "supportedScopes": [
       "openid",
       "payments",
-      "accounts"
+      "accounts",
+      "eventpolling"
     ],
     "responseTypeClasses": [
       "code|org.forgerock.oauth2.core.AuthorizationCodeResponseTypeHandler",
