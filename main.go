@@ -29,7 +29,8 @@ func main() {
 		zap.L().Fatal("No Valid SSL certificate present in the cdk")
 	}
 
-	s := platform.FromUserSession()
+	c := platform.GetCookieNameFromAm()
+	s := platform.FromUserSession(c)
 	am.CreateIDMAdminClient(s.Cookie)
 	if !am.AlphaRealmExists(s.Cookie) {
 		am.CreateAlphaRealm(s.Cookie)
@@ -97,4 +98,5 @@ func configureVariables() {
 	viper.SetDefault("OPEN_AM_PASSWORD", "password")
 	viper.SetDefault("MANAGED_OBJECTS_DIRECTORY_PATH", "config/defaults/managed-objects/")
 	viper.SetDefault("IAM_DIRECTORY_PATH", "config/defaults/")
+	viper.SetDefault("SCHEME", "https")
 }

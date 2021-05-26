@@ -7,7 +7,7 @@ on:
       - README.md
 
 env:
-  SERVICE_NAME: securebanking-openbanking-uk-fidc-inilializer
+  SERVICE_NAME: secureopenbanking-uk-fidc-initializer
 
 jobs:
   build:

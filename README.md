@@ -5,6 +5,7 @@ A POC that configures AM and IDM of your CDK deployment, used primarily for test
 
 - [go 1.15](https://golang.org/doc/install)
 - configure [gopath](https://golang.org/doc/gopath_code.html#GOPATH)
+- [pact](https://github.com/pact-foundation/pact-go#installation-on-nix)
 
 ## Variables
 
@@ -51,3 +52,7 @@ spec:
       readOnly: true
 
 ```
+
+## Running tests
+The tests run against a mockserver which is supplied by [Pact](https://docs.pact.io/). It is used specifically to test internal logic rather than to verify the provider contract.
+running the `make test-ci` target will download the required binaries to be able to run the pact tests. this target is used for github actions but can work locally too (if you do not have the pact bonaries installed)

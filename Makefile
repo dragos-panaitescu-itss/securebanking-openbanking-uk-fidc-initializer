@@ -10,6 +10,11 @@ build: clean
 test:
 	go test ./...
 
+test-ci: mod
+	$(eval localPath=$(shell pwd))
+	curl -fsSL https://raw.githubusercontent.com/pact-foundation/pact-ruby-standalone/master/install.sh | bash
+	PATH=$(PATH):${localPath}/pact/bin go test ./...
+
 clean:
 	rm -f setup
 
