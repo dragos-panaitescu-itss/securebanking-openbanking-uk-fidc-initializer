@@ -8,6 +8,7 @@ build: clean
 	go build -o setup
 
 test:
+	export PACT_DISABLE_TOOL_VALIDITY_CHECK=true
 	go test ./...
 
 clean:
