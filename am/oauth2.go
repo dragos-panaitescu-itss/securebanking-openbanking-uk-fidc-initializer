@@ -109,8 +109,8 @@ func RemoteConsentExists(name string) bool {
 	})
 }
 
-// CreateSoftwarePublisherAgent -
-func CreateSoftwarePublisherAgent() {
+// CreateSoftwarePublisherAgent OBRI
+func CreateSoftwarePublisherAgentOBRI() {
 	if SoftwarePublisherAgentExists("OBRI") {
 		zap.L().Info("Skipping creation of Software publisher agent")
 		return
@@ -147,6 +147,53 @@ func CreateSoftwarePublisherAgent() {
 		},
 	}
 	path := "/am/json/realms/root/realms/alpha/realm-config/agents/SoftwarePublisher/OBRI"
+	s := Client.Put(path, pa, map[string]string{
+		"Accept":             "*/*",
+		"Connection":         "keep-alive",
+		"Accept-API-Version": "protocol=2.0,resource=1.0",
+	})
+
+	zap.S().Infow("Software Publisher Agent", "statusCode", s)
+}
+
+// CreateSoftwarePublisherAgent test-publisher
+func CreateSoftwarePublisherAgentTestPublisher() {
+	if SoftwarePublisherAgentExists("test-publisher") {
+		zap.L().Info("Skipping creation of Software publisher agent")
+		return
+	}
+
+	zap.L().Debug("Creating software publisher agent")
+	pa := PublisherAgent{
+		Userpassword: viper.GetString("IG_SSA_SECRET"),
+		PublicKeyLocation: InheritedValueString{
+			Inherited: false,
+			Value:     "jwks_uri",
+		},
+		JwksCacheTimeout: InheritedValueInt{
+			Inherited: false,
+			Value:     3600000,
+		},
+		SoftwareStatementSigningAlgorithm: InheritedValueString{
+			Inherited: false,
+			Value:     "HS256",
+		},
+		JwkSet: JwkSet{
+			Inherited: false,
+		},
+		Issuer: InheritedValueString{
+			Inherited: false,
+			Value:     "test-publisher",
+		},
+		JwkStoreCacheMissCacheTime: InheritedValueInt{
+			Inherited: false,
+			Value:     60000,
+		},
+		JwksURI: InheritedValueString{
+			Inherited: false,
+		},
+	}
+	path := "/am/json/realms/root/realms/alpha/realm-config/agents/SoftwarePublisher/test-publisher"
 	s := Client.Put(path, pa, map[string]string{
 		"Accept":             "*/*",
 		"Connection":         "keep-alive",

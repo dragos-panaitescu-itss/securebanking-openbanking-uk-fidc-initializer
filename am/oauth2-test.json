@@ -1,14 +1,19 @@
 {
   "result": [
     {
+      "_id": "test-publisher",
+      "_rev": "372432113",
+      "agentgroup": null
+    },
+    {
       "_id": "OBRI",
       "_rev": "-1024354422",
       "agentgroup": null
     }
   ],
-  "resultCount": 1,
+  "resultCount": 2,
   "pagedResultsCookie": null,
   "totalPagedResultsPolicy": "EXACT",
-  "totalPagedResults": 1,
+  "totalPagedResults": 2,
   "remainingPagedResults": -1
 }
