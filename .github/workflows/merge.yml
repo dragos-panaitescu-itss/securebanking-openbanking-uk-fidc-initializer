@@ -18,7 +18,7 @@ jobs:
       
       - name: Run Tests
         run: |
-          make test
+          make test-ci
 
       - uses: google-github-actions/setup-gcloud@master
         with:
@@ -30,7 +30,4 @@ jobs:
       
       - name: docker build
         run: |
-          make docker
-          docker push eu.gcr.io/${{ secrets.DEV_REPO }}/securebanking/$SERVICE_NAME:latest
-          docker tag eu.gcr.io/${{ secrets.DEV_REPO }}/securebanking/$SERVICE_NAME:latest eu.gcr.io/${{ secrets.RELEASE_REPO }}/securebanking/$SERVICE_NAME:latest
-          docker push eu.gcr.io/${{ secrets.RELEASE_REPO }}/securebanking/$SERVICE_NAME:latest
+          make docker release-repo=${{ secrets.RELEASE_REPO }}
