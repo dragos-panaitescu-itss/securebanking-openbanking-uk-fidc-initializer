@@ -1,3 +1,6 @@
+service := secureopenbanking-uk-fidc-initializer
+gcr-repo := sbat-gcr-develop
+
 .PHONY: all
 all: mod build
 
@@ -19,5 +22,14 @@ clean:
 	rm -f setup
 
 docker: clean mod
+ifndef tag
+	$(warning No tag supplied, latest assumed. supply tag with make docker tag=x.x.x service=...)
+	$(eval tag=latest)
+endif
 	env GOOS=linux GOARCH=amd64 go build -o setup
-	docker build -t eu.gcr.io/sbat-gcr-develop/securebanking/secureopenbanking-uk-fidc-initializer:latest .
+	docker build -t eu.gcr.io/${gcr-repo}/securebanking/${service}:${tag} .
+	docker push eu.gcr.io/${gcr-repo}/securebanking/${service}:${tag}
+ifdef release-repo
+	docker tag eu.gcr.io/${gcr-repo}/securebanking/${service}:${tag} eu.gcr.io/${release-repo}/securebanking-ui/${service}:${tag}
+	docker push eu.gcr.io/${release-repo}/securebanking/${service}:${tag}
+endif
