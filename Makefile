@@ -30,6 +30,6 @@ endif
 	docker build -t eu.gcr.io/${gcr-repo}/securebanking/${service}:${tag} .
 	docker push eu.gcr.io/${gcr-repo}/securebanking/${service}:${tag}
 ifdef release-repo
-	docker tag eu.gcr.io/${gcr-repo}/securebanking/${service}:${tag} eu.gcr.io/${release-repo}/securebanking-ui/${service}:${tag}
+	docker tag eu.gcr.io/${gcr-repo}/securebanking/${service}:${tag} eu.gcr.io/${release-repo}/securebanking/${service}:${tag}
 	docker push eu.gcr.io/${release-repo}/securebanking/${service}:${tag}
 endif
