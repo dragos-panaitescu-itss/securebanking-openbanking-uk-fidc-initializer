@@ -3,7 +3,7 @@
   "active": true,
   "description": "",
   "resources": [
-    "http://obdemo-rs:8089/openbanking/v3.1/domestic-payments"
+    "http://rs.dev.forgerock.financial:443/open-banking/v3.1/domestic-payments"
   ],
   "applicationName": "Open Banking",
   "actionValues": {

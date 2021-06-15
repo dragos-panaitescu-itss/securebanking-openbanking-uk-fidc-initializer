@@ -132,7 +132,7 @@ func PolicyExists(name string) bool {
 }
 
 // CreateAISPPolicy -
-func CreateAISPPolicy() {
+func CreateAISPPolicy(policyScriptId string) {
 	if PolicyExists("AISP Policy") {
 		zap.L().Info("Skipping creation of AISP policy")
 		return
@@ -142,8 +142,14 @@ func CreateAISPPolicy() {
 	if err != nil {
 		panic(err)
 	}
+	aisp := &CreatePolicy{}
+	err = json.Unmarshal(b, aisp)
+	if err != nil {
+		panic(err)
+	}
+	aisp.Condition.ScriptID = policyScriptId
 	path := "/am/json/alpha/policies/?_action=create"
-	s := Client.Post(path, b, map[string]string{
+	s := Client.Post(path, aisp, map[string]string{
 		"Accept":             "*/*",
 		"Content-Type":       "application/json",
 		"Connection":         "keep-alive",
