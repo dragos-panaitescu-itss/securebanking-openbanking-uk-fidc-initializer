@@ -51,7 +51,7 @@ func main() {
 	am.CreatePolicyServiceUser()
 	scriptID := am.CreatePolicyEvaluationScript(s.Cookie)
 	am.CreateOpenBankingPolicySet()
-	am.CreateAISPPolicy()
+	am.CreateAISPPolicy(scriptID)
 	am.CreatePISPPolicy(scriptID)
 	am.CreatePolicyEngineOAuth2Client()
 
