@@ -19,3 +19,15 @@ jobs:
       - name: Run Tests
         run: |
           make test-ci
+      
+      - uses: google-github-actions/setup-gcloud@master
+        with:
+          service_account_key: ${{ secrets.GCR_KEY }}
+          export_default_credentials: true
+        # Configure docker to use the gcloud command-line tool as a credential helper
+      - run: |
+          gcloud auth configure-docker
+
+      - name: docker build
+        run: |
+          make docker
