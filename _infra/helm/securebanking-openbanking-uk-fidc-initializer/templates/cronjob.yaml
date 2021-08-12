@@ -5,6 +5,7 @@ metadata:
 spec:
   schedule: "{{ .Values.cron }}"
   concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
   jobTemplate:
     spec:
       template:
@@ -37,4 +38,4 @@ spec:
                   sleep 10
                   done
                   ./setup
-          restartPolicy: Always
+          restartPolicy: OnFailure
