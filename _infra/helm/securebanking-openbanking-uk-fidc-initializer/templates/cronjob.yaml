@@ -24,7 +24,7 @@ spec:
                 valueFrom:
                   configMapKeyRef:
                     name: platform-config
-                    key: IAM_FQDN
+                    key: FQDN
               - name: REQUEST_BODY_PATH
                 value: config/
               command: ["/bin/sh", "-c"]
