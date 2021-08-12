@@ -32,7 +32,7 @@ func CreateRemoteConsentService() {
 		},
 		RemoteConsentResponseSigningAlg: InheritedValueString{
 			Inherited: false,
-			Value:     "RS256",
+			Value:     "HS256",
 		},
 		RemoteConsentRequestSigningAlgorithm: InheritedValueString{
 			Inherited: false,
