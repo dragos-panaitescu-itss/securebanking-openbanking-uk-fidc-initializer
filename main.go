@@ -39,6 +39,8 @@ func main() {
 	s.Authenticate()
 	am.InitRestReaderWriter(s.Cookie, s.AuthToken.AccessToken)
 
+	am.ApplyAmAuthenticationConfig()
+
 	am.CreateRemoteConsentService()
 	am.CreateSoftwarePublisherAgentOBRI()
 	am.CreateSoftwarePublisherAgentTestPublisher()
@@ -58,6 +60,8 @@ func main() {
 	am.CreateIGServiceUser()
 	am.CreateIGOAuth2Client()
 	am.CreateIGPolicyAgent()
+
+	am.ApplySystemClients(s.Cookie)
 
 	time.Sleep(5 * time.Second)
 	am.AddOBManagedObjects()
