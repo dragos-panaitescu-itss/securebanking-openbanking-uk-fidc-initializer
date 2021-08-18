@@ -53,11 +53,7 @@ func TestWillReturnObjectNamesFromPath(t *testing.T) {
 }
 
 func TestManagedObjectDirectoriesExist(t *testing.T) {
-	_, err := ioutil.ReadDir("../config/defaults/managed-objects/additional")
-
-	assert.Nil(t, err, "The managed object directory additional/ should exist")
-
-	_, err = ioutil.ReadDir("../config/defaults/managed-objects/openbanking")
+	_, err := ioutil.ReadDir("../config/defaults/managed-objects/openbanking")
 
 	assert.Nil(t, err, "The managed object config directory config/managed-objects/openbanking/ should exist")
 }
