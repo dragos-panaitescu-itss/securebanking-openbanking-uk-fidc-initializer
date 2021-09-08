@@ -2,6 +2,7 @@ package am
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"strings"
@@ -64,7 +65,7 @@ func CreateIGOAuth2Client() {
 		panic(err)
 	}
 	oauth2Client.CoreOAuth2ClientConfig.Userpassword = "password"
-	path := "/am/json/alpha/realm-config/agents/OAuth2Client/" + viper.GetString("IG_CLIENT_ID")
+	path := fmt.Sprintf("/am/json/alpha/realm-config/agents/OAuth2Client/%s", viper.GetString("IG_CLIENT_ID"))
 	s := Client.Put(path, oauth2Client, map[string]string{
 		"Accept":           "application/json",
 		"Content-Type":     "application/json",
@@ -77,19 +78,15 @@ func CreateIGOAuth2Client() {
 
 // CreateIGPolicyAgent -
 func CreateIGPolicyAgent() {
-	if ServiceIdentityExists("service_account.policy") {
-		zap.L().Info("Skipping creation of IG policy agent")
-		return
-	}
 	zap.L().Debug("Creating IG Policy agent")
 	policyAgent := &PolicyAgent{
-		Userpassword: "password",
+		Userpassword: viper.GetString("IG_AGENT_PASSWORD"),
 		IgTokenIntrospection: IgTokenIntrospection{
 			Value:     "Realm",
 			Inherited: false,
 		},
 	}
-	path := "/am/json/alpha/realm-config/agents/IdentityGatewayAgent/ig-agent"
+	path := fmt.Sprintf("/am/json/realms/root/realms/alpha/realm-config/agents/IdentityGatewayAgent/%s", viper.GetString("IG_AGENT_ID"))
 	s := Client.Put(path, policyAgent, map[string]string{
 		"Accept":           "application/json",
 		"Content-Type":     "application/json",
@@ -108,11 +105,11 @@ func CreateIDMAdminClient(cookie *http.Cookie) {
 	}
 	config := &OAuth2Client{}
 	json.Unmarshal(b, config)
-	var redirect string
+	var redirects []string
 	for _, uri := range config.CoreOAuth2ClientConfig.RedirectionUris.Value {
-		redirect = strings.ReplaceAll(uri, "{{IAM_FQDN}}", viper.GetString("IAM_FQDN"))
+		redirects = append(redirects, strings.ReplaceAll(uri, "{{IAM_FQDN}}", viper.GetString("IAM_FQDN")))
 	}
-	config.CoreOAuth2ClientConfig.RedirectionUris.Value = []string{redirect}
+	config.CoreOAuth2ClientConfig.RedirectionUris.Value = redirects
 	zap.S().Debugw("Admin client request", "body", config)
 	path := "https://" + viper.GetString("IAM_FQDN") + "/am/json/realm-config/agents/OAuth2Client/idmAdminClient"
 	resp, err := client.R().

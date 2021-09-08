@@ -17,6 +17,13 @@ type Result struct {
 	Username string `json:"username,omitempty"`
 }
 
+// Find look at the Result of an AmResult object, commonly returned by the OpenAm API.
+//  If result exists then return true. An AmResult contains an array of Result. which contains the fields
+//  ID, Name and Username.
+//  Eg. If an AmResult has the result with Username = abc
+//  then calling Find("abc", theAmResultObject, func(r *Result) string {
+//		return r.Username
+//	}) will return true
 func Find(arg string, ob *AmResult, fn func(*Result) string) bool {
 	for _, e := range ob.Result {
 		if fn(&e) == arg {

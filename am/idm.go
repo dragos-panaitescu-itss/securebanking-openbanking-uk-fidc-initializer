@@ -78,10 +78,6 @@ func managedObjectsObDirectory() string {
 	return common.ManagedObjectsDirectoryPath() + "openbanking/"
 }
 
-func managedObjectsAdditionalDirectory() string {
-	return common.ManagedObjectsDirectoryPath() + "additional/"
-}
-
 // AddManagedObject - Will add a managed object in IDM. retrieve a filename (minus the suffix) in a supplied directory
 //  and apply patch to idm.
 func AddManagedObject(name string, objectFolderPath string) {
@@ -98,16 +94,6 @@ func AddManagedObject(name string, objectFolderPath string) {
 	})
 
 	zap.S().Infow("Managed object patched", "statusCode", s, "name", name)
-}
-
-func AddAdditionalCDKObjects() {
-	path := managedObjectsAdditionalDirectory()
-	managedObjectFilenames := ObjectNames(path)
-	missingObjects := MissingObjects(managedObjectFilenames)
-
-	for _, o := range missingObjects {
-		AddManagedObject(o, path)
-	}
 }
 
 func CreateApiJwksEndpoint() {

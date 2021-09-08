@@ -2,6 +2,7 @@ package am
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 
@@ -44,7 +45,7 @@ func CreatePolicyEvaluationScript(cookie *http.Cookie) string {
 	if err != nil {
 		panic(err)
 	}
-	path := "https://" + viper.GetString("IAM_FQDN") + "/am/json/alpha/scripts/?_action=create"
+	path := fmt.Sprintf("https://%s/am/json/alpha/scripts/?_action=create", viper.GetString("IAM_FQDN"))
 	scriptBody := &RequestScript{}
 	resp, err := client.R().
 		SetHeader("Accept", "*/*").
