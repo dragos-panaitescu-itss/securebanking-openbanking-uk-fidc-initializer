@@ -24,14 +24,11 @@ Eg: the managed object with name `apiClient` must be contained in a filename cal
 The initializer will attempt to match the filename (minus suffix) to an IDM managed object of the same name. If none are found within IDM then the initializer will create a new idm managed object.
 
 ## Kubernetes ConfigMap
-You can override all managed object internal configuration with config predefined within a kubernetes config map. This config map must be mounted into the `MANAGED_OBJECTS_DIRECTORY_PATH` directory with the following config path(s):
+You can override all managed object internal configuration with config predefined within a kubernetes config map. This config map must be mounted into the `MANAGED_OBJECTS_DIRECTORY_PATH` directory with the following config path:
 
-`managed-objects/additional`
 `managed-objects/openbanking`
 
 If `MANAGED_OBJECTS_DIRECTORY_PATH` is set to the default relative path of `config/defaults/managed-objects/` then default prebaked managedObjects will be used and not your mounted ConfigMap
-
-The `/additional` path will only be called if `ENVIRONMENT_TYPE` is set to `CDK` - This is used primarily for testing and development.
 
 ### ConfigMap mount example
 
