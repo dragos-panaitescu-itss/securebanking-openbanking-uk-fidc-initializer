@@ -3,11 +3,12 @@
   "active": true,
   "description": "",
   "resources": [
-    "http://rs.dev.forgerock.financial:443/open-banking/v3.1/domestic-payments"
+    "https://rs.dev.forgerock.financial:443/open-banking/v3.1/pisp/domestic-payments"
   ],
   "applicationName": "Open Banking",
   "actionValues": {
-    "POST": true
+    "POST": true,
+    "GET": true
   },
   "subject": {
     "type": "JwtClaim",
