@@ -31,6 +31,7 @@ func main() {
 
 	c := platform.GetCookieNameFromAm()
 	s := platform.FromUserSession(c)
+
 	am.CreateIDMAdminClient(s.Cookie)
 	if !am.AlphaRealmExists(s.Cookie) {
 		am.CreateAlphaRealm(s.Cookie)
@@ -101,6 +102,7 @@ func configureVariables() {
 	viper.SetDefault("IG_IDM_USER", "service_account.ig")
 	viper.SetDefault("IG_IDM_PASSWORD", "0penBanking!")
 	viper.SetDefault("IG_AGENT_ID", "ig-agent")
+	viper.SetDefault("IG_AGENT_PASSWORD", "password")
 	viper.SetDefault("OPEN_AM_USERNAME", "amadmin")
 	viper.SetDefault("OPEN_AM_PASSWORD", "password")
 	viper.SetDefault("MANAGED_OBJECTS_DIRECTORY_PATH", "config/defaults/managed-objects/")

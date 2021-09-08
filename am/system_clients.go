@@ -2,6 +2,7 @@ package am
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"strings"
@@ -26,7 +27,7 @@ func ApplySystemClients(cookie *http.Cookie) {
 	}
 	config.CoreOAuth2ClientConfig.RedirectionUris.Value = redirects
 	zap.S().Debugw("oauth2 system client request", "body", config)
-	path := "https://" + viper.GetString("IAM_FQDN") + "/am/json/alpha/realm-config/agents/OAuth2Client/end-user-ui"
+	path := fmt.Sprintf("https://%s//am/json/alpha/realm-config/agents/OAuth2Client/end-user-ui", viper.GetString("IAM_FQDN"))
 	resp, err := client.R().
 		SetHeader("Accept", "application/json").
 		SetHeader("Content-Type", "application/json").

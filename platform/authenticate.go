@@ -1,6 +1,7 @@
 package platform
 
 import (
+	"fmt"
 	"net/http"
 	"net/url"
 
@@ -42,7 +43,7 @@ func (s *Session) Authenticate() (*http.Cookie, string) {
 
 func GetCookieNameFromAm() string {
 	zap.L().Debug("Getting Cookie name from AM")
-	path := viper.GetString("SCHEME") + "://" + viper.GetString("IAM_FQDN") + "/am/json/serverinfo/*"
+	path := fmt.Sprintf("%s://%s/am/json/serverinfo/*", viper.GetString("SCHEME"), viper.GetString("IAM_FQDN"))
 
 	result := &ServerInfo{}
 	resp, err := client.R().
@@ -62,7 +63,7 @@ func GetCookieNameFromAm() string {
 //    returns the Session object with embedded session cookie
 func FromUserSession(cookieName string) *Session {
 	zap.L().Debug("Getting an admin session from AM")
-	path := "https://" + viper.GetString("IAM_FQDN") + "/am/json/realms/root/authenticate"
+	path := fmt.Sprintf("https://%s/am/json/realms/root/authenticat", viper.GetString("IAM_FQDN"))
 	resp, err := client.R().
 		SetHeader("Accept", "application/json").
 		SetHeader("X-OpenAM-Username", viper.GetString("OPEN_AM_USERNAME")).
@@ -103,7 +104,7 @@ func FromUserSession(cookieName string) *Session {
 // 		Redirects should be disabled, we expect a 302 status code here
 func (s *Session) GetIDMAdminAuthCode() {
 	zap.L().Debug("Getting IDM admin auth code")
-	path := "https://" + viper.GetString("IAM_FQDN") + "/am/oauth2/authorize"
+	path := fmt.Sprintf("https://%s/am/oauth2/authorize", viper.GetString("IAM_FQDN"))
 	resp, err := client.R().
 		SetHeader("Accept", "*/*").
 		SetQueryParams(map[string]string{
@@ -137,7 +138,7 @@ func (s *Session) GetIDMAdminAuthCode() {
 func (s *Session) GetIDMAdminToken() {
 	zap.L().Debug("Getting admin token")
 	token := &AdminToken{}
-	path := "https://" + viper.GetString("IAM_FQDN") + "/am/oauth2/access_token"
+	path := fmt.Sprintf("https://%s/am/oauth2/access_token", viper.GetString("IAM_FQDN"))
 	resp, err := client.R().
 		SetHeader("Accept", "*/*").
 		SetHeader("Content-Type", "application/x-www-form-urlencoded").
@@ -145,7 +146,7 @@ func (s *Session) GetIDMAdminToken() {
 		SetCookie(s.Cookie).
 		SetFormData(map[string]string{
 			"grant_type":    "authorization_code",
-			"redirect_uri":  "https://" + viper.GetString("IAM_FQDN") + "/platform/appAuthHelperRedirect.html",
+			"redirect_uri":  fmt.Sprintf("https://%s/platform/appAuthHelperRedirect.html", viper.GetString("IAM_FQDN")),
 			"client_id":     "idmAdminClient",
 			"code":          s.authCode,
 			"code_verifier": "codeverifier",

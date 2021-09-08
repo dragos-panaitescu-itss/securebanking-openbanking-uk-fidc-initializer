@@ -2,6 +2,7 @@ package am
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 
@@ -235,7 +236,7 @@ func CreateOIDCClaimsScript(cookie *http.Cookie) string {
 		panic(err)
 	}
 
-	path := "https://" + viper.GetString("IAM_FQDN") + "/am/json/alpha/scripts/?_action=create"
+	path := fmt.Sprintf("https://%s/am/json/alpha/scripts/?_action=create", viper.GetString("IAM_FQDN"))
 	claimsScript := &RequestScript{}
 	resp, err := client.R().
 		SetHeader("Accept", "*/*").

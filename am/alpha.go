@@ -2,6 +2,7 @@ package am
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 
@@ -33,7 +34,7 @@ func CreateAlphaRealm(cookie *http.Cookie) {
 
 // AlphaRealmExists will check if alpha realm exists
 func AlphaRealmExists(cookie *http.Cookie) bool {
-	path := "https://" + viper.GetString("IAM_FQDN") + "/am/json/global-config/realms/L2FscGhh"
+	path := fmt.Sprintf("https://%s/am/json/global-config/realms/L2FscGhh", viper.GetString("IAM_FQDN"))
 	resp, err := client.R().
 		SetHeader("Accept", "application/json").
 		SetHeader("X-Requested-With", "ForgeRock Identity Cloud Postman Collection").

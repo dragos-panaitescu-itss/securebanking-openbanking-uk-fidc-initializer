@@ -7,6 +7,7 @@ import (
 	"go.uber.org/zap"
 )
 
+// ApplyAmAuthenticationConfig will attempt to create the username/password nodes
 func ApplyAmAuthenticationConfig() {
 	CreateCaUsernameNode()
 	CreateCaPasswordNode()
