@@ -52,7 +52,7 @@ func CreateRemoteConsentService() {
 		},
 		RemoteConsentRedirectURL: InheritedValueString{
 			Inherited: false,
-			Value:     "https://" + viper.GetString("FQDN") + "/rcs",
+			Value:     fmt.Sprintf("https://%s/rcs", viper.GetString("FQDN")),
 		},
 		RemoteConsentRequestEncryptionEnabled: InheritedValueBool{
 			Inherited: false,
@@ -72,13 +72,14 @@ func CreateRemoteConsentService() {
 		},
 		JwksURI: InheritedValueString{
 			Inherited: false,
-			Value:     "http://obdemo-rcs-api:8083/api/rcs/consent/jwk_pub",
+			Value:     "http://securebanking-openbanking-uk-rcs:8080/api/rcs/consent/jwk_pub",
 		},
 		Type: Type{
 			ID:         "RemoteConsentAgent",
 			Name:       "OAuth2 Remote Consent Service",
 			Collection: true,
 		},
+		Userpassword: viper.GetString("IG_RCS_SECRET"),
 	}
 	path := "/am/json/realms/root/realms/alpha/realm-config/agents/RemoteConsentAgent/forgerock-rcs"
 
