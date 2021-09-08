@@ -68,10 +68,6 @@ func main() {
 	am.AddOBManagedObjects()
 
 	am.CreateApiJwksEndpoint()
-
-	if viper.GetString("ENVIRONMENT_TYPE") == "CDK" {
-		am.AddAdditionalCDKObjects()
-	}
 }
 
 func configureLogger() (*zap.Logger, error) {
