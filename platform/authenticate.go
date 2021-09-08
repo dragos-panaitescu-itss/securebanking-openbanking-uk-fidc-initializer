@@ -63,7 +63,7 @@ func GetCookieNameFromAm() string {
 //    returns the Session object with embedded session cookie
 func FromUserSession(cookieName string) *Session {
 	zap.L().Debug("Getting an admin session from AM")
-	path := fmt.Sprintf("https://%s/am/json/realms/root/authenticat", viper.GetString("IAM_FQDN"))
+	path := fmt.Sprintf("https://%s/am/json/realms/root/authenticate", viper.GetString("IAM_FQDN"))
 	resp, err := client.R().
 		SetHeader("Accept", "application/json").
 		SetHeader("X-OpenAM-Username", viper.GetString("OPEN_AM_USERNAME")).
