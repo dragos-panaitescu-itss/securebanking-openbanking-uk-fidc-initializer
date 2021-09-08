@@ -108,7 +108,7 @@ func (s *Session) GetIDMAdminAuthCode() {
 	resp, err := client.R().
 		SetHeader("Accept", "*/*").
 		SetQueryParams(map[string]string{
-			"redirect_uri":          "https://" + viper.GetString("IAM_FQDN") + "/platform/appAuthHelperRedirect.html",
+			"redirect_uri":          fmt.Sprintf("https://%s/platform/appAuthHelperRedirect.html", viper.GetString("IAM_FQDN")),
 			"client_id":             "idmAdminClient",
 			"response_type":         "code",
 			"scope":                 "fr:idm:*",

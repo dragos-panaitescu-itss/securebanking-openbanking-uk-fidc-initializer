@@ -27,6 +27,8 @@ spec:
                     key: FQDN
               - name: FQDN
                 value: obdemo.dev.forgerock.financial
+              - name: IDM_FQDN
+                value: idm.cdk.svc.cluster.local
               - name: REQUEST_BODY_PATH
                 value: config/
               command: ["/bin/sh", "-c"]
