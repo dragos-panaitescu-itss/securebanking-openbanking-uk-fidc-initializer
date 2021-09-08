@@ -1,10 +1,12 @@
 package am
 
 import (
+	b64 "encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strings"
 
 	"github.com/secureBankingAccessToolkit/securebanking-openbanking-uk-fidc-initialiszer/common"
 	"github.com/spf13/viper"
@@ -32,6 +34,14 @@ func CreatePolicyServiceUser() {
 	zap.S().Infow("Policy Service User", "statusCode", s)
 }
 
+type PolicyEvaluationScript struct {
+	Name        string `json:"name"`
+	Context     string `json:"context"`
+	Description string `json:"description"`
+	Language    string `json:"language"`
+	Script      string `json:"script"`
+}
+
 // CreatePolicyEvaluationScript - and returns the created ID
 func CreatePolicyEvaluationScript(cookie *http.Cookie) string {
 	id := GetScriptIdByName("Open Banking Dynamic Policy")
@@ -40,11 +50,28 @@ func CreatePolicyEvaluationScript(cookie *http.Cookie) string {
 		return id
 	}
 
-	zap.L().Debug("Creating policy evaluation script")
-	b, err := ioutil.ReadFile(common.IamDirectoryPath() + "policy-evaluation-script.json")
+	b, err := ioutil.ReadFile(common.IamDirectoryPath() + "policy-evaluation-script.groovy")
 	if err != nil {
 		panic(err)
 	}
+	rawPolicyString := string(b)
+	rawPolicyString = strings.ReplaceAll(rawPolicyString, "{{IDM_CLIENT_ID}}", viper.GetString("IDM_CLIENT_ID"))
+	rawPolicyString = strings.ReplaceAll(rawPolicyString, "{{IDM_CLIENT_SECRET}}", viper.GetString("IDM_CLIENT_SECRET"))
+	rawPolicyString = strings.ReplaceAll(rawPolicyString, "{{IG_IDM_USER}}", viper.GetString("IG_IDM_USER"))
+	rawPolicyString = strings.ReplaceAll(rawPolicyString, "{{IG_IDM_PASSWORD}}", viper.GetString("IG_IDM_PASSWORD"))
+
+	scriptB64 := b64.StdEncoding.EncodeToString([]byte(rawPolicyString))
+
+	policyScript := &PolicyEvaluationScript{
+		Name:        "Open Banking Dynamic Policy",
+		Context:     "POLICY_CONDITION",
+		Description: "Open Banking Dynamic Policy",
+		Language:    "JAVASCRIPT",
+		Script:      scriptB64,
+	}
+
+	zap.L().Debug("Creating policy evaluation script")
+
 	path := fmt.Sprintf("https://%s/am/json/alpha/scripts/?_action=create", viper.GetString("IAM_FQDN"))
 	scriptBody := &RequestScript{}
 	resp, err := client.R().
@@ -55,7 +82,7 @@ func CreatePolicyEvaluationScript(cookie *http.Cookie) string {
 		SetContentLength(true).
 		SetResult(scriptBody).
 		SetCookie(cookie).
-		SetBody(b).
+		SetBody(policyScript).
 		Post(path)
 
 	common.RaiseForStatus(err, resp.Error())
