@@ -132,8 +132,8 @@
     "idTokenInfoClientAuthenticationEnabled": true,
     "alwaysAddClaimsToToken": true,
     "loaMapping": {
-      "urn:openbanking:psd2:sca": "Login",
-      "urn:openbanking:psd2:ca": "Login"
+      "urn:openbanking:psd2:sca": "PSD2SecureCustomerAuthentication",
+      "urn:openbanking:psd2:ca": "PSD2CustomerAuthentication"
     },
     "supportedTokenEndpointAuthenticationSigningAlgorithms": [
       "PS384",

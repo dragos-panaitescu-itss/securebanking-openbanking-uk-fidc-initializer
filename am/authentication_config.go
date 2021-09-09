@@ -61,7 +61,7 @@ func CreateCa() {
 	}
 
 	zap.S().Debugw("Login tree CA", "body", string(b))
-	path := "/am/json/realms/root/realms/alpha/realm-config/authentication/authenticationtrees/trees/Customer%20Authentication"
+	path := "/am/json/realms/root/realms/alpha/realm-config/authentication/authenticationtrees/trees/PSD2CustomerAuthentication"
 	status := Client.Put(path, b, map[string]string{
 		"Accept":             "*/*",
 		"Content-Type":       "application/json",

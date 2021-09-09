@@ -2,7 +2,8 @@ package am
 
 type (
 	ActionValues struct {
-		GET bool `json:"GET"`
+		GET  bool `json:"GET,omitempty"`
+		POST bool `json:"POST,omitempty"`
 	}
 	Subject struct {
 		Type       string `json:"type"`
