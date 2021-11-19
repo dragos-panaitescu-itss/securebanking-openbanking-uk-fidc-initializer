@@ -25,7 +25,8 @@
       "inherited": false,
       "value": [
         "fr:idm:*",
-        "dynamic_client_registration"
+        "dynamic_client_registration",
+        "trusted_gateway"
       ]
     },
     "defaultScopes": {
