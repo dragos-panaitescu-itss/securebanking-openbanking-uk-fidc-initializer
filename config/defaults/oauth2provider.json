@@ -226,7 +226,7 @@
     "authorisedIdmDelegationClients": []
   },
   "clientDynamicRegistrationConfig": {
-    "dynamicClientRegistrationSoftwareStatementRequired": true,
+    "dynamicClientRegistrationSoftwareStatementRequired": false,
     "generateRegistrationAccessTokens": true,
     "requiredSoftwareStatementAttestedAttributes": [],
     "dynamicClientRegistrationScope": "dynamic_client_registration",
