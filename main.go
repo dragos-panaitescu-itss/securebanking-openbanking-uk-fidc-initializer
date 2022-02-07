@@ -89,6 +89,7 @@ func configureVariables() {
 	viper.SetDefault("STRICT", true)
 	viper.SetDefault("ENVIRONMENT_TYPE", "CDK")
 	viper.SetDefault("FQDN", "obdemo-bank.idhub.cc")
+	viper.SetDefault("RCS_UI_FQDN", "rcs-ui.dev.forgerock.financial")
 	viper.SetDefault("IAM_FQDN", "iam.idhub.cc")
 	viper.SetDefault("IDM_FQDN", "idm")
 	viper.SetDefault("AM_REALM", "alpha")
