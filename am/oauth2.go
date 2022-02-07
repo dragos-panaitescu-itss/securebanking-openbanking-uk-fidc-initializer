@@ -52,7 +52,7 @@ func CreateRemoteConsentService() {
 		},
 		RemoteConsentRedirectURL: InheritedValueString{
 			Inherited: false,
-			Value:     fmt.Sprintf("https://%s/rcs", viper.GetString("FQDN")),
+			Value:     fmt.Sprintf("https://%s", viper.GetString("RCS_UI_FQDN")),
 		},
 		RemoteConsentRequestEncryptionEnabled: InheritedValueBool{
 			Inherited: false,
