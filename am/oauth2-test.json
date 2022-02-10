@@ -139,11 +139,21 @@
       "inetUserStatus": [
         "Active"
       ]
+    },
+    {
+      "_id": "test-publisher",
+      "_rev": "372432113",
+      "agentgroup": null
+    },
+    {
+      "_id": "OBRI",
+      "_rev": "-1024354422",
+      "agentgroup": null
     }
   ],
-  "resultCount": 10,
+  "resultCount": 12,
   "pagedResultsCookie": null,
-  "totalPagedResultsPolicy": "NONE",
+  "totalPagedResultsPolicy": "EXACT",
   "totalPagedResults": -1,
   "remainingPagedResults": 21
 }
