@@ -15,6 +15,7 @@ type (
 	}
 	JwkSet struct {
 		Inherited bool `json:"inherited"`
+		Value	string `json:"value"`
 	}
 	Type struct {
 		ID         string `json:"_id"`

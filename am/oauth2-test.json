@@ -1,6 +1,146 @@
 {
   "result": [
     {
+      "_id": "188755a8-a700-44bd-bb06-dffef5f03966",
+      "_rev": "000000009d24f83d",
+      "cn": [
+        "fortest_af65ece6-81b6-420e-b7ee-97e746adcc43 fortest_af65ece6-81b6-420e-b7ee-97e746adcc43"
+      ],
+      "mail": [
+        "mail@forgerock.com"
+      ],
+      "username": "fortest_af65ece6-81b6-420e-b7ee-97e746adcc43",
+      "inetUserStatus": [
+        "Active"
+      ]
+    },
+    {
+      "_id": "1a781ba6-725d-4790-995a-3e94466f7c51",
+      "_rev": "00000000dd18bfda",
+      "cn": [
+        "M T"
+      ],
+      "mail": [
+        "marian.tiris@forgerock.com"
+      ],
+      "username": "marian.tiris",
+      "inetUserStatus": [
+        "Active"
+      ]
+    },
+    {
+      "_id": "1751f8a6-d587-4d8d-817c-7fb2dff83c96",
+      "_rev": "000000008cf9f456",
+      "cn": [
+        "fortest_383e6361-62e8-4616-a4cf-0176e4caaae9 fortest_383e6361-62e8-4616-a4cf-0176e4caaae9"
+      ],
+      "mail": [
+        "mail@forgerock.com"
+      ],
+      "username": "fortest_383e6361-62e8-4616-a4cf-0176e4caaae9",
+      "inetUserStatus": [
+        "Active"
+      ]
+    },
+    {
+      "_id": "788e2c6c-a37f-4694-b3cc-1a15a7f426e3",
+      "_rev": "00000000c1d6f959",
+      "cn": [
+        "fortest_a856b65c-3468-414e-acf5-dbaf5b7ed562 fortest_a856b65c-3468-414e-acf5-dbaf5b7ed562"
+      ],
+      "mail": [
+        "mail@forgerock.com"
+      ],
+      "username": "fortest_a856b65c-3468-414e-acf5-dbaf5b7ed562",
+      "inetUserStatus": [
+        "Active"
+      ]
+    },
+    {
+      "_id": "5dc4afd5-cf47-45d5-b43e-50bf45281106",
+      "_rev": "00000000b601f9b2",
+      "cn": [
+        "fortest_c6f7fa1d-e0d0-4541-a88a-c25e0d9d6b6d fortest_c6f7fa1d-e0d0-4541-a88a-c25e0d9d6b6d"
+      ],
+      "mail": [
+        "mail@forgerock.com"
+      ],
+      "username": "fortest_c6f7fa1d-e0d0-4541-a88a-c25e0d9d6b6d",
+      "inetUserStatus": [
+        "Active"
+      ]
+    },
+    {
+      "_id": "31f068de-b7cf-47dd-a158-f16cc44bfa86",
+      "_rev": "00000000b6d570d6",
+      "cn": [
+        "Policy Engine Service Account"
+      ],
+      "mail": [
+        "john.terry@forgerock.com"
+      ],
+      "username": "service_account.policy",
+      "inetUserStatus": [
+        "Active"
+      ]
+    },
+    {
+      "_id": "bdcfe058-fc31-47fd-a7c5-1c2b027da46e",
+      "_rev": "00000000a491602c",
+      "cn": [
+        "IG Service Account"
+      ],
+      "mail": [
+        "ig@acme.com"
+      ],
+      "username": "service_account.ig",
+      "inetUserStatus": [
+        "Active"
+      ]
+    },
+    {
+      "_id": "16c841df-c237-496f-a577-26c1f837193d",
+      "_rev": "000000006679f538",
+      "cn": [
+        "fortest_fd48e4ed-3476-4e0a-a171-32d08ab93fcf fortest_fd48e4ed-3476-4e0a-a171-32d08ab93fcf"
+      ],
+      "mail": [
+        "mail@forgerock.com"
+      ],
+      "username": "fortest_fd48e4ed-3476-4e0a-a171-32d08ab93fcf",
+      "inetUserStatus": [
+        "Active"
+      ]
+    },
+    {
+      "_id": "12988635-5a59-48d2-8a7e-6832bbab22b7",
+      "_rev": "0000000064b6f52a",
+      "cn": [
+        "fortest_5565eb6d-ec01-4d22-ab0a-e2863d7a4975 fortest_5565eb6d-ec01-4d22-ab0a-e2863d7a4975"
+      ],
+      "mail": [
+        "mail@forgerock.com"
+      ],
+      "username": "fortest_5565eb6d-ec01-4d22-ab0a-e2863d7a4975",
+      "inetUserStatus": [
+        "Active"
+      ]
+    },
+    {
+      "_id": "9b3a4cf5-ac9d-47ac-a615-cc23ac24cce7",
+      "_rev": "00000000d9f1f685",
+      "cn": [
+        "fortest_4deb1499-9aa6-4319-840c-646dfe374df7 fortest_4deb1499-9aa6-4319-840c-646dfe374df7"
+      ],
+      "mail": [
+        "mail@forgerock.com"
+      ],
+      "username": "fortest_4deb1499-9aa6-4319-840c-646dfe374df7",
+      "inetUserStatus": [
+        "Active"
+      ]
+    },
+    {
       "_id": "test-publisher",
       "_rev": "372432113",
       "agentgroup": null
@@ -11,9 +151,9 @@
       "agentgroup": null
     }
   ],
-  "resultCount": 2,
+  "resultCount": 12,
   "pagedResultsCookie": null,
   "totalPagedResultsPolicy": "EXACT",
-  "totalPagedResults": 2,
-  "remainingPagedResults": -1
+  "totalPagedResults": -1,
+  "remainingPagedResults": 21
 }
