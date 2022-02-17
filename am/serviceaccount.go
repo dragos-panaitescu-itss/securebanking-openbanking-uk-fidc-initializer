@@ -131,8 +131,8 @@ func CreateIDMAdminClient(cookie *http.Cookie) {
 //   When CDK is removed, these entities might still be persisted. this gives us
 //   an indication that we do not need to initialize the environment
 func ServiceIdentityExists(identity string) bool {
-	path := "/am/json/realms/root/realms/alpha/users?_queryFilter=true&_pageSize=10&_fields=cn,mail,username,inetUserStatus"
-	serviceIdentity := &AmResult{}
+	path := "/am/json/realms/root/realms/alpha/users/" + identity + "?_fields=username"
+	serviceIdentity := &Result{}
 	b := Client.Get(path, map[string]string{
 		"Accept":             "application/json",
 		"X-Requested-With":   "ForgeRock Identity Cloud Postman Collection",
@@ -143,8 +143,5 @@ func ServiceIdentityExists(identity string) bool {
 	if err != nil {
 		panic(err)
 	}
-
-	return Find(identity, serviceIdentity, func(r *Result) string {
-		return r.Username
-	})
+	return serviceIdentity.Username == identity
 }
