@@ -16,7 +16,7 @@ func TestFindExistingAlphaClient(t *testing.T) {
 	mockRestReaderWriter.On("Get", mock.Anything, mock.Anything).
 		Return(buffer)
 
-	b := AlphaClientsExist("Doesn't exist")
+	b := AlphaClientsExist("Doesnt existy")
 	assert.False(t, b)
 	mockRestReaderWriter.AssertCalled(t, "Get", mock.Anything, mock.Anything)
 

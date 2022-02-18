@@ -16,17 +16,16 @@ type RestError struct {
 // RaiseForStatus will exit if go resty returns an error in STRICT mode,
 //    Be it client error, server error or other. Turning off
 //    STRICT mode will simply warn of client/server errors.
-func RaiseForStatus(err error, restError interface{}, status string) {
+func RaiseForStatus(err error, restError interface{}) {
 	if err != nil {
-		zap.S().Fatalw("Go rest has thrown an error when attempting to send", "error", err, "httpStatus", status)
+		zap.S().Fatalw("Goresty has thrown an error when attempting to send", "error", err)
 	}
 
 	if restError != nil {
 		strict := viper.GetBool("STRICT")
 		if strict {
-			zap.S().Fatalw("Go rest has sent the request but the status is > 399", "error", restError, "httpStatus", status)
+			zap.S().Fatalw("Goresty has sent the request but the status is > 399", "error", restError)
 		}
-		zap.S().Warnw("Go rest has sent the request but the status is > 399", "error", restError, "httpStatus", status)
+		zap.S().Warnw("Goresty has sent the request but the status is > 399", "error", restError)
 	}
 }
-
