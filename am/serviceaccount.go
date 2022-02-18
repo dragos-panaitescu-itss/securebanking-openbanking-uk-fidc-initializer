@@ -122,7 +122,7 @@ func CreateIDMAdminClient(cookie *http.Cookie) {
 		SetBody(config).
 		Put(path)
 
-	common.RaiseForStatus(err, resp.Error())
+	common.RaiseForStatus(err, resp.Error(), resp.Status())
 
 	zap.S().Infow("IDM Admin Client", "statusCode", resp.StatusCode(), "redirect", config.CoreOAuth2ClientConfig.RedirectionUris.Value)
 }
@@ -133,12 +133,14 @@ func CreateIDMAdminClient(cookie *http.Cookie) {
 func ServiceIdentityExists(identity string) bool {
 	path := "/am/json/realms/root/realms/alpha/users/" + identity + "?_fields=username"
 	serviceIdentity := &Result{}
-	b := Client.Get(path, map[string]string{
+	b, status := Client.Get(path, map[string]string{
 		"Accept":             "application/json",
 		"X-Requested-With":   "ForgeRock Identity Cloud Postman Collection",
 		"Accept-Api-Version": "protocol=2.1, resource=4.0",
 	})
-
+	if status == http.StatusNotFound {
+		return false
+	}
 	err := json.Unmarshal(b, serviceIdentity)
 	if err != nil {
 		panic(err)
