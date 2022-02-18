@@ -19,10 +19,6 @@ func TestPolicySetExists(t *testing.T) {
 	b := PolicySetExists("Open Banking")
 
 	assert.True(t, b)
-	mockRestReaderWriter.AssertCalled(t, "Get", mock.Anything, mock.Anything)
-
-	b = ServiceIdentityExists("Doesnt existy")
-	assert.False(t, b)
 }
 
 func TestPolicyExists(t *testing.T) {
