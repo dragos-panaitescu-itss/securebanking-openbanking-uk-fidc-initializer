@@ -37,12 +37,7 @@ func (r *RestClient) Get(path string, headers map[string]string) ([]byte, int) {
 	resp, err := r.request(headers).
 		Get(r.FQDN + path)
 
-	// return the status code as String to check the status
-	//if resp.StatusCode() != http.StatusOK {
-	//	return []byte(resp.Status())
-	//}
-
-	common.RaiseForStatus(err, resp.Error(), resp.Status())
+	common.RaiseForStatus(err, resp.Error(), resp.StatusCode())
 
 	return resp.Body(), resp.StatusCode()
 }
@@ -60,7 +55,7 @@ func (r *RestClient) Post(path string, ob interface{}, headers map[string]string
 		SetContentLength(true).
 		Post(r.FQDN + path)
 
-	common.RaiseForStatus(err, resp.Error(), resp.Status())
+	common.RaiseForStatus(err, resp.Error(), resp.StatusCode())
 
 	return resp.StatusCode()
 }
@@ -70,7 +65,7 @@ func (r *RestClient) Patch(path string, ob interface{}, headers map[string]strin
 		SetBody(ob).
 		Patch(r.FQDN + path)
 
-	common.RaiseForStatus(err, resp.Error(), resp.Status())
+	common.RaiseForStatus(err, resp.Error(), resp.StatusCode())
 
 	return resp.StatusCode()
 }
@@ -81,7 +76,7 @@ func (r *RestClient) Put(path string, ob interface{}, headers map[string]string)
 		SetContentLength(true).
 		Put(r.FQDN + path)
 
-	common.RaiseForStatus(err, resp.Error(), resp.Status())
+	common.RaiseForStatus(err, resp.Error(), resp.StatusCode())
 
 	return resp.StatusCode()
 }

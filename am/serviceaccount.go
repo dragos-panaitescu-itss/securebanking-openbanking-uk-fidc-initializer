@@ -122,7 +122,7 @@ func CreateIDMAdminClient(cookie *http.Cookie) {
 		SetBody(config).
 		Put(path)
 
-	common.RaiseForStatus(err, resp.Error(), resp.Status())
+	common.RaiseForStatus(err, resp.Error(), resp.StatusCode())
 
 	zap.S().Infow("IDM Admin Client", "statusCode", resp.StatusCode(), "redirect", config.CoreOAuth2ClientConfig.RedirectionUris.Value)
 }

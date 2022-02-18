@@ -255,7 +255,7 @@ func CreateOIDCClaimsScript(cookie *http.Cookie) string {
 		SetBody(b).
 		Post(path)
 
-	common.RaiseForStatus(err, resp.Error(), resp.Status())
+	common.RaiseForStatus(err, resp.Error(), resp.StatusCode())
 
 	zap.S().Infow("OIDC claims script", "statusCode", resp.StatusCode(), "claimsScriptID", claimsScript.ID, "createdBy", claimsScript.CreatedBy)
 	return claimsScript.ID

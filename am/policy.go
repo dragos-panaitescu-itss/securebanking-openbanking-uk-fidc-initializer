@@ -85,7 +85,7 @@ func CreatePolicyEvaluationScript(cookie *http.Cookie) string {
 		SetBody(policyScript).
 		Post(path)
 
-	common.RaiseForStatus(err, resp.Error(), resp.Status())
+	common.RaiseForStatus(err, resp.Error(), resp.StatusCode())
 
 	zap.S().Infow("Policy Evaluation Script", "statusCode", resp.StatusCode(), "scriptId", scriptBody.ID)
 	return scriptBody.ID
