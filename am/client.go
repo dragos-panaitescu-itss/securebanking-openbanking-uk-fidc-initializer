@@ -9,7 +9,7 @@ import (
 )
 
 type RestReaderWriter interface {
-	Get(string, map[string]string) ([]byte, int)
+	Get(string, map[string]string) []byte
 	Patch(string, interface{}, map[string]string) int
 	Post(string, interface{}, map[string]string) int
 	Put(string, interface{}, map[string]string) int
@@ -33,18 +33,13 @@ func InitRestReaderWriter(cookie *http.Cookie, authCode string) {
 	}
 }
 
-func (r *RestClient) Get(path string, headers map[string]string) ([]byte, int) {
+func (r *RestClient) Get(path string, headers map[string]string) []byte {
 	resp, err := r.request(headers).
 		Get(r.FQDN + path)
 
-	// return the status code as String to check the status
-	//if resp.StatusCode() != http.StatusOK {
-	//	return []byte(resp.Status())
-	//}
+	common.RaiseForStatus(err, resp.Error())
 
-	common.RaiseForStatus(err, resp.Error(), resp.Status())
-
-	return resp.Body(), resp.StatusCode()
+	return resp.Body()
 }
 
 func (r *RestClient) request(headers map[string]string) *resty.Request {
@@ -60,7 +55,7 @@ func (r *RestClient) Post(path string, ob interface{}, headers map[string]string
 		SetContentLength(true).
 		Post(r.FQDN + path)
 
-	common.RaiseForStatus(err, resp.Error(), resp.Status())
+	common.RaiseForStatus(err, resp.Error())
 
 	return resp.StatusCode()
 }
@@ -70,7 +65,7 @@ func (r *RestClient) Patch(path string, ob interface{}, headers map[string]strin
 		SetBody(ob).
 		Patch(r.FQDN + path)
 
-	common.RaiseForStatus(err, resp.Error(), resp.Status())
+	common.RaiseForStatus(err, resp.Error())
 
 	return resp.StatusCode()
 }
@@ -81,7 +76,7 @@ func (r *RestClient) Put(path string, ob interface{}, headers map[string]string)
 		SetContentLength(true).
 		Put(r.FQDN + path)
 
-	common.RaiseForStatus(err, resp.Error(), resp.Status())
+	common.RaiseForStatus(err, resp.Error())
 
 	return resp.StatusCode()
 }

@@ -85,7 +85,7 @@ func CreatePolicyEvaluationScript(cookie *http.Cookie) string {
 		SetBody(policyScript).
 		Post(path)
 
-	common.RaiseForStatus(err, resp.Error(), resp.Status())
+	common.RaiseForStatus(err, resp.Error())
 
 	zap.S().Infow("Policy Evaluation Script", "statusCode", resp.StatusCode(), "scriptId", scriptBody.ID)
 	return scriptBody.ID
@@ -124,14 +124,12 @@ func CreateOpenBankingPolicySet() {
 func PolicySetExists(name string) bool {
 	path := "/am/json/alpha/applications?_pageSize=20&_sortKeys=name&_queryFilter=name+eq+%22%5E(%3F!sunAMDelegationService%24).*%22&_pagedResultsOffset=0"
 	serviceIdentity := &AmResult{}
-	b, status := Client.Get(path, map[string]string{
+	b := Client.Get(path, map[string]string{
 		"Accept":             "application/json",
 		"X-Requested-With":   "ForgeRock Identity Cloud Postman Collection",
 		"Accept-Api-Version": "protocol=1.0,resource=2.0",
 	})
-	if status == http.StatusNotFound {
-		return false
-	}
+
 	err := json.Unmarshal(b, serviceIdentity)
 	if err != nil {
 		panic(err)
@@ -145,14 +143,12 @@ func PolicySetExists(name string) bool {
 func PolicyExists(name string) bool {
 	path := "/am/json/alpha/policies?_pageSize=20&_sortKeys=name&_queryFilter=applicationName+eq+%22Open%20Banking%22&_pagedResultsOffset=0"
 	serviceIdentity := &AmResult{}
-	b, status := Client.Get(path, map[string]string{
+	b := Client.Get(path, map[string]string{
 		"Accept":             "application/json",
 		"X-Requested-With":   "ForgeRock Identity Cloud Postman Collection",
 		"Accept-Api-Version": "protocol=1.0,resource=2.0",
 	})
-	if status == http.StatusNotFound {
-		return false
-	}
+
 	err := json.Unmarshal(b, serviceIdentity)
 	if err != nil {
 		panic(err)
