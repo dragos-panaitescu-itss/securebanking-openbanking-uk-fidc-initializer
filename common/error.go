@@ -32,4 +32,3 @@ func RaiseForStatus(err error, restError interface{}, status int) {
 		}
 	}
 }
-

@@ -30,7 +30,7 @@ func ObjectNames(relativePath string) []string {
 func MissingObjects(objectNames []string) []string {
 	path := "/openidm/config/managed"
 	result := &OBManagedObjects{}
-	b, _ := Client.Get(path, map[string]string{
+	b := Client.Get(path, map[string]string{
 		"Accept":           "application/json",
 		"X-Requested-With": "ForgeRock Identity Cloud Postman Collection",
 	})

@@ -27,6 +27,7 @@ func CreateAlphaRealm(cookie *http.Cookie) {
 		SetCookie(cookie).
 		SetBody(b).
 		Post(path)
+
 	common.RaiseForStatus(err, resp.Error(), resp.StatusCode())
 
 	zap.S().Infow("Alpha Realm Created", "statusCode", resp.StatusCode())
@@ -55,14 +56,12 @@ func AlphaRealmExists(cookie *http.Cookie) bool {
 func AlphaClientsExist(clientName string) bool {
 	path := "/am/json/realms/root/realms/alpha/realm-config/agents/OAuth2Client?_queryFilter=true&_pageSize=10&_fields=coreOAuth2ClientConfig/status,coreOAuth2ClientConfig/agentgroup"
 	result := &AmResult{}
-	b, status := Client.Get(path, map[string]string{
+	b := Client.Get(path, map[string]string{
 		"Accept":             "application/json",
 		"X-Requested-With":   "ForgeRock Identity Cloud Postman Collection",
 		"Accept-Api-Version": "protocol=2.0,resource=1.0",
 	})
-	if status == http.StatusNotFound {
-		return false
-	}
+
 	err := json.Unmarshal(b, result)
 	if err != nil {
 		panic(err)

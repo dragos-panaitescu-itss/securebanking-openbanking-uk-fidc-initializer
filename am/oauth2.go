@@ -96,14 +96,12 @@ func CreateRemoteConsentService() {
 func RemoteConsentExists(name string) bool {
 	path := "/am/json/realms/root/realms/alpha/realm-config/agents/RemoteConsentAgent?_queryFilter=true&_pageSize=10&_fields=agentgroup"
 	consent := &AmResult{}
-	b, status := Client.Get(path, map[string]string{
+	b := Client.Get(path, map[string]string{
 		"Accept":             "application/json",
 		"X-Requested-With":   "ForgeRock Identity Cloud Postman Collection",
 		"Accept-Api-Version": "protocol=2.0,resource=1.0",
 	})
-	if status == http.StatusNotFound {
-		return false
-	}
+
 	err := json.Unmarshal(b, consent)
 	if err != nil {
 		panic(err)
@@ -211,14 +209,12 @@ func CreateSoftwarePublisherAgentTestPublisher() {
 func SoftwarePublisherAgentExists(name string) bool {
 	path := "/am/json/realms/root/realms/alpha/realm-config/agents/SoftwarePublisher?_queryFilter=true&_pageSize=10&_fields=agentgroup"
 	agent := &AmResult{}
-	b, status := Client.Get(path, map[string]string{
+	b := Client.Get(path, map[string]string{
 		"Accept":             "application/json",
 		"X-Requested-With":   "ForgeRock Identity Cloud Postman Collection",
 		"Accept-Api-Version": "protocol=2.0,resource=1.0",
 	})
-	if status == http.StatusNotFound {
-		return false
-	}
+
 	err := json.Unmarshal(b, agent)
 	if err != nil {
 		panic(err)
@@ -254,7 +250,7 @@ func CreateOIDCClaimsScript(cookie *http.Cookie) string {
 		SetResult(claimsScript).
 		SetBody(b).
 		Post(path)
-
+  
 	common.RaiseForStatus(err, resp.Error(), resp.StatusCode())
 
 	zap.S().Infow("OIDC claims script", "statusCode", resp.StatusCode(), "claimsScriptID", claimsScript.ID, "createdBy", claimsScript.CreatedBy)
@@ -264,7 +260,7 @@ func CreateOIDCClaimsScript(cookie *http.Cookie) string {
 func GetScriptIdByName(name string) string {
 	path := "/am/json/alpha/scripts?_pageSize=20&_sortKeys=name&_queryFilter=true&_pagedResultsOffset=0"
 	consent := &AmResult{}
-	b, _ := Client.Get(path, map[string]string{
+	b := Client.Get(path, map[string]string{
 		"Accept":             "application/json",
 		"X-Requested-With":   "ForgeRock Identity Cloud Postman Collection",
 		"Accept-Api-Version": "protocol=1.0,resource=1.0",
@@ -312,14 +308,12 @@ func UpdateOAuth2Provider(claimsScriptID string) {
 func Oauth2ProviderExists(id string) bool {
 	path := "/am/json/realms/root/realms/alpha/realm-config/services?_queryFilter=true"
 	r := &AmResult{}
-	b, status := Client.Get(path, map[string]string{
+	b := Client.Get(path, map[string]string{
 		"Accept":             "application/json",
 		"X-Requested-With":   "ForgeRock Identity Cloud Postman Collection",
 		"Accept-Api-Version": "protocol=1.0,resource=1.0",
 	})
-	if status == http.StatusNotFound {
-		return false
-	}
+
 	err := json.Unmarshal(b, r)
 	if err != nil {
 		panic(err)
