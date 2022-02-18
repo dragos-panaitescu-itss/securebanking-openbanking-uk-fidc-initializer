@@ -37,9 +37,9 @@ func (r *RestClient) Get(path string, headers map[string]string) []byte {
 	resp, err := r.request(headers).
 		Get(r.FQDN + path)
 
-	common.RaiseForStatus(err, resp.Error())
+	common.RaiseForStatus(err, resp.Error(), resp.StatusCode())
 
-	return resp.Body()
+	return resp.Body(), resp.StatusCode()
 }
 
 func (r *RestClient) request(headers map[string]string) *resty.Request {
@@ -54,8 +54,8 @@ func (r *RestClient) Post(path string, ob interface{}, headers map[string]string
 		SetBody(ob).
 		SetContentLength(true).
 		Post(r.FQDN + path)
-
-	common.RaiseForStatus(err, resp.Error())
+  
+	common.RaiseForStatus(err, resp.Error(), resp.StatusCode())
 
 	return resp.StatusCode()
 }
@@ -65,7 +65,7 @@ func (r *RestClient) Patch(path string, ob interface{}, headers map[string]strin
 		SetBody(ob).
 		Patch(r.FQDN + path)
 
-	common.RaiseForStatus(err, resp.Error())
+	common.RaiseForStatus(err, resp.Error(), resp.StatusCode())
 
 	return resp.StatusCode()
 }
@@ -76,7 +76,7 @@ func (r *RestClient) Put(path string, ob interface{}, headers map[string]string)
 		SetContentLength(true).
 		Put(r.FQDN + path)
 
-	common.RaiseForStatus(err, resp.Error())
+	common.RaiseForStatus(err, resp.Error(), resp.StatusCode())
 
 	return resp.StatusCode()
 }

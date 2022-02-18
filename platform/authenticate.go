@@ -50,7 +50,8 @@ func GetCookieNameFromAm() string {
 		SetHeader("Accept", "application/json").
 		SetResult(result).
 		Get(path)
-	common.RaiseForStatus(err, resp.Error())
+
+	common.RaiseForStatus(err, resp.Error(), resp.StatusCode())
 
 	cookieName := result.Cookiename
 
@@ -69,7 +70,9 @@ func FromUserSession(cookieName string) *Session {
 		SetHeader("X-OpenAM-Username", viper.GetString("OPEN_AM_USERNAME")).
 		SetHeader("X-OpenAM-Password", viper.GetString("OPEN_AM_PASSWORD")).
 		Post(path)
-	common.RaiseForStatus(err, resp.Error())
+
+	common.RaiseForStatus(err, resp.Error(), resp.StatusCode())
+
 
 	var cookieValue string = ""
 	for _, cookie := range resp.Cookies() {
@@ -152,6 +155,8 @@ func (s *Session) GetIDMAdminToken() {
 			"code_verifier": "codeverifier",
 		}).
 		Post(path)
-	common.RaiseForStatus(err, resp.Error())
+
+	common.RaiseForStatus(err, resp.Error(), resp.StatusCode())
+
 	s.AuthToken = *token
 }

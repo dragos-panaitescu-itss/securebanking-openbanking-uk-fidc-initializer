@@ -27,7 +27,8 @@ func CreateAlphaRealm(cookie *http.Cookie) {
 		SetCookie(cookie).
 		SetBody(b).
 		Post(path)
-	common.RaiseForStatus(err, resp.Error())
+
+	common.RaiseForStatus(err, resp.Error(), resp.StatusCode())
 
 	zap.S().Infow("Alpha Realm Created", "statusCode", resp.StatusCode())
 }

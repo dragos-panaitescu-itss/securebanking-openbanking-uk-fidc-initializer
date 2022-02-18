@@ -38,7 +38,7 @@ func ApplySystemClients(cookie *http.Cookie) {
 		SetBody(config).
 		Put(path)
 
-	common.RaiseForStatus(err, resp.Error())
+	common.RaiseForStatus(err, resp.Error(), resp.StatusCode())
 
 	zap.S().Infow("oauth2 system Client", "statusCode", resp.StatusCode(), "redirect", config.CoreOAuth2ClientConfig.RedirectionUris.Value)
 }
