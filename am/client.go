@@ -9,7 +9,7 @@ import (
 )
 
 type RestReaderWriter interface {
-	Get(string, map[string]string) []byte
+	Get(string, map[string]string) ([]byte, int)
 	Patch(string, interface{}, map[string]string) int
 	Post(string, interface{}, map[string]string) int
 	Put(string, interface{}, map[string]string) int
@@ -33,7 +33,7 @@ func InitRestReaderWriter(cookie *http.Cookie, authCode string) {
 	}
 }
 
-func (r *RestClient) Get(path string, headers map[string]string) []byte {
+func (r *RestClient) Get(path string, headers map[string]string) ([]byte, int) {
 	resp, err := r.request(headers).
 		Get(r.FQDN + path)
 

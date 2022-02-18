@@ -2,3 +2,4 @@ setup
 .vscode/
 pacts/
 logs/
+pact/
