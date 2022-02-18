@@ -1,6 +1,7 @@
 package am
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/go-resty/resty/v2"
@@ -34,9 +35,10 @@ func InitRestReaderWriter(cookie *http.Cookie, authCode string) {
 }
 
 func (r *RestClient) Get(path string, headers map[string]string) ([]byte, int) {
+	route := r.FQDN + path
 	resp, err := r.request(headers).
-		Get(r.FQDN + path)
-
+		Get(route)
+	log.Println("Route:", route, resp.Status())
 	common.RaiseForStatus(err, resp.Error(), resp.StatusCode())
 
 	return resp.Body(), resp.StatusCode()
