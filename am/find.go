@@ -17,6 +17,11 @@ type Result struct {
 	Username string `json:"username,omitempty"`
 }
 
+type ResultFilter struct {
+	Result      []Result `json:"result"`
+	ResultCount int      `json:"resultCount,omitempty"`
+}
+
 // Find look at the Result of an AmResult object, commonly returned by the OpenAm API.
 //  If result exists then return true. An AmResult contains an array of Result. which contains the fields
 //  ID, Name and Username.

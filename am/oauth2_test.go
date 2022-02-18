@@ -22,10 +22,6 @@ func TestFindSoftwarePublisherAgent(t *testing.T) {
 
 	b = SoftwarePublisherAgentExists("test-publisher")
 	assert.True(t, b)
-	mockRestReaderWriter.AssertCalled(t, "Get", mock.Anything, mock.Anything)
-
-	b = ServiceIdentityExists("Doesn't exist")
-	assert.False(t, b)
 }
 
 func TestFindRemoteConsent(t *testing.T) {
@@ -38,10 +34,6 @@ func TestFindRemoteConsent(t *testing.T) {
 	b := RemoteConsentExists("forgerock-rcs")
 
 	assert.True(t, b)
-	mockRestReaderWriter.AssertCalled(t, "Get", mock.Anything, mock.Anything)
-
-	b = ServiceIdentityExists("Doesnt existy")
-	assert.False(t, b)
 }
 
 func TestReturnScriptId(t *testing.T) {
@@ -70,8 +62,4 @@ func TestFindOAuth2Provider(t *testing.T) {
 	b := Oauth2ProviderExists("oauth-oidc")
 
 	assert.True(t, b)
-	mockRestReaderWriter.AssertCalled(t, "Get", mock.Anything, mock.Anything)
-
-	b = ServiceIdentityExists("Doesnt existy")
-	assert.False(t, b)
 }

@@ -10,7 +10,7 @@ type RestReaderWriter struct {
 }
 
 // Get provides a mock function with given fields: _a0, _a1
-func (_m *RestReaderWriter) Get(_a0 string, _a1 map[string]string) []byte {
+func (_m *RestReaderWriter) Get(_a0 string, _a1 map[string]string) ([]byte, int) {
 	ret := _m.Called(_a0, _a1)
 
 	var r0 []byte
@@ -22,7 +22,7 @@ func (_m *RestReaderWriter) Get(_a0 string, _a1 map[string]string) []byte {
 		}
 	}
 
-	return r0
+	return r0, 200
 }
 
 // Patch provides a mock function with given fields: _a0, _a1, _a2

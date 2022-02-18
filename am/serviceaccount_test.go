@@ -19,8 +19,16 @@ func TestServiceIdentityExists(t *testing.T) {
 	b := ServiceIdentityExists("service_account.ig")
 
 	assert.True(t, b)
-	mockRestReaderWriter.AssertCalled(t, "Get", mock.Anything, mock.Anything)
+}
 
-	b = ServiceIdentityExists("Doesn't exist")
+func TestServiceIdentityNotExists(t *testing.T) {
+	mockRestReaderWriter := &mocks.RestReaderWriter{}
+	Client = mockRestReaderWriter
+	buffer, _ := ioutil.ReadFile("serviceaccount-empty-test.json")
+	mockRestReaderWriter.On("Get", mock.Anything, mock.Anything).
+		Return(buffer)
+
+	b := ServiceIdentityExists("service_account.ig")
+
 	assert.False(t, b)
 }
