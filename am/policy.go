@@ -50,7 +50,7 @@ func CreatePolicyEvaluationScript(cookie *http.Cookie) string {
 		return id
 	}
 
-	b, err := ioutil.ReadFile(common.IamDirectoryPath() + "policy-evaluation-script.groovy")
+	b, err := ioutil.ReadFile(common.IamDirectoryPath() + "policy-evaluation-script.js")
 	if err != nil {
 		panic(err)
 	}
