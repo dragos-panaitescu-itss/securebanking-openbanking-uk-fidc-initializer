@@ -183,24 +183,24 @@ func GetIdentityIdByUsername(identity string) string {
 	path := "/am/json/realms/root/realms/alpha/users" + filter
 	//path := "/am/json/realms/root/realms/alpha/users/" + identity + "?_fields=username"
 	serviceIdentityFilter := &ResultFilter{}
-	b, _ := Client.Get(path, map[string]string{
+	result, _ := Client.Get(path, map[string]string{
 		"Accept":             "application/json",
 		"X-Requested-With":   "ForgeRock Identity Cloud Postman Collection",
 		"Accept-Api-Version": "protocol=2.1, resource=4.0",
 	})
 
-	result := json.Unmarshal(b, serviceIdentityFilter)
-    if result != nil {
-        panic(result)
-        return nil
+	err := json.Unmarshal(result, serviceIdentityFilter)
+    if err != nil {
+        panic(err)
+        return ""
     }
 
     userId := result.Result[0].ID
     if userId == nil {
-        panic("The user with the username ", identity, " does not exist")
-        return nil
+        panic("The user with the username " + identity + " does not exist")
+        return ""
     }
-    zap.S().Debugw("The user with the usename ", identity, " has the following id ", userId)
+    zap.S().Debug("The user with the usename ", identity, " has the following id ", userId)
 
     return userId
 }
@@ -210,9 +210,8 @@ func PopulateRSData() {
 
 	id := GetIdentityIdByUsername(viper.GetString("PSU_USERNAME"))
 
-	if id == nil {
+	if id == "" {
         zap.L().Debugw("The user with the username ", viper.GetString("PSU_USERNAME"), " doesn't exist")
-        return nil
     }
     zap.S().Infow("Populate with RS Data the Payment Services User with the username: ", viper.GetString("PSU_USERNAME"))
 
