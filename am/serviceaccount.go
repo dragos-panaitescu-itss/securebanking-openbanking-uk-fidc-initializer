@@ -183,18 +183,19 @@ func GetIdentityIdByUsername(identity string) string {
 	path := "/am/json/realms/root/realms/alpha/users" + filter
 	//path := "/am/json/realms/root/realms/alpha/users/" + identity + "?_fields=username"
 	serviceIdentityFilter := &ResultFilter{}
-	result, _ := Client.Get(path, map[string]string{
+	b, _ := Client.Get(path, map[string]string{
 		"Accept":             "application/json",
 		"X-Requested-With":   "ForgeRock Identity Cloud Postman Collection",
 		"Accept-Api-Version": "protocol=2.1, resource=4.0",
 	})
 
-	err := json.Unmarshal(result, serviceIdentityFilter)
+	err := json.Unmarshal(b, result)
     if err != nil {
         panic(err)
         return ""
     }
 
+    zap.S().Debug(result)
     userId := result.Result[0].ID
     if userId == nil {
         panic("The user with the username " + identity + " does not exist")
