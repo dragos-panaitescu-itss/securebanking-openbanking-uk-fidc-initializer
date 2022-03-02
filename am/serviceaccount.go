@@ -197,7 +197,7 @@ func GetIdentityIdByUsername(identity string) string {
 
     zap.S().Debug(result)
     userId := result.Result[0].ID
-    if userId == nil {
+    if userId == "" {
         panic("The user with the username " + identity + " does not exist")
         return ""
     }
@@ -212,7 +212,7 @@ func PopulateRSData() {
 	id := GetIdentityIdByUsername(viper.GetString("PSU_USERNAME"))
 
 	if id == "" {
-        zap.L().Debugw("The user with the username ", viper.GetString("PSU_USERNAME"), " doesn't exist")
+        zap.L().Debug("The user with the username ", viper.GetString("PSU_USERNAME"), " doesn't exist")
     }
     zap.S().Infow("Populate with RS Data the Payment Services User with the username: ", viper.GetString("PSU_USERNAME"))
 
