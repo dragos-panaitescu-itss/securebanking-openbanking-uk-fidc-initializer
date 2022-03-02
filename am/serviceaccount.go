@@ -182,7 +182,7 @@ func GetIdentityIdByUsername(identity string) string {
 	filter := "?_queryFilter=uid+eq+%22"+identity+"%22&_fields=username"
 	path := "/am/json/realms/root/realms/alpha/users" + filter
 	//path := "/am/json/realms/root/realms/alpha/users/" + identity + "?_fields=username"
-	serviceIdentityFilter := &ResultFilter{}
+	result := &ResultFilter{}
 	b, _ := Client.Get(path, map[string]string{
 		"Accept":             "application/json",
 		"X-Requested-With":   "ForgeRock Identity Cloud Postman Collection",
