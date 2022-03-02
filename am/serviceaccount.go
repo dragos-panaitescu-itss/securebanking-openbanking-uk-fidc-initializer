@@ -212,9 +212,9 @@ func PopulateRSData() {
 	id := GetIdentityIdByUsername(viper.GetString("PSU_USERNAME"))
 
 	if id == "" {
-        zap.L().Debug("The user with the username ", viper.GetString("PSU_USERNAME"), " doesn't exist")
+        zap.S().Debug("The user with the username " + viper.GetString("PSU_USERNAME") + " doesn't exist")
     }
-    zap.S().Infow("Populate with RS Data the Payment Services User with the username: ", viper.GetString("PSU_USERNAME"))
+    zap.S().Infow("Populate with RS Data the Payment Services User with the username: " + viper.GetString("PSU_USERNAME"))
 
 
 	user := &common.PopulateRsDataRequestBody{
