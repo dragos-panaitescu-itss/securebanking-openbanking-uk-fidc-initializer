@@ -61,6 +61,8 @@ func main() {
 	am.CreateIGServiceUser()
 	am.CreateIGOAuth2Client()
 	am.CreateIGPolicyAgent()
+	am.CreatePSU()
+	am.PopulateRSData()
 
 	am.ApplySystemClients(s.Cookie)
 
@@ -108,4 +110,6 @@ func configureVariables() {
 	viper.SetDefault("MANAGED_OBJECTS_DIRECTORY_PATH", "config/defaults/managed-objects/")
 	viper.SetDefault("IAM_DIRECTORY_PATH", "config/defaults/")
 	viper.SetDefault("SCHEME", "https")
+	viper.SetDefault("PSU_USERNAME", "psu")
+	viper.SetDefault("PSU_PASSWORD", "0penBanking!")
 }
