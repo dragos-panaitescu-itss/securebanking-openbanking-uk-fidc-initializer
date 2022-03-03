@@ -30,7 +30,7 @@ func ObjectNames(relativePath string) []string {
 func MissingObjects(objectNames []string) []string {
 	path := "/openidm/config/managed"
 	result := &OBManagedObjects{}
-	b, _ := Client.Get(path, map[string]string{
+	b, _ := common.Client.Get(path, map[string]string{
 		"Accept":           "application/json",
 		"X-Requested-With": "ForgeRock Identity Cloud Postman Collection",
 	})
@@ -87,7 +87,7 @@ func AddManagedObject(name string, objectFolderPath string) {
 	}
 
 	path := "/openidm/config/managed"
-	s := Client.Patch(path, b, map[string]string{
+	s := common.Client.Patch(path, b, map[string]string{
 		"Accept":       "*/*",
 		"Content-Type": "application/json",
 		"Connection":   "keep-alive",
@@ -104,7 +104,7 @@ func CreateApiJwksEndpoint() {
 	}
 
 	path := "/openidm/config/endpoint/apiclientjwks"
-	s := Client.Put(path, b, map[string]string{
+	s := common.Client.Put(path, b, map[string]string{
 		"Accept":       "*/*",
 		"Content-Type": "application/json",
 		"Connection":   "keep-alive",
@@ -123,7 +123,7 @@ func CreateUser() {
 	}
 
 	path := "/openidm/config/managed"
-	s := Client.Patch(path, b, map[string]string{
+	s := common.Client.Patch(path, b, map[string]string{
 		"Accept":       "*/*",
 		"Content-Type": "application/json",
 		"Connection":   "keep-alive",

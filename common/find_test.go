@@ -1,4 +1,4 @@
-package am
+package common
 
 import (
 	"testing"

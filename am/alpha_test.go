@@ -1,6 +1,7 @@
 package am
 
 import (
+	"github.com/secureBankingAccessToolkit/securebanking-openbanking-uk-fidc-initialiszer/common"
 	"io/ioutil"
 	"testing"
 
@@ -11,7 +12,7 @@ import (
 
 func TestFindExistingAlphaClient(t *testing.T) {
 	mockRestReaderWriter := &mocks.RestReaderWriter{}
-	Client = mockRestReaderWriter
+	common.Client = mockRestReaderWriter
 	buffer, _ := ioutil.ReadFile("client-check-test.json")
 	mockRestReaderWriter.On("Get", mock.Anything, mock.Anything).
 		Return(buffer)

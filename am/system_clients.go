@@ -3,11 +3,11 @@ package am
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/secureBankingAccessToolkit/securebanking-openbanking-uk-fidc-initialiszer/common"
 	"io/ioutil"
 	"net/http"
 	"strings"
 
-	"github.com/secureBankingAccessToolkit/securebanking-openbanking-uk-fidc-initialiszer/common"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 )

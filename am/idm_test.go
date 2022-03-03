@@ -1,6 +1,7 @@
 package am
 
 import (
+	"github.com/secureBankingAccessToolkit/securebanking-openbanking-uk-fidc-initialiszer/common"
 	"io/ioutil"
 	"testing"
 
@@ -11,7 +12,7 @@ import (
 
 func TestWillReturnAllMissingObjects(t *testing.T) {
 	mockRestReaderWriter := &mocks.RestReaderWriter{}
-	Client = mockRestReaderWriter
+	common.Client = mockRestReaderWriter
 	buffer, _ := ioutil.ReadFile("managed-objects-test.json")
 	mockRestReaderWriter.On("Get", mock.Anything, mock.Anything).
 		Return(buffer)
@@ -23,7 +24,7 @@ func TestWillReturnAllMissingObjects(t *testing.T) {
 
 func TestWillReturnPartialListOfMissingObjects(t *testing.T) {
 	mockRestReaderWriter := &mocks.RestReaderWriter{}
-	Client = mockRestReaderWriter
+	common.Client = mockRestReaderWriter
 	buffer, _ := ioutil.ReadFile("managed-objects-test.json")
 	mockRestReaderWriter.On("Get", mock.Anything, mock.Anything).
 		Return(buffer)
@@ -35,7 +36,7 @@ func TestWillReturnPartialListOfMissingObjects(t *testing.T) {
 
 func TestWillReturnNoMissingObjects(t *testing.T) {
 	mockRestReaderWriter := &mocks.RestReaderWriter{}
-	Client = mockRestReaderWriter
+	common.Client = mockRestReaderWriter
 	buffer, _ := ioutil.ReadFile("managed-objects-test.json")
 	mockRestReaderWriter.On("Get", mock.Anything, mock.Anything).
 		Return(buffer)
