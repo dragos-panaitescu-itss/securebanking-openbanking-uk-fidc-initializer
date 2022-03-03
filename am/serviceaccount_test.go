@@ -1,6 +1,7 @@
 package am
 
 import (
+	"github.com/secureBankingAccessToolkit/securebanking-openbanking-uk-fidc-initialiszer/common"
 	"io/ioutil"
 	"testing"
 
@@ -11,7 +12,7 @@ import (
 
 func TestServiceIdentityExists(t *testing.T) {
 	mockRestReaderWriter := &mocks.RestReaderWriter{}
-	Client = mockRestReaderWriter
+	common.Client = mockRestReaderWriter
 	buffer, _ := ioutil.ReadFile("serviceaccount-test.json")
 	mockRestReaderWriter.On("Get", mock.Anything, mock.Anything).
 		Return(buffer)
@@ -23,7 +24,7 @@ func TestServiceIdentityExists(t *testing.T) {
 
 func TestServiceIdentityNotExists(t *testing.T) {
 	mockRestReaderWriter := &mocks.RestReaderWriter{}
-	Client = mockRestReaderWriter
+	common.Client = mockRestReaderWriter
 	buffer, _ := ioutil.ReadFile("serviceaccount-empty-test.json")
 	mockRestReaderWriter.On("Get", mock.Anything, mock.Anything).
 		Return(buffer)

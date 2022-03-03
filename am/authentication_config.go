@@ -26,7 +26,7 @@ func CreateCaUsernameNode() {
 
 	zap.S().Debugw("CA username node", "body", string(b))
 	path := "/am/json/realms/root/realms/alpha/realm-config/authentication/authenticationtrees/nodes/UsernameCollectorNode/ada9ef86-d550-4591-b9dc-5751e7adbb62"
-	status := Client.Put(path, b, map[string]string{
+	status := common.Client.Put(path, b, map[string]string{
 		"Accept":             "*/*",
 		"Content-Type":       "application/json",
 		"Accept-Api-Version": "protocol=2.0, resource=1.0",
@@ -44,7 +44,7 @@ func CreateCaPasswordNode() {
 
 	zap.S().Debugw("CA Password node", "body", string(b))
 	path := "/am/json/realms/root/realms/alpha/realm-config/authentication/authenticationtrees/nodes/PasswordCollectorNode/1db869b1-09de-4a8e-b340-e0563891c3bf"
-	status := Client.Put(path, b, map[string]string{
+	status := common.Client.Put(path, b, map[string]string{
 		"Accept":             "*/*",
 		"Content-Type":       "application/json",
 		"Accept-Api-Version": "protocol=2.0, resource=1.0",
@@ -62,7 +62,7 @@ func CreateCa() {
 
 	zap.S().Debugw("Login tree CA", "body", string(b))
 	path := "/am/json/realms/root/realms/alpha/realm-config/authentication/authenticationtrees/trees/PSD2CustomerAuthentication"
-	status := Client.Put(path, b, map[string]string{
+	status := common.Client.Put(path, b, map[string]string{
 		"Accept":             "*/*",
 		"Content-Type":       "application/json",
 		"Accept-Api-Version": "protocol=2.0, resource=1.0",
@@ -80,7 +80,7 @@ func CreateScaUsernameNode() {
 
 	zap.S().Debugw("SCA username node", "body", string(b))
 	path := "/am/json/realms/root/realms/alpha/realm-config/authentication/authenticationtrees/nodes/UsernameCollectorNode/ee0efdc1-9fba-4323-95ef-ec468f6ad30c"
-	status := Client.Put(path, b, map[string]string{
+	status := common.Client.Put(path, b, map[string]string{
 		"Accept":             "*/*",
 		"Content-Type":       "application/json",
 		"Accept-Api-Version": "protocol=2.0, resource=1.0",
@@ -98,7 +98,7 @@ func CreateScaPasswordNode() {
 
 	zap.S().Debugw("SCA Password node", "body", string(b))
 	path := "/am/json/realms/root/realms/alpha/realm-config/authentication/authenticationtrees/nodes/PasswordCollectorNode/4785b3c1-5dc9-4883-b01e-2f1b6bfda50e"
-	status := Client.Put(path, b, map[string]string{
+	status := common.Client.Put(path, b, map[string]string{
 		"Accept":             "*/*",
 		"Content-Type":       "application/json",
 		"Accept-Api-Version": "protocol=2.0, resource=1.0",
@@ -116,7 +116,7 @@ func CreateSca() {
 
 	zap.S().Debugw("Login tree SCA", "body", string(b))
 	path := "/am/json/realms/root/realms/alpha/realm-config/authentication/authenticationtrees/trees/PSD2SecureCustomerAuthentication"
-	status := Client.Put(path, b, map[string]string{
+	status := common.Client.Put(path, b, map[string]string{
 		"Accept":             "*/*",
 		"Content-Type":       "application/json",
 		"Accept-Api-Version": "protocol=2.0, resource=1.0",

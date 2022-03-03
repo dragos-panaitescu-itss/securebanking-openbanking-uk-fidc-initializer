@@ -1,6 +1,8 @@
 package main
 
 import (
+	"github.com/secureBankingAccessToolkit/securebanking-openbanking-uk-fidc-initialiszer/common"
+	"github.com/secureBankingAccessToolkit/securebanking-openbanking-uk-fidc-initialiszer/rs"
 	"strings"
 	"time"
 
@@ -38,7 +40,7 @@ func main() {
 	}
 
 	s.Authenticate()
-	am.InitRestReaderWriter(s.Cookie, s.AuthToken.AccessToken)
+	common.InitRestReaderWriter(s.Cookie, s.AuthToken.AccessToken)
 
 	am.ApplyAmAuthenticationConfig()
 
@@ -61,8 +63,9 @@ func main() {
 	am.CreateIGServiceUser()
 	am.CreateIGOAuth2Client()
 	am.CreateIGPolicyAgent()
-	am.CreatePSU()
-	am.PopulateRSData()
+	// Create and populate data for PSU user
+	userId := rs.CreatePSU()
+	rs.PopulateRSData(userId)
 
 	am.ApplySystemClients(s.Cookie)
 

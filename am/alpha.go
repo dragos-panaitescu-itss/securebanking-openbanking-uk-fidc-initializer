@@ -55,8 +55,8 @@ func AlphaRealmExists(cookie *http.Cookie) bool {
 // AlphaClientsExist - Will return true if clients exist in the alpha realm.
 func AlphaClientsExist(clientName string) bool {
 	path := "/am/json/realms/root/realms/alpha/realm-config/agents/OAuth2Client?_queryFilter=true&_pageSize=10&_fields=coreOAuth2ClientConfig/status,coreOAuth2ClientConfig/agentgroup"
-	result := &AmResult{}
-	b, _ := Client.Get(path, map[string]string{
+	result := &common.AmResult{}
+	b, _ := common.Client.Get(path, map[string]string{
 		"Accept":             "application/json",
 		"X-Requested-With":   "ForgeRock Identity Cloud Postman Collection",
 		"Accept-Api-Version": "protocol=2.0,resource=1.0",
@@ -67,7 +67,7 @@ func AlphaClientsExist(clientName string) bool {
 		panic(err)
 	}
 
-	return Find(clientName, result, func(r *Result) string {
+	return common.Find(clientName, result, func(r *common.Result) string {
 		return r.ID
 	})
 }

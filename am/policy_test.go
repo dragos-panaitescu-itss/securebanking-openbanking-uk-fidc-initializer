@@ -1,6 +1,7 @@
 package am
 
 import (
+	"github.com/secureBankingAccessToolkit/securebanking-openbanking-uk-fidc-initialiszer/common"
 	"io/ioutil"
 	"testing"
 
@@ -11,7 +12,7 @@ import (
 
 func TestPolicySetExists(t *testing.T) {
 	mockRestReaderWriter := &mocks.RestReaderWriter{}
-	Client = mockRestReaderWriter
+	common.Client = mockRestReaderWriter
 	buffer, _ := ioutil.ReadFile("policyset-test.json")
 	mockRestReaderWriter.On("Get", mock.Anything, mock.Anything).
 		Return(buffer)
@@ -23,7 +24,7 @@ func TestPolicySetExists(t *testing.T) {
 
 func TestPolicyExists(t *testing.T) {
 	mockRestReaderWriter := &mocks.RestReaderWriter{}
-	Client = mockRestReaderWriter
+	common.Client = mockRestReaderWriter
 	buffer, _ := ioutil.ReadFile("policy-test.json")
 	mockRestReaderWriter.On("Get", mock.Anything, mock.Anything).
 		Return(buffer)

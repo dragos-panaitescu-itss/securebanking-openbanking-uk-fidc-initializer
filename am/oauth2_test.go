@@ -1,6 +1,7 @@
 package am
 
 import (
+	"github.com/secureBankingAccessToolkit/securebanking-openbanking-uk-fidc-initialiszer/common"
 	"io/ioutil"
 	"testing"
 
@@ -11,7 +12,7 @@ import (
 
 func TestFindSoftwarePublisherAgent(t *testing.T) {
 	mockRestReaderWriter := &mocks.RestReaderWriter{}
-	Client = mockRestReaderWriter
+	common.Client = mockRestReaderWriter
 	buffer, _ := ioutil.ReadFile("oauth2-test.json")
 	mockRestReaderWriter.On("Get", mock.Anything, mock.Anything).
 		Return(buffer)
@@ -26,7 +27,7 @@ func TestFindSoftwarePublisherAgent(t *testing.T) {
 
 func TestFindRemoteConsent(t *testing.T) {
 	mockRestReaderWriter := &mocks.RestReaderWriter{}
-	Client = mockRestReaderWriter
+	common.Client = mockRestReaderWriter
 	buffer, _ := ioutil.ReadFile("remote-consent-test.json")
 	mockRestReaderWriter.On("Get", mock.Anything, mock.Anything).
 		Return(buffer)
@@ -38,7 +39,7 @@ func TestFindRemoteConsent(t *testing.T) {
 
 func TestReturnScriptId(t *testing.T) {
 	mockRestReaderWriter := &mocks.RestReaderWriter{}
-	Client = mockRestReaderWriter
+	common.Client = mockRestReaderWriter
 	buffer, _ := ioutil.ReadFile("script-test.json")
 	mockRestReaderWriter.On("Get", mock.Anything, mock.Anything).
 		Return(buffer)
@@ -54,7 +55,7 @@ func TestReturnScriptId(t *testing.T) {
 
 func TestFindOAuth2Provider(t *testing.T) {
 	mockRestReaderWriter := &mocks.RestReaderWriter{}
-	Client = mockRestReaderWriter
+	common.Client = mockRestReaderWriter
 	buffer, _ := ioutil.ReadFile("oauth2provider-test.json")
 	mockRestReaderWriter.On("Get", mock.Anything, mock.Anything).
 		Return(buffer)

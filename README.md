@@ -53,3 +53,7 @@ spec:
 ## Running tests
 The tests run against a mockserver which is supplied by [Pact](https://docs.pact.io/). It is used specifically to test internal logic rather than to verify the provider contract.
 running the `make test-ci` target will download the required binaries to be able to run the pact tests. this target is used for github actions but can work locally too (if you do not have the pact bonaries installed)
+
+## Patch
+Creation of PSU user on AM and populate the user data to RS service for each environment.
+- For functional test purposes @See /rs folder.

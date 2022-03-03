@@ -25,7 +25,7 @@ func CreatePolicyServiceUser() {
 		panic(err)
 	}
 	path := "/openidm/managed/user/?_action=create"
-	s := Client.Post(path, b, map[string]string{
+	_, s := common.Client.Post(path, b, map[string]string{
 		"Accept":       "*/*",
 		"Content-Type": "application/json",
 		"Connection":   "keep-alive",
@@ -111,7 +111,7 @@ func CreateOpenBankingPolicySet() {
 	ps.Realm = "/alpha"
 	zap.S().Debugw("Open Banking Policy set unmarshaled", "policy-set", ps)
 	path := "/am/json/alpha/applications/?_action=create"
-	s := Client.Post(path, ps, map[string]string{
+	_, s := common.Client.Post(path, ps, map[string]string{
 		"Accept":             "*/*",
 		"Content-Type":       "application/json",
 		"Connection":         "keep-alive",
@@ -123,8 +123,8 @@ func CreateOpenBankingPolicySet() {
 
 func PolicySetExists(name string) bool {
 	path := "/am/json/alpha/applications?_pageSize=20&_sortKeys=name&_queryFilter=name+eq+%22%5E(%3F!sunAMDelegationService%24).*%22&_pagedResultsOffset=0"
-	serviceIdentity := &AmResult{}
-	b, _ := Client.Get(path, map[string]string{
+	serviceIdentity := &common.AmResult{}
+	b, _ := common.Client.Get(path, map[string]string{
 		"Accept":             "application/json",
 		"X-Requested-With":   "ForgeRock Identity Cloud Postman Collection",
 		"Accept-Api-Version": "protocol=1.0,resource=2.0",
@@ -135,15 +135,15 @@ func PolicySetExists(name string) bool {
 		panic(err)
 	}
 
-	return Find(name, serviceIdentity, func(r *Result) string {
+	return common.Find(name, serviceIdentity, func(r *common.Result) string {
 		return r.Name
 	})
 }
 
 func PolicyExists(name string) bool {
 	path := "/am/json/alpha/policies?_pageSize=20&_sortKeys=name&_queryFilter=applicationName+eq+%22Open%20Banking%22&_pagedResultsOffset=0"
-	serviceIdentity := &AmResult{}
-	b, _ := Client.Get(path, map[string]string{
+	serviceIdentity := &common.AmResult{}
+	b, _ := common.Client.Get(path, map[string]string{
 		"Accept":             "application/json",
 		"X-Requested-With":   "ForgeRock Identity Cloud Postman Collection",
 		"Accept-Api-Version": "protocol=1.0,resource=2.0",
@@ -154,7 +154,7 @@ func PolicyExists(name string) bool {
 		panic(err)
 	}
 
-	return Find(name, serviceIdentity, func(r *Result) string {
+	return common.Find(name, serviceIdentity, func(r *common.Result) string {
 		return r.Name
 	})
 }
@@ -177,7 +177,7 @@ func CreateAISPPolicy(policyScriptId string) {
 	}
 	aisp.Condition.ScriptID = policyScriptId
 	path := "/am/json/alpha/policies/?_action=create"
-	s := Client.Post(path, aisp, map[string]string{
+	_, s := common.Client.Post(path, aisp, map[string]string{
 		"Accept":             "*/*",
 		"Content-Type":       "application/json",
 		"Connection":         "keep-alive",
@@ -206,7 +206,7 @@ func CreatePISPPolicy(policyScriptId string) {
 	pisp.Condition.ScriptID = policyScriptId
 	zap.S().Debugw("PISP Policy", "policy", pisp)
 	path := "/am/json/alpha/policies/?_action=create"
-	s := Client.Post(path, pisp, map[string]string{
+	_, s := common.Client.Post(path, pisp, map[string]string{
 		"Accept":             "*/*",
 		"Content-Type":       "application/json",
 		"Connection":         "keep-alive",
@@ -236,7 +236,7 @@ func CreatePolicyEngineOAuth2Client() {
 	engineClient.CoreOAuth2ClientConfig.Userpassword = "password"
 	zap.S().Debugw("Engine client body", "engine", engineClient)
 	path := "/am/json/alpha/realm-config/agents/OAuth2Client/policy-client"
-	s := Client.Put(path, engineClient, map[string]string{
+	s := common.Client.Put(path, engineClient, map[string]string{
 		"Accept":           "application/json",
 		"Content-Type":     "application/json",
 		"Connection":       "keep-alive",
