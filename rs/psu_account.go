@@ -17,7 +17,7 @@ func CreatePSU() string {
 		return userId
 	}
 
-	zap.L().Debug("Creating Payment Services User")
+	zap.L().Info("Creating Payment Services User")
 
 	user := &PSU{
 		UserName:  viper.GetString("PSU_USERNAME"),

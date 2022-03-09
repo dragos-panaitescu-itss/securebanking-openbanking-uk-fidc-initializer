@@ -2,10 +2,9 @@ package platform
 
 import (
 	"fmt"
+	"go.uber.org/zap"
 	"net/http"
 	"net/url"
-
-	"go.uber.org/zap"
 
 	"github.com/go-resty/resty/v2"
 	"github.com/secureBankingAccessToolkit/securebanking-openbanking-uk-fidc-initialiszer/common"
@@ -42,9 +41,9 @@ func (s *Session) Authenticate() (*http.Cookie, string) {
 }
 
 func GetCookieNameFromAm() string {
-	zap.L().Debug("Getting Cookie name from AM")
+	zap.L().Info("Getting Cookie name from AM")
 	path := fmt.Sprintf("%s://%s/am/json/serverinfo/*", viper.GetString("SCHEME"), viper.GetString("IAM_FQDN"))
-
+	zap.S().Infow("Getting Cookie name from AM", "path", path)
 	result := &ServerInfo{}
 	resp, err := client.R().
 		SetHeader("Accept", "application/json").
@@ -63,20 +62,29 @@ func GetCookieNameFromAm() string {
 // FromUserSession - get a session token from AM for authentication
 //    returns the Session object with embedded session cookie
 func FromUserSession(cookieName string) *Session {
-	zap.L().Debug("Getting an admin session from AM")
-	path := fmt.Sprintf("https://%s/am/json/realms/root/authenticate", viper.GetString("IAM_FQDN"))
+	zap.L().Info("Getting an admin session from AM")
+
+	//authorization_server := viper.GetString("IAM_FQDN")
+	//var path = fmt.Sprintf("https://%s/am/json/realms/root/authenticate", authorization_server)
+	//if !strings.HasPrefix(authorization_server, "https://iam.dev.forgerock.financial") {
+	//	path = fmt.Sprintf("https://%s/am/json/realms/root/realms/alpha/authenticate", authorization_server)
+	//}
+	path := fmt.Sprintf("https://%s/am/json/realms/root/authenticate?authIndexType=service&authIndexValue=ldapService", viper.GetString("IAM_FQDN"))
+
+	zap.S().Infow("Path to authenticate the user", "path", path)
+
 	resp, err := client.R().
 		SetHeader("Accept", "application/json").
+		SetHeader("Accept-API-Version", "resource=2.0, protocol=1.0").
 		SetHeader("X-OpenAM-Username", viper.GetString("OPEN_AM_USERNAME")).
 		SetHeader("X-OpenAM-Password", viper.GetString("OPEN_AM_PASSWORD")).
 		Post(path)
 
 	common.RaiseForStatus(err, resp.Error(), resp.StatusCode())
 
-
 	var cookieValue string = ""
 	for _, cookie := range resp.Cookies() {
-		zap.S().Debugw("Cookie found", "cookie", cookie)
+		zap.S().Infow("Cookie found", "cookie", cookie)
 		if cookie.Name == cookieName {
 			cookieValue = cookie.Value
 		}
@@ -106,7 +114,7 @@ func FromUserSession(cookieName string) *Session {
 // GetIDMAdminAuthCode - get auth code from IDM.
 // 		Redirects should be disabled, we expect a 302 status code here
 func (s *Session) GetIDMAdminAuthCode() {
-	zap.L().Debug("Getting IDM admin auth code")
+	zap.L().Info("Getting IDM admin auth code")
 	path := fmt.Sprintf("https://%s/am/oauth2/authorize", viper.GetString("IAM_FQDN"))
 	resp, err := client.R().
 		SetHeader("Accept", "*/*").
@@ -132,14 +140,14 @@ func (s *Session) GetIDMAdminAuthCode() {
 	if err != nil {
 		zap.S().Fatalw("Error parsing location header", "statusCode", resp.StatusCode(), "error", err)
 	}
-	zap.S().Debugw("Got Location header from IDM", "Location", v)
+	zap.S().Infow("Got Location header from IDM", "Location", v)
 	authCode := v["https://"+viper.GetString("IAM_FQDN")+"/platform/appAuthHelperRedirect.html?code"][0]
 	s.authCode = authCode
 }
 
 // GetIDMAdminToken - get admin token from IDM
 func (s *Session) GetIDMAdminToken() {
-	zap.L().Debug("Getting admin token")
+	zap.L().Info("Getting admin token")
 	token := &AdminToken{}
 	path := fmt.Sprintf("https://%s/am/oauth2/access_token", viper.GetString("IAM_FQDN"))
 	resp, err := client.R().

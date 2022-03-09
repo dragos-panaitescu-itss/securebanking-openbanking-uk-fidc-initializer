@@ -9,14 +9,14 @@ A POC that configures AM and IDM of your CDK deployment, used primarily for test
 
 ## Variables
 
-| Environment variable  | description | default |
-|-----------------------|-------------|---------|
-| VERBOSE               | turn on verbose logging | `true` |
-| STRICT                | turn on strict mode, will exit early is invalid statuses are detected | `false` |
-| ENVIRONMENT_TYPE      | Type of Forgerock identity platoform you use for authentication (can be `CDK` or `CDM`) | `CDK` |
-| OPEN_AM_PASSWORD      | The plain text AM password | `password` |
-| IAM_DIRECTORY_PATH    | path to the directory containing the IAM json requests. **Must have a trailing slash** | `config/defaults/` |
-| MANAGED_OBJECTS_DIRECTORY_PATH    | path to the directory containing the Managed object requests. **Must have a trailing slash** | `config/defaults/managed-objects/` |
+| Environment variable           | description                                                                                  | default                            |
+|--------------------------------|----------------------------------------------------------------------------------------------|------------------------------------|
+| VERBOSE                        | turn on verbose logging                                                                      | `true`                             |
+| STRICT                         | turn on strict mode, will exit early is invalid statuses are detected                        | `false`                            |
+| ENVIRONMENT_TYPE               | Type of Forgerock identity platoform you use for authentication (can be `CDK` or `CDM`)      | `CDK`                              |
+| OPEN_AM_PASSWORD               | The plain text AM password                                                                   | `password`                         |
+| IAM_DIRECTORY_PATH             | path to the directory containing the IAM json requests. **Must have a trailing slash**       | `config/defaults/`                 |
+| MANAGED_OBJECTS_DIRECTORY_PATH | path to the directory containing the Managed object requests. **Must have a trailing slash** | `config/defaults/managed-objects/` |
 
 ## Json configuration
 IDM managed object JSON configuration can be added to the config/managed-objects directory under either the [additional](./config/defaults/managed-objects/additional) or [openbanking](./config/defaults/managed-objects/openbanking) path. The files must be json and the filenames must match the name of the managed object.

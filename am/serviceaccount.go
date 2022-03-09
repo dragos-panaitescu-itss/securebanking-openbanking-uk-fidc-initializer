@@ -21,7 +21,7 @@ func CreateIGServiceUser() {
 		return
 	}
 
-	zap.L().Debug("Creating IG service user")
+	zap.L().Info("Creating IG service user")
 
 	user := &common.ServiceUser{
 		UserName:  viper.GetString("IG_IDM_USER"),
@@ -52,7 +52,7 @@ func CreateIGOAuth2Client() {
 		return
 	}
 
-	zap.L().Debug("Creating IG OAuth2 client")
+	zap.L().Info("Creating IG OAuth2 client")
 	b, err := ioutil.ReadFile(common.IamDirectoryPath() + "ig-oauth2-client.json")
 	if err != nil {
 		panic(err)
@@ -77,7 +77,7 @@ func CreateIGOAuth2Client() {
 
 // CreateIGPolicyAgent -
 func CreateIGPolicyAgent() {
-	zap.L().Debug("Creating IG Policy agent")
+	zap.L().Info("Creating IG Policy agent")
 	policyAgent := &PolicyAgent{
 		Userpassword: viper.GetString("IG_AGENT_PASSWORD"),
 		IgTokenIntrospection: IgTokenIntrospection{
@@ -97,7 +97,7 @@ func CreateIGPolicyAgent() {
 }
 
 func CreateIDMAdminClient(cookie *http.Cookie) {
-	zap.L().Debug("Creating IDM admin oauth2 client")
+	zap.L().Info("Creating IDM admin oauth2 client")
 	b, err := ioutil.ReadFile(common.IamDirectoryPath() + "idm-admin-client.json")
 	if err != nil {
 		panic(err)
@@ -109,7 +109,7 @@ func CreateIDMAdminClient(cookie *http.Cookie) {
 		redirects = append(redirects, strings.ReplaceAll(uri, "{{IAM_FQDN}}", viper.GetString("IAM_FQDN")))
 	}
 	config.CoreOAuth2ClientConfig.RedirectionUris.Value = redirects
-	zap.S().Debugw("Admin client request", "body", config)
+	zap.S().Infow("Admin client request", "body", config)
 	path := "https://" + viper.GetString("IAM_FQDN") + "/am/json/realm-config/agents/OAuth2Client/idmAdminClient"
 	resp, err := client.R().
 		SetHeader("Accept", "application/json").
@@ -167,13 +167,13 @@ func GetIdentityIdByUsername(identity string) string {
 		return ""
 	}
 
-	zap.S().Debug(result)
+	zap.S().Info(result)
 	userId := result.Result[0].ID
 	if userId == "" {
 		panic("The user with the username " + identity + " does not exist")
 		return ""
 	}
-	zap.S().Debug("The user with the usename ", identity, " has the following id ", userId)
+	zap.S().Info("The user with the usename ", identity, " has the following id ", userId)
 
 	return userId
 }

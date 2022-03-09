@@ -43,7 +43,7 @@ func MissingObjects(objectNames []string) []string {
 	var missingObjects []string = objectNames
 	for _, o := range result.Objects {
 		for i, objectName := range missingObjects {
-			zap.S().Debugw("checking", "object", o)
+			zap.S().Infow("checking", "object", o)
 			if strings.Contains(o.Name, objectName) {
 				zap.S().Infow("ManagedObject found", "name", objectName)
 				missingObjects = append(missingObjects[:i], missingObjects[i+1:]...)
@@ -97,7 +97,7 @@ func AddManagedObject(name string, objectFolderPath string) {
 }
 
 func CreateApiJwksEndpoint() {
-	zap.L().Debug("Creating API JWKS Endpoint")
+	zap.L().Info("Creating API JWKS Endpoint")
 	b, err := ioutil.ReadFile(common.IamDirectoryPath() + "create-jwks-endpoint.json")
 	if err != nil {
 		panic(err)
@@ -116,7 +116,7 @@ func CreateApiJwksEndpoint() {
 // CreateUser will create a user that will allow us to create new identities
 //    in the alpha realm
 func CreateUser() {
-	zap.L().Debug("Creating new user")
+	zap.L().Info("Creating new user")
 	b, err := ioutil.ReadFile(common.IamDirectoryPath() + "create-user.json")
 	if err != nil {
 		panic(err)

@@ -33,6 +33,32 @@ func CreateAlphaRealm(cookie *http.Cookie) {
 	zap.S().Infow("Alpha Realm Created", "statusCode", resp.StatusCode())
 }
 
+// check if the realm exist
+func RealmExist(cookie *http.Cookie, realm string) bool {
+	path := fmt.Sprintf("https://%s/am/json/global-config/realms?_queryFilter=true", viper.GetString("IAM_FQDN"))
+	serviceIdentityFilter := &common.ResultFilter{}
+	resp, errResp := client.R().
+		SetHeader("Accept", "application/json").
+		SetHeader("X-Requested-With", "ForgeRock Identity Cloud Postman Collection").
+		SetHeader("Accept-Api-Version", "protocol=2.0,resource=1.0").
+		SetCookie(cookie).
+		Get(path)
+	if errResp != nil {
+		panic(errResp)
+	}
+	err := json.Unmarshal(resp.Body(), serviceIdentityFilter)
+	if err != nil {
+		panic(err)
+	}
+
+	for _, s := range serviceIdentityFilter.Result {
+		if s.Name == realm {
+			return true
+		}
+	}
+	return false
+}
+
 // AlphaRealmExists will check if alpha realm exists
 func AlphaRealmExists(cookie *http.Cookie) bool {
 	path := fmt.Sprintf("https://%s/am/json/global-config/realms/L2FscGhh", viper.GetString("IAM_FQDN"))

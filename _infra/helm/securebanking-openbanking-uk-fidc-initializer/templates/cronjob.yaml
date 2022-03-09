@@ -6,15 +6,17 @@ spec:
   schedule: "{{ .Values.cron }}"
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 1
+  startingDeadlineSeconds: 180
   jobTemplate:
     spec:
       template:
         spec:
           containers:
             - name: iam-init
-              image: eu.gcr.io/sbat-gcr-develop/securebanking/secureopenbanking-uk-fidc-initializer:latest
+              image: eu.gcr.io/sbat-gcr-develop/securebanking/secureopenbanking-uk-fidc-initializer:jorge-test
               imagePullPolicy: Always
               env:
+              {{- if and (eq .Values.use.fidc.platform "false") (eq .Values.use.fidc.initializer "false") }}
               - name: OPEN_AM_PASSWORD
                 valueFrom:
                   secretKeyRef:
@@ -25,6 +27,29 @@ spec:
                   configMapKeyRef:
                     name: platform-config
                     key: FQDN
+              {{- else }}
+              - name: OPEN_AM_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: initializer-secret
+                    key: cloudPlatformAdminPassword
+              - name: OPEN_AM_USERNAME
+                valueFrom:
+                  secretKeyRef:
+                    name: initializer-secret
+                    key: cloudPlatformAdminUser
+              - name: RCS_UI_FQDN
+                value: https://rcs-ui.{{ .Values.namespace}}.forgerock.financial
+              - name: IS_CLOUD
+                value: {{ .Values.use.fidc.platform | quote }}
+              - name: STRICT
+                value: {{ .Values.go.resty.strict | quote }}
+              - name: IAM_FQDN
+                valueFrom:
+                  configMapKeyRef:
+                    name: platform-config
+                    key: IAM_FQDN
+              {{ end }}
               - name: FQDN
                 value: obdemo.dev.forgerock.financial
               - name: IDM_FQDN
@@ -32,8 +57,9 @@ spec:
               - name: REQUEST_BODY_PATH
                 value: config/
               command: ["/bin/sh", "-c"]
-              args: 
+              args:
                 - |
+                  echo "IAM_FQDN $IAM_FQDN"
                   until $(curl -X GET --output /dev/null --silent --head --fail -H "X-OpenIDM-Username: anonymous" \
                   -H "X-OpenIDM-Password: anonymous" -H "X-OpenIDM-NoSession: true" \
                   https://$IAM_FQDN/openidm/info/ping)

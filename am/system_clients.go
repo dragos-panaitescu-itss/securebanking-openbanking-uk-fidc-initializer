@@ -13,7 +13,7 @@ import (
 )
 
 func ApplySystemClients(cookie *http.Cookie) {
-	zap.L().Debug("Creating oauth2 system client")
+	zap.L().Info("Creating oauth2 system client")
 	b, err := ioutil.ReadFile(common.IamDirectoryPath() + "am-oauth2-system-clients/" + "end-user-ui-oauth2-client.json")
 	if err != nil {
 		panic(err)
@@ -26,7 +26,7 @@ func ApplySystemClients(cookie *http.Cookie) {
 		redirects = append(redirects, s)
 	}
 	config.CoreOAuth2ClientConfig.RedirectionUris.Value = redirects
-	zap.S().Debugw("oauth2 system client request", "body", config)
+	zap.S().Infow("oauth2 system client request", "body", config)
 	path := fmt.Sprintf("https://%s/am/json/alpha/realm-config/agents/OAuth2Client/end-user-ui", viper.GetString("IAM_FQDN"))
 	resp, err := client.R().
 		SetHeader("Accept", "application/json").

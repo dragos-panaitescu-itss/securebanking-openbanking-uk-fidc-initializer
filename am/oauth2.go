@@ -17,7 +17,7 @@ func CreateRemoteConsentService() {
 		zap.L().Info("Remote consent exists. skipping")
 		return
 	}
-	zap.L().Debug("Creating remote consent service")
+	zap.L().Info("Creating remote consent service")
 	rc := &RemoteConsent{
 		RemoteConsentRequestEncryptionAlgorithm: InheritedValueString{
 			Inherited: false,
@@ -119,7 +119,7 @@ func CreateSoftwarePublisherAgentOBRI() {
 		return
 	}
 
-	zap.L().Debug("Creating software publisher agent")
+	zap.L().Info("Creating software publisher agent")
 	pa := PublisherAgent{
 		PublicKeyLocation: InheritedValueString{
 			Inherited: false,
@@ -166,7 +166,7 @@ func CreateSoftwarePublisherAgentTestPublisher() {
 		return
 	}
 
-	zap.L().Debug("Creating software publisher agent")
+	zap.L().Info("Creating software publisher agent")
 	pa := PublisherAgent{
 		Userpassword: viper.GetString("IG_SSA_SECRET"),
 		PublicKeyLocation: InheritedValueString{
@@ -232,7 +232,7 @@ func CreateOIDCClaimsScript(cookie *http.Cookie) string {
 		zap.L().Info("Script exists")
 		return id
 	}
-	zap.L().Debug("Creating OIDC claims script")
+	zap.L().Info("Creating OIDC claims script")
 	b, err := ioutil.ReadFile(common.IamDirectoryPath() + "oidc.json")
 	if err != nil {
 		panic(err)

@@ -19,48 +19,60 @@ func main() {
 		panic(err)
 	}
 	defer logger.Sync()
-
 	undo := zap.ReplaceGlobals(logger)
 	defer undo()
-
+	zap.L().Info("4")
 	if !strings.HasSuffix(viper.GetString("MANAGED_OBJECTS_DIRECTORY_PATH"), "/") {
 		zap.S().Fatalw("MANAGED_OBJECTS_DIRECTORY_PATH must have a trailing slash /", "MANAGED_OBJECTS_DIRECTORY_PATH", viper.GetString("MANAGED_OBJECTS_DIRECTORY_PATH"))
 	}
-
+	zap.L().Info("5")
 	if !platform.IsValidX509() {
 		zap.L().Fatal("No Valid SSL certificate present in the cdk")
 	}
-
+	zap.L().Info("6")
 	c := platform.GetCookieNameFromAm()
+	zap.L().Info("7")
 	s := platform.FromUserSession(c)
-
-	am.CreateIDMAdminClient(s.Cookie)
-	if !am.AlphaRealmExists(s.Cookie) {
+	zap.L().Info("8")
+	isCloud := viper.GetBool("IS_CLOUD")
+	if !isCloud {
+		am.CreateIDMAdminClient(s.Cookie)
+	}
+	if !am.RealmExist(s.Cookie, "alpha") {
 		am.CreateAlphaRealm(s.Cookie)
 	}
-
+	zap.L().Info("9")
 	s.Authenticate()
 	common.InitRestReaderWriter(s.Cookie, s.AuthToken.AccessToken)
-
+	zap.L().Info("10")
 	am.ApplyAmAuthenticationConfig()
-
+	zap.L().Info("11")
 	am.CreateRemoteConsentService()
+	zap.L().Info("12")
 	am.CreateSoftwarePublisherAgentOBRI()
+	zap.L().Info("13")
 	am.CreateSoftwarePublisherAgentTestPublisher()
+	zap.L().Info("14")
 
 	id := am.CreateOIDCClaimsScript(s.Cookie)
 	am.UpdateOAuth2Provider(id)
-
+	zap.L().Info("15")
 	time.Sleep(5 * time.Second)
 
 	am.CreatePolicyServiceUser()
+	zap.L().Info("16")
 	scriptID := am.CreatePolicyEvaluationScript(s.Cookie)
+	zap.L().Info("17")
 	am.CreateOpenBankingPolicySet()
+	zap.L().Info("18")
 	am.CreateAISPPolicy(scriptID)
+	zap.L().Info("19")
 	am.CreatePISPPolicy(scriptID)
+	zap.L().Info("20")
 	am.CreatePolicyEngineOAuth2Client()
-
+	zap.L().Info("21")
 	am.CreateIGServiceUser()
+	zap.L().Info("22")
 	am.CreateIGOAuth2Client()
 	am.CreateIGPolicyAgent()
 	// Create and populate data for PSU user
@@ -91,6 +103,7 @@ func configureLogger() (*zap.Logger, error) {
 func configureVariables() {
 	viper.AutomaticEnv()
 	viper.SetDefault("VERBOSE", false)
+	viper.SetDefault("IS_CLOUD", false)
 	viper.SetDefault("STRICT", true)
 	viper.SetDefault("ENVIRONMENT_TYPE", "CDK")
 	viper.SetDefault("FQDN", "obdemo-bank.idhub.cc")

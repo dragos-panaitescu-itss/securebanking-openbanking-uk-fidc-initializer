@@ -70,7 +70,7 @@ func CreatePolicyEvaluationScript(cookie *http.Cookie) string {
 		Script:      scriptB64,
 	}
 
-	zap.L().Debug("Creating policy evaluation script")
+	zap.L().Info("Creating policy evaluation script")
 
 	path := fmt.Sprintf("https://%s/am/json/alpha/scripts/?_action=create", viper.GetString("IAM_FQDN"))
 	scriptBody := &RequestScript{}
@@ -98,7 +98,7 @@ func CreateOpenBankingPolicySet() {
 		return
 	}
 
-	zap.L().Debug("Creating Open Banking policy set")
+	zap.L().Info("Creating Open Banking policy set")
 	b, err := ioutil.ReadFile(common.IamDirectoryPath() + "ob-policy-set.json")
 	if err != nil {
 		panic(err)
@@ -109,7 +109,7 @@ func CreateOpenBankingPolicySet() {
 		zap.S().Fatalw("Error unmarshalling policy set", "error", err)
 	}
 	ps.Realm = "/alpha"
-	zap.S().Debugw("Open Banking Policy set unmarshaled", "policy-set", ps)
+	zap.S().Infow("Open Banking Policy set unmarshaled", "policy-set", ps)
 	path := "/am/json/alpha/applications/?_action=create"
 	_, s := common.Client.Post(path, ps, map[string]string{
 		"Accept":             "*/*",
@@ -165,7 +165,7 @@ func CreateAISPPolicy(policyScriptId string) {
 		zap.L().Info("Skipping creation of AISP policy")
 		return
 	}
-	zap.L().Debug("Creating AISP policy")
+	zap.L().Info("Creating AISP policy")
 	b, err := ioutil.ReadFile(common.IamDirectoryPath() + "aisp-policy.json")
 	if err != nil {
 		panic(err)
@@ -193,7 +193,7 @@ func CreatePISPPolicy(policyScriptId string) {
 		zap.L().Info("Skipping creation of PISP policy")
 		return
 	}
-	zap.L().Debug("Creating PISP policy")
+	zap.L().Info("Creating PISP policy")
 	b, err := ioutil.ReadFile(common.IamDirectoryPath() + "pisp-policy.json")
 	if err != nil {
 		panic(err)
@@ -204,7 +204,7 @@ func CreatePISPPolicy(policyScriptId string) {
 		panic(err)
 	}
 	pisp.Condition.ScriptID = policyScriptId
-	zap.S().Debugw("PISP Policy", "policy", pisp)
+	zap.S().Infow("PISP Policy", "policy", pisp)
 	path := "/am/json/alpha/policies/?_action=create"
 	_, s := common.Client.Post(path, pisp, map[string]string{
 		"Accept":             "*/*",
@@ -223,7 +223,7 @@ func CreatePolicyEngineOAuth2Client() {
 		return
 	}
 
-	zap.L().Debug("Creating policy engine oauth2 client")
+	zap.L().Info("Creating policy engine oauth2 client")
 	b, err := ioutil.ReadFile(common.IamDirectoryPath() + "create-policy-engine-oauth2-client.json")
 	if err != nil {
 		panic(err)
@@ -234,7 +234,7 @@ func CreatePolicyEngineOAuth2Client() {
 		panic(err)
 	}
 	engineClient.CoreOAuth2ClientConfig.Userpassword = "password"
-	zap.S().Debugw("Engine client body", "engine", engineClient)
+	zap.S().Infow("Engine client body", "engine", engineClient)
 	path := "/am/json/alpha/realm-config/agents/OAuth2Client/policy-client"
 	s := common.Client.Put(path, engineClient, map[string]string{
 		"Accept":           "application/json",
