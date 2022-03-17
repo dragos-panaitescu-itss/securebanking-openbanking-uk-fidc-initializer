@@ -75,7 +75,7 @@ logger.message("OB_Policy starting")
 function parseResourceUri() {
   var elements = resourceURI.split("/");
   return {
-    "api": elements[6],
+    "api": elements[6].indexOf("?") > -1 ? elements[6].substring(0,elements[6].indexOf("?")) : elements[6],
     "id": (elements.length > 7) ? elements[7] : null,
     "data" : (elements.length > 8) ? elements[8] : null
   }
