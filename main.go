@@ -1,131 +1,169 @@
 package main
 
 import (
-	"github.com/secureBankingAccessToolkit/securebanking-openbanking-uk-fidc-initialiszer/common"
-	"github.com/secureBankingAccessToolkit/securebanking-openbanking-uk-fidc-initialiszer/rs"
-	"strings"
-	"time"
-
-	"github.com/secureBankingAccessToolkit/securebanking-openbanking-uk-fidc-initialiszer/am"
-	"github.com/secureBankingAccessToolkit/securebanking-openbanking-uk-fidc-initialiszer/platform"
+	"fmt"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
+	"os"
+	"reflect"
+	"secure-banking-uk-initializer/pkg/common"
+	"secure-banking-uk-initializer/pkg/httprest"
+	"secure-banking-uk-initializer/pkg/identity-platform"
+	"secure-banking-uk-initializer/pkg/rs"
+	"secure-banking-uk-initializer/pkg/securebanking"
+	"secure-banking-uk-initializer/pkg/types"
+	"strconv"
+	"strings"
+	"time"
 )
 
-func main() {
-	configureVariables()
-	logger, err := configureLogger()
-	if err != nil {
-		panic(err)
+// init function is execute before main to initialize the program,
+// this function is called when the package is initialized
+func init() {
+	fmt.Println("initializing the program.....")
+	viper.AutomaticEnv()
+	viper.SetDefault("ENVIRONMENT.VERBOSE", false)
+	viper.SetDefault("ENVIRONMENT.STRICT", true)
+	viper.SetDefault("ENVIRONMENT.VIPER_CONFIG", "default")
+	loadLogger()
+	loadConfiguration()
+	checks()
+	// after call 'loadConfiguration' we have an object with all configuration mapped
+	if common.Config.Environment.Verbose {
+		verboseProgramInfo()
 	}
-	defer logger.Sync()
-	undo := zap.ReplaceGlobals(logger)
-	defer undo()
-	zap.L().Info("4")
-	if !strings.HasSuffix(viper.GetString("MANAGED_OBJECTS_DIRECTORY_PATH"), "/") {
-		zap.S().Fatalw("MANAGED_OBJECTS_DIRECTORY_PATH must have a trailing slash /", "MANAGED_OBJECTS_DIRECTORY_PATH", viper.GetString("MANAGED_OBJECTS_DIRECTORY_PATH"))
-	}
-	zap.L().Info("5")
-	if !platform.IsValidX509() {
-		zap.L().Fatal("No Valid SSL certificate present in the cdk")
-	}
-	zap.L().Info("6")
-	c := platform.GetCookieNameFromAm()
-	zap.L().Info("7")
-	s := platform.FromUserSession(c)
-	zap.L().Info("8")
-	isCloud := viper.GetBool("IS_CLOUD")
-	if !isCloud {
-		am.CreateIDMAdminClient(s.Cookie)
-	}
-	if !am.RealmExist(s.Cookie, "alpha") {
-		am.CreateAlphaRealm(s.Cookie)
-	}
-	zap.L().Info("9")
-	s.Authenticate()
-	common.InitRestReaderWriter(s.Cookie, s.AuthToken.AccessToken)
-	zap.L().Info("10")
-	am.ApplyAmAuthenticationConfig()
-	zap.L().Info("11")
-	am.CreateRemoteConsentService()
-	zap.L().Info("12")
-	am.CreateSoftwarePublisherAgentOBRI()
-	zap.L().Info("13")
-	am.CreateSoftwarePublisherAgentTestPublisher()
-	zap.L().Info("14")
 
-	id := am.CreateOIDCClaimsScript(s.Cookie)
-	am.UpdateOAuth2Provider(id)
-	zap.L().Info("15")
+	if viper.GetBool("ENVIRONMENT.ONLY_CONFIG") {
+		os.Exit(0)
+	}
+}
+
+// verboseProgramInfo is a method to add all additional information about the program to output in the console in verbose/debug mode
+func verboseProgramInfo() {
+	fmt.Println("IdentityPlatformFQDN:", common.Config.Hosts.IdentityPlatformFQDN)
+	zap.S().Infow("Configuration", "config", config)
+}
+
+// config to get configuration values
+var config types.Configuration
+
+func main() {
+	// operations
+	checkValidPlatformCert()
+	session := getIdentityPlatformSession()
+
+	// operation not supported on CDM (identity cloud platform)
+	createIdentityPlatformOAuth2AdminClient(session)
+	createRealm(session, types.Realms.Instance().ALPHA)
+
+	fmt.Println("Resty initialization....")
+	session.Authenticate()
+	httprest.InitRestReaderWriter(session.Cookie, session.AuthToken.AccessToken)
+
+	fmt.Println("Attempt PSD2 authentication trees initialization...")
+	securebanking.CreateSecureBankingPSD2AuthenticationTrees()
+	fmt.Println("Attempt to create secure banking remote consent...")
+	securebanking.CreateSecureBankingRemoteConsentService()
+	fmt.Println("Attempt to create OBRI software publisher agent...")
+	securebanking.CreateSoftwarePublisherAgentOBRI()
+	fmt.Println("Attempt to create Test software publisher agent...")
+	securebanking.CreateSoftwarePublisherAgentTestPublisher()
+	fmt.Println("Attempt to create OIDC claims script..")
+	id := securebanking.CreateOIDCClaimsScript(session.Cookie)
+	securebanking.UpdateOAuth2Provider(id)
+
 	time.Sleep(5 * time.Second)
 
-	am.CreatePolicyServiceUser()
-	zap.L().Info("16")
-	scriptID := am.CreatePolicyEvaluationScript(s.Cookie)
-	zap.L().Info("17")
-	am.CreateOpenBankingPolicySet()
-	zap.L().Info("18")
-	am.CreateAISPPolicy(scriptID)
-	zap.L().Info("19")
-	am.CreatePISPPolicy(scriptID)
-	zap.L().Info("20")
-	am.CreatePolicyEngineOAuth2Client()
-	zap.L().Info("21")
-	am.CreateIGServiceUser()
-	zap.L().Info("22")
-	am.CreateIGOAuth2Client()
-	am.CreateIGPolicyAgent()
+	securebanking.CreatePolicyServiceUser()
+	scriptID := securebanking.CreatePolicyEvaluationScript(session.Cookie)
+	securebanking.CreateOpenBankingPolicySet()
+	securebanking.CreateAISPPolicy(scriptID)
+	securebanking.CreatePISPPolicy(scriptID)
+	securebanking.CreatePolicyEngineOAuth2Client()
+	platform.CreateIGServiceUser()
+	platform.CreateIGOAuth2Client()
+	platform.CreateIGPolicyAgent()
 	// Create and populate data for PSU user
 	userId := rs.CreatePSU()
 	rs.PopulateRSData(userId)
 
-	am.ApplySystemClients(s.Cookie)
+	platform.ApplySystemClients(session.Cookie)
 
 	time.Sleep(5 * time.Second)
-	am.AddOBManagedObjects()
+	securebanking.AddOBManagedObjects()
 
-	am.CreateApiJwksEndpoint()
+	securebanking.CreateApiJwksEndpoint()
+
 }
 
-func configureLogger() (*zap.Logger, error) {
-	verbose := viper.GetBool("VERBOSE")
-
-	if verbose {
-		config := zap.NewProductionConfig()
-		config.Level = zap.NewAtomicLevelAt(zap.DebugLevel)
-		// disable sampling to ensure we get all log messages
-		config.Sampling = nil
-		return config.Build(zap.AddCaller())
+func loadLogger() {
+	logger, e := common.ConfigureLogger()
+	if e != nil {
+		panic(e)
 	}
-	return zap.NewProduction(zap.AddCaller())
+	defer func(logger *zap.Logger) {
+		err := logger.Sync()
+		if err != nil {
+
+		}
+	}(logger)
+
+	zap.ReplaceGlobals(logger)
 }
 
-func configureVariables() {
-	viper.AutomaticEnv()
-	viper.SetDefault("VERBOSE", false)
-	viper.SetDefault("IS_CLOUD", false)
-	viper.SetDefault("STRICT", true)
-	viper.SetDefault("ENVIRONMENT_TYPE", "CDK")
-	viper.SetDefault("FQDN", "obdemo-bank.idhub.cc")
-	viper.SetDefault("RCS_UI_FQDN", "rcs-ui.dev.forgerock.financial")
-	viper.SetDefault("IAM_FQDN", "iam.idhub.cc")
-	viper.SetDefault("IDM_FQDN", "idm")
-	viper.SetDefault("AM_REALM", "alpha")
-	viper.SetDefault("IDM_CLIENT_ID", "policy-client")
-	viper.SetDefault("IDM_CLIENT_SECRET", "password")
-	viper.SetDefault("IG_CLIENT_ID", "ig-client")
-	viper.SetDefault("IG_CLIENT_SECRET", "password")
-	viper.SetDefault("IG_RCS_SECRET", "password")
-	viper.SetDefault("IG_SSA_SECRET", "password")
-	viper.SetDefault("IG_IDM_USER", "service_account.ig")
-	viper.SetDefault("IG_IDM_PASSWORD", "0penBanking!")
-	viper.SetDefault("IG_AGENT_ID", "ig-agent")
-	viper.SetDefault("IG_AGENT_PASSWORD", "password")
-	viper.SetDefault("OPEN_AM_USERNAME", "amadmin")
-	viper.SetDefault("OPEN_AM_PASSWORD", "password")
-	viper.SetDefault("MANAGED_OBJECTS_DIRECTORY_PATH", "config/defaults/managed-objects/")
-	viper.SetDefault("IAM_DIRECTORY_PATH", "config/defaults/")
-	viper.SetDefault("SCHEME", "https")
-	viper.SetDefault("PSU_USERNAME", "psu")
-	viper.SetDefault("PSU_PASSWORD", "0penBanking!")
+func loadConfiguration() {
+	fmt.Println("Load the [", viper.GetString("ENVIRONMENT.VIPER_CONFIG"), "] configuration.....")
+	err := common.LoadConfigurationByEnv(viper.GetString("ENVIRONMENT.VIPER_CONFIG"))
+	if err != nil {
+		zap.S().Fatalw("Cannot load config:", "error", err)
+	}
+	config = common.Config
+}
+
+func checks() {
+	fmt.Println("Making some checks.....")
+	checkPaths()
+}
+func checkPaths() {
+	zap.L().Debug("Checking trailing slash in paths")
+	suffix := "/"
+	value := reflect.ValueOf(config.Environment.Paths)
+	for i := 0; i < value.NumField(); i++ {
+		if !strings.HasSuffix(value.Field(i).String(), suffix) {
+			zap.S().Fatalw(value.Type().Field(i).Name + " must have a trailing slash /")
+		}
+		zap.S().Debugw("index["+strconv.Itoa(i)+"]", "Field", value.Type().Field(i).Name, "value", value.Field(i).String())
+	}
+}
+
+// Operations
+func checkValidPlatformCert() {
+	zap.L().Info("Check valid cert")
+	if !platform.IsValidX509() {
+		zap.L().Fatal("No Valid SSL certificate present in the cdk")
+	}
+}
+
+func getIdentityPlatformSession() *common.Session {
+	zap.L().Info("Get CookieName")
+	c := platform.GetCookieNameFromAm()
+	zap.L().Info("Get user session")
+	return platform.FromUserSession(c)
+}
+
+func createIdentityPlatformOAuth2AdminClient(session *common.Session) {
+	// operation not supported on CDM (identity cloud platform)
+	if config.Environment.Type == types.Platform.Instance().CDK {
+		platform.CreateIdentityPlatformOAuth2AdminClient(session.Cookie)
+	} else {
+		zap.S().Infow("SKIP: Creating OAuth2Client Identity Platform admin client, the platform instance is not a CDK",
+			"platform type", config.Environment.Type)
+	}
+}
+
+func createRealm(session *common.Session, realmName string) {
+	// the alpha realm exist in identity cloud by default
+	if !platform.RealmExist(session.Cookie, realmName) {
+		platform.CreateRealm(session.Cookie, realmName)
+	}
 }

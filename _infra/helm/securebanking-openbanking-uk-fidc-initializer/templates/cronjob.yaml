@@ -13,56 +13,56 @@ spec:
         spec:
           containers:
             - name: iam-init
-              image: eu.gcr.io/sbat-gcr-develop/securebanking/secureopenbanking-uk-fidc-initializer:jorge-test
+              image: eu.gcr.io/sbat-gcr-develop/securebanking/secureopenbanking-uk-fidc-initializer:latest
               imagePullPolicy: Always
               env:
-              {{- if and (eq .Values.use.fidc.platform "false") (eq .Values.use.fidc.initializer "false") }}
-              - name: OPEN_AM_PASSWORD
+                - name: ENVIRONMENT.STRICT
+                  value: { { .Values.environment.strict | quote } }
+                - name: HOSTS.IDENTITY_PLATFORM_FQDN
+                  valueFrom:
+                    configMapKeyRef:
+                      name: platform-config
+                      key: IDENTITY_PLATFORM_FQDN
+                - name: HOSTS.RS_FQDN
+                  valueFrom:
+                    configMapKeyRef:
+                      name: platform-config
+                      key: RS_FQDN
+                - name: HOSTS.RCS_UI_FQDN
+                  valueFrom:
+                    configMapKeyRef:
+                      name: platform-config
+                      key: RCS_UI_FQDN
+                - name: HOSTS.IG_FQDN
+                  valueFrom:
+                    configMapKeyRef:
+                      name: platform-config
+                      key: IG_FQDN
+                {{ - if eq .Values.environment.type "FIDC" }}
+                - name: USERS.CDM_ADMIN_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: initializer-secret
+                      key: cdm-admin-password
+                - name: USERS.CDM_ADMIN_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: initializer-secret
+                      key: cdm-admin-user
+              {{ - else }}
+              - name: USERS.CDM_ADMIN_PASSWORD
                 valueFrom:
                   secretKeyRef:
                     name: am-env-secrets
                     key: AM_PASSWORDS_AMADMIN_CLEAR
-              - name: IAM_FQDN
-                valueFrom:
-                  configMapKeyRef:
-                    name: platform-config
-                    key: FQDN
-              {{- else }}
-              - name: OPEN_AM_PASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    name: initializer-secret
-                    key: cloudPlatformAdminPassword
-              - name: OPEN_AM_USERNAME
-                valueFrom:
-                  secretKeyRef:
-                    name: initializer-secret
-                    key: cloudPlatformAdminUser
-              - name: RCS_UI_FQDN
-                value: https://rcs-ui.{{ .Values.namespace}}.forgerock.financial
-              - name: IS_CLOUD
-                value: {{ .Values.use.fidc.platform | quote }}
-              - name: STRICT
-                value: {{ .Values.go.resty.strict | quote }}
-              - name: IAM_FQDN
-                valueFrom:
-                  configMapKeyRef:
-                    name: platform-config
-                    key: IAM_FQDN
               {{ end }}
-              - name: FQDN
-                value: obdemo.dev.forgerock.financial
-              - name: IDM_FQDN
-                value: idm.cdk.svc.cluster.local
-              - name: REQUEST_BODY_PATH
-                value: config/
-              command: ["/bin/sh", "-c"]
+              command: [ "/bin/sh", "-c" ]
               args:
                 - |
-                  echo "IAM_FQDN $IAM_FQDN"
+                  echo "IDENTITY_PLATFORM_FQDN $HOSTS.IDENTITY_PLATFORM_FQDN"
                   until $(curl -X GET --output /dev/null --silent --head --fail -H "X-OpenIDM-Username: anonymous" \
                   -H "X-OpenIDM-Password: anonymous" -H "X-OpenIDM-NoSession: true" \
-                  https://$IAM_FQDN/openidm/info/ping)
+                  https://$HOSTS.IDENTITY_PLATFORM_FQDN/openidm/info/ping)
                   do
                   echo "IDM not ready"
                   sleep 10

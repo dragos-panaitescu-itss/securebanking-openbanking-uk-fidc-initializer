@@ -1,17 +1,16 @@
 cron: "* * * * *"
-use:
-  fidc:
-    platform: "true"
-    initializer: "true"
 
-namespace: nightly
+# environment.type: It can be:
+# CDK value: (Cloud Developer's Kit) development identity platform
+# CDM value: CDM (Cloud Deployment Model) identity cloud platform
+# FIDC value: FIDC (Forgerock Identity Cloud) identity cloud platform
+environment:
+  type: CDK
+  namespace: cdk
+  # RaiseForStatus will exit if go resty returns an error in STRICT mode,
+  # be it client error, server error or other. Turning off (false)
+  # STRICT mode will simply warn of client/server errors.
+  strict: true
 
 # The GCP project where the secret lives
 projectId: sbat-dev
-
-go:
-  resty:
-    # RaiseForStatus will exit if go resty returns an error in STRICT mode,
-    # be it client error, server error or other. Turning off (false)
-    # STRICT mode will simply warn of client/server errors.
-    strict: "true" # default true
