@@ -18,6 +18,11 @@ spec:
               env:
                 - name: ENVIRONMENT.STRICT
                   value: {{ .Values.environment.strict | quote }}
+                - name: IDENTITY_PLATFORM_FQDN # variable to run the command shell, the shell doesn't support variables with dot.
+                    valueFrom:
+                      configMapKeyRef:
+                        name: securebanking-platform-config
+                        key: IDENTITY_PLATFORM_FQDN
                 - name: HOSTS.IDENTITY_PLATFORM_FQDN
                   valueFrom:
                     configMapKeyRef:
@@ -59,10 +64,10 @@ spec:
               command: [ "/bin/sh", "-c" ]
               args:
                 - |
-                  echo "IDENTITY_PLATFORM_FQDN $HOSTS.IDENTITY_PLATFORM_FQDN"
+                  echo "IDENTITY_PLATFORM_FQDN $IDENTITY_PLATFORM_FQDN"
                   until $(curl -X GET --output /dev/null --silent --head --fail -H "X-OpenIDM-Username: anonymous" \
                   -H "X-OpenIDM-Password: anonymous" -H "X-OpenIDM-NoSession: true" \
-                  https://$HOSTS.IDENTITY_PLATFORM_FQDN/openidm/info/ping)
+                  https://$IDENTITY_PLATFORM_FQDN/openidm/info/ping)
                   do
                   echo "IDM not ready"
                   sleep 10
