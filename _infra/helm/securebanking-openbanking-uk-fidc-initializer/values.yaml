@@ -5,8 +5,8 @@ cron: "* * * * *"
 # CDM value: CDM (Cloud Deployment Model) identity cloud platform
 # FIDC value: FIDC (Forgerock Identity Cloud) identity cloud platform
 environment:
-  type: CDK
-  namespace: cdk
+  type: FIDC
+  namespace: nightly
   # RaiseForStatus will exit if go resty returns an error in STRICT mode,
   # be it client error, server error or other. Turning off (false)
   # STRICT mode will simply warn of client/server errors.
