@@ -18,6 +18,11 @@ spec:
               env:
                 - name: ENVIRONMENT.STRICT
                   value: {{ .Values.environment.strict | quote }}
+                - name: ENVIRONMENT.TYPE
+                  valueFrom:
+                    configMapKeyRef:
+                      name: securebanking-platform-config
+                      key: ENVIRONMENT_TYPE
                 - name: IDENTITY_PLATFORM_FQDN # variable to run the command shell, the shell doesn't support variables with dot.
                   valueFrom:
                     configMapKeyRef:
