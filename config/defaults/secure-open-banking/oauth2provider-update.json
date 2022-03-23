@@ -44,7 +44,8 @@
       "openid",
       "payments",
       "accounts",
-      "eventpolling"
+      "eventpolling",
+      "fundsconfirmations"
     ],
     "responseTypeClasses": [
       "code|org.forgerock.oauth2.core.AuthorizationCodeResponseTypeHandler",
@@ -311,7 +312,7 @@
       "A192CBC-HS384",
       "A256CBC-HS512"
     ],
-    "remoteConsentServiceId": "forgerock-rcs"
+    "remoteConsentServiceId": "secure-open-banking-rcs"
   },
   "deviceCodeConfig": {
     "devicePollInterval": 5,

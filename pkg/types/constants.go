@@ -30,5 +30,5 @@ func (p *realms) Instance() realms {
 }
 
 func newRealmStruct() realms {
-	return realms{ALPHA: "bravo", BRAVO: "alpha"}
+	return realms{ALPHA: "alpha", BRAVO: "bravo"}
 }
