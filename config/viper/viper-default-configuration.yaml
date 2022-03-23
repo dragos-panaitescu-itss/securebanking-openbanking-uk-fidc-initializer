@@ -16,10 +16,10 @@ ENVIRONMENT: # Root key to define the environment program properties
     CONFIG_IDENTITY_PLATFORM: config/defaults/identity-platform/ # Path folder for generic platform configuration
 HOSTS:
   IDENTITY_PLATFORM_FQDN: iam.dev.forgerock.financial # Identity platform Host name
-  IG_FQDN: ig.nightly.forgerock.financial # IG host name
-  RS_FQDN: rs.nightly.forgerock.financial # RS host name
-  RCS_FQDN: rcs.nightly.forgerock.financial # RCS host name
-  RCS_UI_FQDN: rcs-ui.nightly.forgerock.financial # RCS user interface app host name (Consent user app)
+  IG_FQDN: ig.dev.forgerock.financial # IG host name
+  RS_FQDN: rs.dev.forgerock.financial # RS host name
+  RCS_FQDN: rcs.dev.forgerock.financial # RCS host name
+  RCS_UI_FQDN: rcs-ui.dev.forgerock.financial # RCS user interface app host name (Consent user app)
   SCHEME: https # URI scheme, Syntax part of a generic URI
 IG: # Root key for parameter values related with IG platform component service configuration
   IG_CLIENT_ID: ig-client # IG agent client
