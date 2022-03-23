@@ -17,7 +17,7 @@ spec:
               imagePullPolicy: Always
               env:
                 - name: ENVIRONMENT.STRICT
-                  value: { { .Values.environment.strict | quote } }
+                  value: {{ .Values.environment.strict | quote }}
                 - name: HOSTS.IDENTITY_PLATFORM_FQDN
                   valueFrom:
                     configMapKeyRef:
