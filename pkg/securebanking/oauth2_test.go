@@ -32,7 +32,7 @@ func TestFindRemoteConsent(t *testing.T) {
 	mockRestReaderWriter.On("Get", mock.Anything, mock.Anything).
 		Return(buffer)
 
-	b := remoteConsentExists("forgerock-rcs")
+	b := remoteConsentExists("secure-open-banking-rcs")
 
 	assert.True(t, b)
 }
