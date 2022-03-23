@@ -2,11 +2,11 @@ package platform
 
 import (
 	"log"
+	"secure-banking-uk-initializer/pkg/common"
 	"strconv"
 	"testing"
 
 	"github.com/pact-foundation/pact-go/dsl"
-	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -36,8 +36,8 @@ func TestConsumer(t *testing.T) {
 		})
 
 	var test = func() (err error) {
-		viper.SetDefault("IAM_FQDN", "localhost:"+strconv.Itoa(pact.Server.Port))
-		viper.SetDefault("SCHEME", "http")
+		common.Config.Hosts.IdentityPlatformFQDN = "localhost:" + strconv.Itoa(pact.Server.Port)
+		common.Config.Hosts.Scheme = "http"
 		cookie := GetCookieNameFromAm()
 
 		assert.Equal(t, "iPlanetDirectory", cookie)
