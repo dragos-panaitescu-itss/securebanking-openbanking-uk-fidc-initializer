@@ -38,7 +38,7 @@ spec:
                     configMapKeyRef:
                       name: platform-config
                       key: IG_FQDN
-                {{ - if eq .Values.environment.type "FIDC" }}
+                {{- if eq .Values.environment.type "FIDC" }}
                 - name: USERS.CDM_ADMIN_PASSWORD
                   valueFrom:
                     secretKeyRef:
@@ -49,7 +49,7 @@ spec:
                     secretKeyRef:
                       name: initializer-secret
                       key: cdm-admin-user
-                {{ - else }}
+                {{- else }}
                 - name: USERS.CDM_ADMIN_PASSWORD
                   valueFrom:
                     secretKeyRef:
