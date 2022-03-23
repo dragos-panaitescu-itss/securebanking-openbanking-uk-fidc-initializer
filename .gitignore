@@ -4,3 +4,6 @@ pacts/
 logs/
 pact/
 .idea/
+temp
+config/viper/*
+!viper-default-configuration.yaml
