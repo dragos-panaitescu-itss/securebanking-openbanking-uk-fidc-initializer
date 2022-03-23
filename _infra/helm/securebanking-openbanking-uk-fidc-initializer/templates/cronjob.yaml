@@ -49,13 +49,13 @@ spec:
                     secretKeyRef:
                       name: initializer-secret
                       key: cdm-admin-user
-              {{ - else }}
-              - name: USERS.CDM_ADMIN_PASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    name: am-env-secrets
-                    key: AM_PASSWORDS_AMADMIN_CLEAR
-              {{ end }}
+                {{ - else }}
+                - name: USERS.CDM_ADMIN_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: am-env-secrets
+                      key: AM_PASSWORDS_AMADMIN_CLEAR
+                {{ end }}
               command: [ "/bin/sh", "-c" ]
               args:
                 - |
