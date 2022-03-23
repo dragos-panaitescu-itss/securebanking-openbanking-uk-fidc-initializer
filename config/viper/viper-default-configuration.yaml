@@ -9,7 +9,8 @@ ENVIRONMENT: # Root key to define the environment program properties
   # TYPE: It can be the values set on platform constants (@See constants.go), currently CDK or CDM
   # CDK value: (Cloud Developer's Kit) development identity platform
   # CDM value: CDM (Cloud Deployment Model) identity cloud platform
-  TYPE: CDM
+  # FIDC (Forgerock Identity Cloud) identity cloud platform
+  TYPE: CDK
   PATHS: # Key to define the paths for files to populate configuration data to the platform
     CONFIG_BASE_DIRECTORY: config/defaults/ # Base configuration path folder
     CONFIG_SECURE_BANKING: config/defaults/secure-open-banking/ # Path folder for secure banking
