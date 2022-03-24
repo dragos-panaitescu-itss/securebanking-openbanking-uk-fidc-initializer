@@ -28,8 +28,12 @@ func CreatePSU() string {
 		Mail:      "psu@acme.com",
 		Password:  common.Config.Users.PsuPassword,
 	}
-
-	path := "/openidm/managed/user/?_action=create"
+	// TODO: check the managed user object, it's different for cloud
+	var managedUserObject = "user"
+	if common.Config.Environment.Type == types.Platform.Instance().FIDC {
+		managedUserObject = "alpha_user"
+	}
+	path := "/openidm/managed/" + managedUserObject + "/?_action=create"
 	body, s := httprest.Client.Post(path, user, map[string]string{
 		"Accept":       "*/*",
 		"Content-Type": "application/json",
