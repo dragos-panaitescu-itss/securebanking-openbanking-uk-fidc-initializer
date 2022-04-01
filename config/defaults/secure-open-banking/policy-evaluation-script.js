@@ -214,7 +214,7 @@ function findIntentType(api) {
 function getIntent(intentId, intentType) {
     var accessToken = getIdmAccessToken();
     var request = new org.forgerock.http.protocol.Request();
-    var uri = "http://idm/openidm/managed/" + intentType + "/" + intentId
+    var uri = "http://idm/openidm/managed/" + intentType + "/" + intentId + "?_fields=_id,_rev,Data,Risk,user/_id,accounts,apiClient/_id"
     logger.message("OB_Policy IDM fetch " + uri)
 
     request.setMethod('GET');
@@ -266,21 +266,24 @@ if (intentType === "accountAccessIntent") {
     var status = intent.Data.Status
     var permissions = intent.Data.Permissions
     var accounts = intent.accounts
+    // The responseAttributes expected always and array as value
+    var userResourceOwner = new Array(intent.user._id)
 
     if (status != STATUS_AUTHORISED) {
         logger.warning("Rejecting request - status [" + status + "]")
         authorized = false
-
     } else if (apiRequest.id == null) {
         logger.message("OB_POLICY accounts " + accounts);
         responseAttributes.put("grantedAccounts", accounts);
         responseAttributes.put("grantedPermissions", permissions);
+        responseAttributes.put("userResourceOwner", userResourceOwner);
         authorized = true
     } else if (apiRequest.data == null) {
         logger.message("OB_POLICY account info for " + apiRequest.id);
         // RS server expects granted accounts and permissions even though we're checking as well
         responseAttributes.put("grantedAccounts", accounts);
         responseAttributes.put("grantedPermissions", permissions);
+        responseAttributes.put("userResourceOwner", userResourceOwner);
         authorized = (accounts.indexOf(apiRequest.id) > -1) &&
             dataAuthorised(permissions, apiRequest.api)
     } else {
@@ -288,6 +291,7 @@ if (intentType === "accountAccessIntent") {
         // RS server expects granted accounts and permissions even though we're checking as well
         responseAttributes.put("grantedAccounts", accounts);
         responseAttributes.put("grantedPermissions", permissions);
+        responseAttributes.put("userResourceOwner", userResourceOwner);
         authorized = (accounts.indexOf(apiRequest.id) > -1) &&
             dataAuthorised(permissions, apiRequest.data)
     }
