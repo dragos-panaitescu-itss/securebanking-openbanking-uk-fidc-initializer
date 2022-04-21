@@ -54,7 +54,16 @@
       "token|org.forgerock.oauth2.core.TokenResponseTypeHandler"
     ],
     "tokenCompressionEnabled": false,
-    "allowedAudienceValues": [],
+    "allowedAudienceValues": [
+      "https://obdemo.dev.forgerock.financial:443/am/oauth2/realms/root/realms/alpha/access_token",
+      "https://obdemo.nightly.forgerock.financial:443/am/oauth2/realms/root/realms/alpha/access_token",
+      "https://obdemo.andra-racovita.forgerock.financial:443/am/oauth2/realms/root/realms/alpha/access_token",
+      "https://obdemo.mariantiris.forgerock.financial:443/am/oauth2/realms/root/realms/alpha/access_token",
+      "https://obdemo.christian-brindley.forgerock.financial:443/am/oauth2/realms/root/realms/alpha/access_token",
+      "https://obdemo.bohocode.forgerock.financial:443/am/oauth2/realms/root/realms/alpha/access_token",
+      "https://obdemo.jorgesanchezperez.forgerock.financial:443/am/oauth2/realms/root/realms/alpha/access_token",
+      "https://obdemo.joycegilding-forgerock.forgerock.financial:443/am/oauth2/realms/root/realms/alpha/access_token"
+    ],
     "scopeImplementationClass": "org.forgerock.openam.oauth2.OpenAMScopeValidator",
     "tlsCertificateRevocationCheckingEnabled": false
   },
