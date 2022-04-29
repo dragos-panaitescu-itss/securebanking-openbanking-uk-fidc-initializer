@@ -3,13 +3,14 @@ package platform
 import (
 	"encoding/json"
 	"fmt"
-	"go.uber.org/zap"
 	"io/ioutil"
 	"net/http"
 	"secure-banking-uk-initializer/pkg/common"
 	"secure-banking-uk-initializer/pkg/httprest"
 	"secure-banking-uk-initializer/pkg/types"
 	"strings"
+
+	"go.uber.org/zap"
 )
 
 func CreateIGServiceUser() {
@@ -174,4 +175,26 @@ func RealmExist(cookie *http.Cookie, realm string) bool {
 	}
 	zap.S().Infow("Check realm exist", "realm", realm, "exist", realmExist)
 	return realmExist
+}
+
+func CreateServerConfig(cookie *http.Cookie) {
+	zap.L().Info("Pushing Creating ServerDefault - Advanced Settings")
+	b, err := ioutil.ReadFile(common.Config.Environment.Paths.ConfigIdentityPlatform + "server-defaults.json")
+	if err != nil {
+		panic(err)
+	}
+	path := "https://" + common.Config.Hosts.IdentityPlatformFQDN + "/am/json/global-config/servers/server-default/properties/advanced"
+	resp, err := restClient.R().
+		SetHeader("Accept", "application/json").
+		SetHeader("Content-Type", "application/json").
+		SetHeader("X-Requested-With", "ForgeRock Identity Cloud Postman Collection").
+		SetHeader("accept-api-version", "protocol=1.0,resource=1.0").
+		SetContentLength(true).
+		SetCookie(cookie).
+		SetBody(b).
+		Put(path)
+
+	common.RaiseForStatus(err, resp.Error(), resp.StatusCode())
+
+	zap.S().Infow("Pushed server default - Advanced Settings")
 }

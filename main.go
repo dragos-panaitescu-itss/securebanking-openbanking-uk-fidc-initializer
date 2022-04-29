@@ -2,19 +2,20 @@ package main
 
 import (
 	"fmt"
-	"github.com/spf13/viper"
-	"go.uber.org/zap"
 	"os"
 	"reflect"
 	"secure-banking-uk-initializer/pkg/common"
 	"secure-banking-uk-initializer/pkg/httprest"
-	"secure-banking-uk-initializer/pkg/identity-platform"
+	platform "secure-banking-uk-initializer/pkg/identity-platform"
 	"secure-banking-uk-initializer/pkg/rs"
 	"secure-banking-uk-initializer/pkg/securebanking"
 	"secure-banking-uk-initializer/pkg/types"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/spf13/viper"
+	"go.uber.org/zap"
 )
 
 // init function is execute before main to initialize the program,
@@ -55,6 +56,7 @@ func main() {
 	// operation not supported on CDM (identity cloud platform)
 	createIdentityPlatformOAuth2AdminClient(session)
 	createRealm(session, types.Realms.Instance().ALPHA)
+	createServerConfig(session)
 
 	fmt.Println("Resty initialization....")
 	session.Authenticate()
@@ -166,4 +168,8 @@ func createRealm(session *common.Session, realmName string) {
 	if !platform.RealmExist(session.Cookie, realmName) {
 		platform.CreateRealm(session.Cookie, realmName)
 	}
+}
+
+func createServerConfig(session *common.Session) {
+	platform.CreateServerConfig(session.Cookie)
 }
