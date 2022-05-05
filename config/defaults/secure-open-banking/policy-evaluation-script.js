@@ -9,6 +9,11 @@ function getIdmClientDetails() {
     }
 }
 
+// Constants
+STATUS_AUTHORISED = "Authorised"
+var script_name = "policy_evaluation_script.js"
+logger.message(script_name + ": starting")
+
 var accountsAndTransactionsPermissions = [{
     name: "READACCOUNTSBASIC",
     property: {permission: "ReadAccountsBasic", requestType: "accounts"}
@@ -82,10 +87,6 @@ function dataAuthorised(permissions, requestType) {
         return true
     return false
 }
-
-STATUS_AUTHORISED = "Authorised"
-
-logger.message("OB_Policy starting")
 
 function parseResourceUri() {
     var elements = resourceURI.split("/");
@@ -173,7 +174,7 @@ function stringFromArray(data) {
 }
 
 function logResponse(callerMethod, response) {
-    logger.warning("[" + callerMethod + "] OB_Policy User REST Call. Status: " + response.getStatus() + ", Body: " + response.getEntity().getString());
+    logger.message(script_name + ": [" + callerMethod + "] OB_Policy User REST Call. Status: " + response.getStatus() + ", Body: " + response.getEntity().getString());
 }
 
 function getIdmAccessToken() {
@@ -199,7 +200,7 @@ function getIdmAccessToken() {
     var oauth2response = JSON.parse(response.getEntity().getString());
 
     var accessToken = oauth2response.access_token
-    logger.warning("OB_Policy Got access token " + accessToken);
+    logger.message(script_name + ": Got access token " + accessToken);
     return accessToken
 }
 
@@ -215,7 +216,7 @@ function getIntent(intentId, intentType) {
     var accessToken = getIdmAccessToken();
     var request = new org.forgerock.http.protocol.Request();
     var uri = "http://idm/openidm/managed/" + intentType + "/" + intentId + "?_fields=_id,_rev,Data,Risk,user/_id,accounts,apiClient/_id"
-    logger.message("OB_Policy IDM fetch " + uri)
+    logger.message(script_name + ": IDM fetch " + uri)
 
     request.setMethod('GET');
     request.setUri(uri)
@@ -248,7 +249,7 @@ function initiationMatch(initiationRequest, initiation) {
 
 
     if (!match) {
-        logger.warning("Mismatch between request [" + JSON.stringify(initiationRequestObj) + "] and consent [" + JSON.stringify(initiation) + "]");
+        logger.warning(script_name + ": Mismatch between request [" + JSON.stringify(initiationRequestObj) + "] and consent [" + JSON.stringify(initiation) + "]");
     }
 
     return match
@@ -256,12 +257,13 @@ function initiationMatch(initiationRequest, initiation) {
 
 var intentId = environment.get("intent_id").iterator().next();
 var apiRequest = parseResourceUri()
-logger.warning("OB_Policy req " + apiRequest.api + ":" + apiRequest.id + ":" + apiRequest.data);
+logger.message(script_name + ": req " + apiRequest.api + ":" + apiRequest.id + ":" + apiRequest.data);
 
 var intentType = findIntentType(apiRequest.api)
 var intent = getIntent(intentId, intentType);
 
 if (intentType === "accountAccessIntent") {
+    logger.message(script_name + ": Account Access Intent");
 
     var status = intent.Data.Status
     var permissions = intent.Data.Permissions
@@ -270,16 +272,16 @@ if (intentType === "accountAccessIntent") {
     var userResourceOwner = new Array(intent.user._id)
 
     if (status != STATUS_AUTHORISED) {
-        logger.warning("Rejecting request - status [" + status + "]")
+        logger.message(script_name + "-[Account Access]: Rejecting request - status [" + status + "]")
         authorized = false
     } else if (apiRequest.id == null) {
-        logger.message("OB_POLICY accounts " + accounts);
+        logger.message(script_name + "-[Account Access]: accounts " + accounts);
         responseAttributes.put("grantedAccounts", accounts);
         responseAttributes.put("grantedPermissions", permissions);
         responseAttributes.put("userResourceOwner", userResourceOwner);
         authorized = true
     } else if (apiRequest.data == null) {
-        logger.message("OB_POLICY account info for " + apiRequest.id);
+        logger.message(script_name + "-[Account Access]: account info for " + apiRequest.id);
         // RS server expects granted accounts and permissions even though we're checking as well
         responseAttributes.put("grantedAccounts", accounts);
         responseAttributes.put("grantedPermissions", permissions);
@@ -287,7 +289,7 @@ if (intentType === "accountAccessIntent") {
         authorized = (accounts.indexOf(apiRequest.id) > -1) &&
             dataAuthorised(permissions, apiRequest.api)
     } else {
-        logger.message("OB_POLICY account request for " + apiRequest.id + ":" + apiRequest.data);
+        logger.message(script_name + "-[Account Access]: account request for " + apiRequest.id + ":" + apiRequest.data);
         // RS server expects granted accounts and permissions even though we're checking as well
         responseAttributes.put("grantedAccounts", accounts);
         responseAttributes.put("grantedPermissions", permissions);
@@ -297,18 +299,38 @@ if (intentType === "accountAccessIntent") {
     }
 
 } else if (intentType === "domesticPaymentIntent") {
+    logger.message(script_name + ": Domestic Payments Intent");
 
     var status = intent.Data.Status
-    var permissions = intent.Data.Permissions
-    var account = intent.account
+    var userResourceOwner = new Array(intent.user._id)
 
-    if (status != STATUS_AUTHORISED) {
-        logger.warning("Rejecting request - status [" + status + "]")
+    if (status !== STATUS_AUTHORISED) {
+        logger.message(script_name + "-[Domestic Payments]: Rejecting request - status [" + status + "]")
         authorized = false
     } else {
-        authorized = initiationMatch(environment.get("initiation").iterator().next(), intent.Data.Initiation)
-    }
+        responseAttributes.put("userResourceOwner", userResourceOwner);
+        var requestMethod = environment.get("request_method").iterator().next()
 
+        if (requestMethod != null) {
+            switch (requestMethod) {
+                case "POST":
+                    logger.message(script_name + "-[Domestic Payments]: POST request");
+                    var initiation = environment.get("initiation").iterator().next()
+                    authorized = initiationMatch(initiation, intent.Data.Initiation)
+                    break;
+                case "GET":
+                    logger.message(script_name + "-[Domestic Payments]: GET request");
+                    authorized = true
+                    break;
+                default:
+                    authorized = false
+                    break;
+            }
+        } else {
+            authorized = false
+        }
+    }
 } else {
     authorized = false
 }
+logger.message(script_name + ": Policy evaluation result, authorized=" + authorized);
