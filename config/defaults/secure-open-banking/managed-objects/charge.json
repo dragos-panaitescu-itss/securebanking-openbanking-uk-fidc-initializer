@@ -3,7 +3,7 @@
     "operation": "add",
     "field": "objects/-",
     "value": {
-      "name": "Charge",
+      "name": "charge",
       "schema": {
         "$schema": "http://forgerock.org/json-schema#",
         "type": "object",
@@ -82,7 +82,8 @@
           "ChargeBearer",
           "Type",
           "Amount"
-        ]
+        ],
+        "mat-icon": null
       },
       "iconClass": "fa fa-database",
       "type": "Managed Object"

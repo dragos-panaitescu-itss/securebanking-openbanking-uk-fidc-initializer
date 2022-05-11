@@ -113,7 +113,7 @@
                 "searchable": false,
                 "userEditable": true,
                 "items": {
-                  "type": "Charge"
+                  "type": "charge"
                 }
               },
               "Initiation": {
