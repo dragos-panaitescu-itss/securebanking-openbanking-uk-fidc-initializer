@@ -1,0 +1,91 @@
+[
+  {
+    "operation": "add",
+    "field": "objects/-",
+    "value": {
+      "name": "Charge",
+      "schema": {
+        "$schema": "http://forgerock.org/json-schema#",
+        "type": "object",
+        "title": "Charge",
+        "description": "Charge",
+        "icon": "fa-money",
+        "properties": {
+          "ChargeBearer": {
+            "title": "Charge Bearer",
+            "type": "string",
+            "viewable": true,
+            "searchable": false,
+            "userEditable": true,
+            "description": "Specifies which party/parties will bear the charges associated with the processing of the payment transaction.",
+            "isVirtual": false,
+            "nullable": false
+          },
+          "Type ": {
+            "title": "Type",
+            "type": "string",
+            "viewable": true,
+            "searchable": false,
+            "userEditable": true,
+            "description": "Charge type, in a coded form.",
+            "isVirtual": false,
+            "nullable": false
+          },
+          "Amount": {
+            "title": "Amount",
+            "type": "object",
+            "viewable": true,
+            "searchable": false,
+            "userEditable": true,
+            "nullable": false,
+            "properties": {
+              "Amount": {
+                "title": "Amount",
+                "type": "string",
+                "viewable": true,
+                "searchable": false,
+                "userEditable": true,
+                "description": "A number of monetary units specified in an active currency where the unit of currency is explicit and compliant with ISO 4217.",
+                "isVirtual": false,
+                "nullable": false
+              },
+              "Currency": {
+                "title": "Currency",
+                "type": "string",
+                "viewable": true,
+                "searchable": false,
+                "userEditable": true,
+                "description": "A code allocated to a currency by a Maintenance Agency under an international identification scheme, as described in the latest edition of the international standard ISO 4217 \"Codes for the representation of currencies and funds\".",
+                "isVirtual": false,
+                "nullable": false
+              }
+            },
+            "order": [
+              "Amount",
+              "Currency"
+            ],
+            "description": "Amount of money associated with the charge type.",
+            "isVirtual": false,
+            "required": [
+              "Amount",
+              "Currency"
+            ],
+            "nullable": false
+          }
+        },
+        "order": [
+          "ChargeBearer",
+          "Type",
+          "Amount"
+        ],
+        "required": [
+          "ChargeBearer",
+          "Type",
+          "Amount"
+        ]
+      },
+      "iconClass": "fa fa-database",
+      "type": "Managed Object"
+    }
+  }
+]
