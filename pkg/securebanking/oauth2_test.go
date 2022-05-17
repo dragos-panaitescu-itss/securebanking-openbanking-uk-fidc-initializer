@@ -5,9 +5,10 @@ import (
 	"secure-banking-uk-initializer/pkg/httprest"
 	"testing"
 
+	mocks "secure-banking-uk-initializer/pkg/mocks/am"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	mocks "secure-banking-uk-initializer/pkg/mocks/am"
 )
 
 func TestFindSoftwarePublisherAgent(t *testing.T) {
