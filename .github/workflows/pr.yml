@@ -8,6 +8,7 @@ on:
 
 env:
   SERVICE_NAME: securebanking-openbanking-uk-fidc-inilializer
+  PR_NUMBER: pr-${{ github.event.number }}
 
 jobs:
   build:
@@ -31,6 +32,6 @@ jobs:
       - run: |
           gcloud auth configure-docker
 
-      - name: docker build
+      - name: docker build with tag=${{ env.PR_NUMBER }}
         run: |
-          make docker
+          make docker tag=${{ env.PR_NUMBER }}
