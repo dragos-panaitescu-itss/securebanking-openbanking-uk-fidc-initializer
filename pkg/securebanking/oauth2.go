@@ -8,8 +8,9 @@ import (
 	"secure-banking-uk-initializer/pkg/httprest"
 	"secure-banking-uk-initializer/pkg/types"
 
-	"go.uber.org/zap"
 	"secure-banking-uk-initializer/pkg/common"
+
+	"go.uber.org/zap"
 )
 
 func CreateSecureBankingRemoteConsentService() {
@@ -311,4 +312,30 @@ func oauth2ProviderExists(id string) bool {
 	return common.Find(id, r, func(r *types.Result) string {
 		return r.ID
 	})
+}
+
+func CreateBaseURLSourceService(cookie *http.Cookie) {
+	zap.S().Info("Creating BaseURLSource service in the alpha realm")
+
+	b, err := ioutil.ReadFile(common.Config.Environment.Paths.ConfigSecureBanking + "create-base-url-source.json")
+	if err != nil {
+		panic(err)
+	}
+	path := fmt.Sprintf("https://%s/am/json/realms/root/realms/alpha/realm-config/services/baseurl?_action=create", common.Config.Hosts.IdentityPlatformFQDN)
+	resp, err := restClient.R().
+		SetHeader("Accept", "application/json").
+		SetHeader("Accept-API-Version", "protocol=1.0,resource=1.0").
+		SetHeader("Content-Type", "application/json").
+		SetContentLength(true).
+		SetCookie(cookie).
+		SetBody(b).
+		Post(path)
+
+	zap.S().Info("resp is " + resp.String())
+	if resp != nil && resp.StatusCode() == 409 {
+		zap.S().Info("Did not create BaseURLSource service in alpha realm. It already exists.")
+	} else {
+		common.RaiseForStatus(err, resp.Error(), resp.StatusCode())
+		zap.S().Info("Created Base URL Service in AM's alpha realm")
+	}
 }

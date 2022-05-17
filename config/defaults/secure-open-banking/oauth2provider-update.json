@@ -13,7 +13,6 @@
   "advancedOAuth2Config": {
     "tlsClientCertificateHeaderFormat": "URLENCODED_PEM",
     "supportedSubjectTypes": [
-      "public",
       "pairwise"
     ],
     "defaultScopes": [],
@@ -55,14 +54,14 @@
     ],
     "tokenCompressionEnabled": false,
     "allowedAudienceValues": [
-      "https://obdemo.dev.forgerock.financial:443/am/oauth2/realms/root/realms/alpha/access_token",
-      "https://obdemo.nightly.forgerock.financial:443/am/oauth2/realms/root/realms/alpha/access_token",
-      "https://obdemo.andra-racovita.forgerock.financial:443/am/oauth2/realms/root/realms/alpha/access_token",
-      "https://obdemo.mariantiris.forgerock.financial:443/am/oauth2/realms/root/realms/alpha/access_token",
-      "https://obdemo.christian-brindley.forgerock.financial:443/am/oauth2/realms/root/realms/alpha/access_token",
-      "https://obdemo.bohocode.forgerock.financial:443/am/oauth2/realms/root/realms/alpha/access_token",
-      "https://obdemo.jorgesanchezperez.forgerock.financial:443/am/oauth2/realms/root/realms/alpha/access_token",
-      "https://obdemo.joycegilding-forgerock.forgerock.financial:443/am/oauth2/realms/root/realms/alpha/access_token"
+      "https://obdemo.dev.forgerock.financial/am/oauth2/realms/root/realms/alpha/access_token",
+      "https://obdemo.nightly.forgerock.financial/am/oauth2/realms/root/realms/alpha/access_token",
+      "https://obdemo.andra-racovita.forgerock.financial/am/oauth2/realms/root/realms/alpha/access_token",
+      "https://obdemo.mariantiris.forgerock.financial/am/oauth2/realms/root/realms/alpha/access_token",
+      "https://obdemo.christian-brindley.forgerock.financial/am/oauth2/realms/root/realms/alpha/access_token",
+      "https://obdemo.bohocode.forgerock.financial/am/oauth2/realms/root/realms/alpha/access_token",
+      "https://obdemo.jorgesanchezperez.forgerock.financial/am/oauth2/realms/root/realms/alpha/access_token",
+      "https://obdemo.joycegilding-forgerock.forgerock.financial/am/oauth2/realms/root/realms/alpha/access_token"
     ],
     "scopeImplementationClass": "org.forgerock.openam.oauth2.OpenAMScopeValidator",
     "tlsCertificateRevocationCheckingEnabled": false
