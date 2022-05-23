@@ -11,6 +11,16 @@
         "description": "Domestic Scheduled Payment Intent",
         "icon": "fa-money",
         "properties": {
+          "_id": {
+            "title": "Internal IDM Identifier",
+            "type": "string",
+            "viewable": true,
+            "searchable": false,
+            "userEditable": false,
+            "description": null,
+            "minLength": null,
+            "isVirtual": false
+          },
           "Data": {
             "title": "Data",
             "type": "object",
@@ -41,7 +51,7 @@
                 "description": "Date and time at which the resource was created.",
                 "nullable": false
               },
-              " ": {
+              "Permission": {
                 "title": "Permission",
                 "type": "string",
                 "viewable": true,
@@ -118,7 +128,7 @@
                 "items" : {
                   "type" : "relationship",
                   "reverseRelationship" : true,
-                  "reversePropertyName" : "Domestic Scheduled Payment Intent",
+                  "reversePropertyName" : "domesticScheduledPaymentIntent",
                   "validate" : false,
                   "properties" : {
                     "_ref" : {
@@ -141,12 +151,7 @@
                       "label" : "charge",
                       "query" : {
                         "queryFilter" : "true",
-                        "fields" : [
-                          "id",
-                          "ChargeBearer",
-                          "Type",
-                          "Amount"
-                        ],
+                        "fields" : ["_id"],
                         "sortKeys" : [ ]
                       },
                       "notify" : false
@@ -649,61 +654,6 @@
                 ],
                 "description": "Supporting Data provided by TPP, when requesting SCA Exemption.",
                 "isVirtual": false
-              },
-              "Debtor": {
-                "title": "Debtor",
-                "type": "object",
-                "viewable": true,
-                "searchable": false,
-                "userEditable": true,
-                "properties": {
-                  "Identification": {
-                    "title": "Identification",
-                    "type": "string",
-                    "viewable": true,
-                    "searchable": false,
-                    "userEditable": true,
-                    "description": "Identification assigned by an institution to identify an account. This identification is known by the account owner.",
-                    "maxLength": 256,
-                    "isVirtual": false
-                  },
-                  "Name": {
-                    "title": "Name",
-                    "type": "string",
-                    "viewable": true,
-                    "searchable": false,
-                    "userEditable": true,
-                    "description": "Name of the account, as assigned by the account servicing institution.  Usage The account name is the name or names of the account owner(s) represented at an account level. The account name is not the product name or the nickname of the account.",
-                    "isVirtual": false
-                  },
-                  "SchemeName": {
-                    "title": "Scheme Name",
-                    "type": "string",
-                    "viewable": true,
-                    "searchable": false,
-                    "userEditable": true,
-                    "description": "Name of the identification scheme, in a coded form as published in an external list.",
-                    "isVirtual": false
-                  },
-                  "SecondaryIdentification": {
-                    "title": "Secondary Identification",
-                    "type": "string",
-                    "viewable": true,
-                    "searchable": false,
-                    "userEditable": true,
-                    "description": "This is secondary identification of the account, as assigned by the account servicing institution.  This can be used by building societies to additionally identify accounts with a roll number (in addition to a sort code and account number combination)",
-                    "maxLength": 34,
-                    "isVirtual": false
-                  }
-                },
-                "order": [
-                  "Identification",
-                  "Name",
-                  "SchemeName",
-                  "SecondaryIdentification"
-                ],
-                "description": "Set of elements used to identify a person or an organisation.",
-                "isVirtual": false
               }
             },
             "order": [
@@ -718,7 +668,6 @@
               "Permission",
               "Charges",
               "Initiation",
-              "Debtor",
               "Authorisation",
               "SCASupportData"
             ],
@@ -1074,6 +1023,7 @@
           }
         },
         "order": [
+          "_id",
           "Data",
           "Risk",
           "Links",

@@ -11,6 +11,16 @@
         "description": "Charge",
         "icon": "fa-money",
         "properties": {
+          "_id": {
+            "title": "Internal IDM Identifier",
+            "type": "string",
+            "viewable": true,
+            "searchable": false,
+            "userEditable": false,
+            "description": null,
+            "minLength": null,
+            "isVirtual": false
+          },
           "ChargeBearer": {
             "title": "Charge Bearer",
             "type": "string",
@@ -71,12 +81,59 @@
               "Currency"
             ],
             "nullable": false
+          },
+          "domesticScheduledPaymentIntent": {
+            "title": "Domestic Scheduled Payment Intent",
+            "type": "relationship",
+            "viewable": true,
+            "searchable": false,
+            "userEditable": false,
+            "returnByDefault": false,
+            "reverseRelationship": true,
+            "reversePropertyName": "Charges",
+            "validate": false,
+            "properties": {
+              "_ref": {
+                "type": "string"
+              },
+              "_refProperties": {
+                "type": "object",
+                "properties": {
+                  "_id": {
+                    "type": "string",
+                    "required": false,
+                    "propName": "_id"
+                  }
+                }
+              }
+            },
+            "resourceCollection": [
+              {
+                "path": "managed/domesticScheduledPaymentIntent",
+                "label": "domesticScheduledPaymentIntent",
+                "query": {
+                  "queryFilter": "true",
+                  "fields": ["_id"],
+                  "sortKeys": []
+                },
+                "notify": false
+              }
+            ],
+            "description": null,
+            "requiredByParent": false,
+            "isVirtual": false,
+            "notifySelf": false,
+            "referencedRelationshipFields": null,
+            "referencedObjectFields": null,
+            "deleteQueryConfig": false
           }
         },
         "order": [
+          "_id",
           "ChargeBearer",
           "Type",
-          "Amount"
+          "Amount",
+          "domesticScheduledPaymentIntent"
         ],
         "required": [
           "ChargeBearer",
