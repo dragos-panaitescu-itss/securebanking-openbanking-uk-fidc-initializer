@@ -112,8 +112,47 @@
                 "viewable": true,
                 "searchable": false,
                 "userEditable": true,
-                "items": {
-                  "type": "charge"
+                "isVirtual" : false,
+                "referencedRelationshipFields" : null,
+                "referencedObjectFields" : null,
+                "items" : {
+                  "type" : "relationship",
+                  "reverseRelationship" : true,
+                  "reversePropertyName" : "Domestic Scheduled Payment Intent",
+                  "validate" : false,
+                  "properties" : {
+                    "_ref" : {
+                      "type" : "string"
+                    },
+                    "_refProperties" : {
+                      "type" : "object",
+                      "properties" : {
+                        "_id" : {
+                          "type" : "string",
+                          "required" : false,
+                          "propName" : "_id"
+                        }
+                      }
+                    }
+                  },
+                  "resourceCollection" : [
+                    {
+                      "path" : "managed/charge",
+                      "label" : "charge",
+                      "query" : {
+                        "queryFilter" : "true",
+                        "fields" : [
+                          "id",
+                          "ChargeBearer",
+                          "Type",
+                          "Amount"
+                        ],
+                        "sortKeys" : [ ]
+                      },
+                      "notify" : false
+                    }
+                  ],
+                  "notifySelf" : false
                 }
               },
               "Initiation": {

@@ -21,7 +21,7 @@
             "isVirtual": false,
             "nullable": false
           },
-          "Type ": {
+          "Type": {
             "title": "Type",
             "type": "string",
             "viewable": true,
