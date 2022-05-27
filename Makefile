@@ -1,4 +1,4 @@
-service := secureopenbanking-uk-fidc-initializer
+service := secureopenbanking-uk-iam-initializer
 gcr-repo := sbat-gcr-develop
 
 .PHONY: all

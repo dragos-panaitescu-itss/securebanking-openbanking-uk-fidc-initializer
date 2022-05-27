@@ -144,15 +144,8 @@ There are a variables used before load the configuration file and these variable
 |----------------------------|--------------------------------|---------------------------------------------------------------------------|
 | `USERS.CDM_ADMIN_USERNAME` | amadmin                        | Identity platform Username with admin grants (must exist previously)      |
 | `USERS.CDM_ADMIN_PASSWORD` | add-here-the-user-password     | Identity platform User password with admin grants (must exist previously) |
-| `USERS.PSU_USERNAME`       | add-here-the-psu-user-name     | Psu Username to (It will be created)                                      |
-| `USERS.PSU_PASSWORD`       | add-here-the-psu-user-password | Psu user password (It will be created)                                    |
+
 </details>
-
-**Namespaces variables**
-
-| Environment variable | default                                              | description                                                     |
-|----------------------|------------------------------------------------------|-----------------------------------------------------------------|
-| `NAMESPACES`         | [ns-env-one, ns-env-two, github-developer-user-name] | Array of developer namespaces/environments to populate PSU data |
 
 ## Json Identify platform configuration files
 Identity Platform JSON files configuration can be added to the config/defaults/${type} directory under either the [additional](./config/defaults/managed-objects/additional) or [openbanking](./config/defaults/managed-objects/openbanking) path. The files must be json and the filenames must match the name of the managed object.
@@ -198,10 +191,6 @@ spec:
 ## Running tests
 The tests run against a mockserver which is supplied by [Pact](https://docs.pact.io/). It is used specifically to test internal logic rather than to verify the provider contract.
 running the `make test-ci` target will download the required binaries to be able to run the pact tests. this target is used for github actions but can work locally too (if you do not have the pact bonaries installed)
-
-## Temporary Patch
-Creation of PSU user on AM and populate the user data to RS service for each environment.
-- For functional test purposes @See /rs folder.
 
 ### Commands
 | Command             | description                                                                                                          |

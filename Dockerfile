@@ -1,6 +1,6 @@
 FROM alpine:3.13.0
 
-RUN apk --no-cache add curl libc6-compat
+RUN apk --no-cache add curl libc6-compat gcompat
 RUN addgroup -S sob-group && adduser -S sob-user -G sob-group
 
 RUN mkdir -p "/opt/sob/config"

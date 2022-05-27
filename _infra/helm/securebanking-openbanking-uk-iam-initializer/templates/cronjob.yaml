@@ -13,7 +13,7 @@ spec:
         spec:
           containers:
             - name: iam-init
-              image: eu.gcr.io/sbat-gcr-develop/securebanking/secureopenbanking-uk-fidc-initializer:latest
+              image: eu.gcr.io/sbat-gcr-develop/securebanking/secureopenbanking-uk-iam-initializer:latest
               imagePullPolicy: Always
               env:
                 - name: ENVIRONMENT.STRICT

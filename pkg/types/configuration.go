@@ -6,7 +6,6 @@ type Configuration struct {
 	Identity    identity    `mapstructure:"IDENTITY"`
 	Ig          ig          `mapstructure:"IG"`
 	Users       users       `mapstructure:"USERS"`
-	Namespaces  []string    `mapstructure:"NAMESPACES"`
 }
 
 type hosts struct {
@@ -54,6 +53,4 @@ type paths struct {
 type users struct {
 	CdmAdminUsername string `mapstructure:"CDM_ADMIN_USERNAME"`
 	CdmAdminPassword string `mapstructure:"CDM_ADMIN_PASSWORD"`
-	PsuUsername      string `mapstructure:"PSU_USERNAME"`
-	PsuPassword      string `mapstructure:"PSU_PASSWORD"`
 }
