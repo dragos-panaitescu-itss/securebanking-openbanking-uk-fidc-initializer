@@ -205,10 +205,15 @@ function getIdmAccessToken() {
 }
 
 function findIntentType(api) {
-    if (getRequestTypeAccountAndTransactions(api) != null)
+    if (getRequestTypeAccountAndTransactions(api) != null) {
         return "accountAccessIntent"
-    else if (api === "domestic-payments")
+    }
+    else if (api === "domestic-payments" || api === "domestic-payment-consents") {
         return "domesticPaymentIntent"
+    }
+    else if (api === "domestic-scheduled-payments" || api === "domestic-scheduled-payment-consents") {
+        return "domesticScheduledPaymentIntent"
+    }
     return null
 }
 
@@ -298,7 +303,7 @@ if (intentType === "accountAccessIntent") {
             dataAuthorised(permissions, apiRequest.data)
     }
 
-} else if (intentType === "domesticPaymentIntent") {
+} else if (intentType === "domesticPaymentIntent" || intentType === "domesticScheduledPaymentIntent") {
     logger.message(script_name + ": Domestic Payments Intent");
 
     var status = intent.Data.Status

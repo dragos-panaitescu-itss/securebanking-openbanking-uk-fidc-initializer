@@ -3,6 +3,7 @@
   "active": true,
   "description": "",
   "resources": [
+    "https://rs.*.forgerock.financial:443/open-banking/*/pisp/domestic-payment-consents/*/funds-confirmation",
     "https://rs.*.forgerock.financial:443/open-banking/*/pisp/domestic-payments",
     "https://rs.*.forgerock.financial:443/open-banking/*/pisp/domestic-payments/*",
     "https://rs.*.forgerock.financial:443/open-banking/*/pisp/domestic-payments/*/payment-details",
