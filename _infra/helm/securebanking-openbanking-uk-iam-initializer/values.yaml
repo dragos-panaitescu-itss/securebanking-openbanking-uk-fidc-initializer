@@ -7,6 +7,11 @@ cron: "* * * * *"
 environment:
   type: FIDC
   namespace: dev
+  # the subdomain on which the platform will be available, e.g. iam.<subdomain>.forgerock.financial
+  fr_platform:
+    fqdn: iam.dev.forgerock.financial
+  sbat: 
+    domain: dev.forgerock.financial
   
   # RaiseForStatus will exit if go resty returns an error in STRICT mode,
   # be it client error, server error or other. Turning off (false)

@@ -67,7 +67,6 @@ func CreateIGOAuth2Client() {
 		"Accept":           "application/json",
 		"Content-Type":     "application/json",
 		"Connection":       "keep-alive",
-		"X-Requested-With": "ForgeRock Identity Cloud Postman Collection",
 	})
 
 	zap.S().Infow("IG OAuth2 Client", "statusCode", s)

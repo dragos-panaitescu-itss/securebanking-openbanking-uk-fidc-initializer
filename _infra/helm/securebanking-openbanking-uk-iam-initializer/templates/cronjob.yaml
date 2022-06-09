@@ -33,21 +33,11 @@ spec:
                     configMapKeyRef:
                       name: securebanking-platform-config
                       key: IDENTITY_PLATFORM_FQDN
-                - name: HOSTS.RS_FQDN
-                  valueFrom:
-                    configMapKeyRef:
-                      name: securebanking-platform-config
-                      key: RS_FQDN
                 - name: HOSTS.RCS_UI_FQDN
                   valueFrom:
                     configMapKeyRef:
                       name: securebanking-platform-config
                       key: RCS_UI_FQDN
-                - name: HOSTS.IG_FQDN
-                  valueFrom:
-                    configMapKeyRef:
-                      name: securebanking-platform-config
-                      key: IG_FQDN
                 {{- if eq .Values.environment.type "FIDC" }}
                 - name: USERS.CDM_ADMIN_PASSWORD
                   valueFrom:
@@ -77,5 +67,5 @@ spec:
                   echo "IDM not ready"
                   sleep 10
                   done
-                  ./setup
+                  ./initialize
           restartPolicy: OnFailure

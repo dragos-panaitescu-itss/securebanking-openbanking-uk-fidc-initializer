@@ -1,5 +1,11 @@
 package types
 
+import "fmt"
+
+func ToStr(config Configuration) string {
+	return fmt.Sprintf("Config is %#v", config)
+}
+
 type Configuration struct {
 	Environment environment `mapstructure:"ENVIRONMENT"`
 	Hosts       hosts       `mapstructure:"HOSTS"`
@@ -9,8 +15,6 @@ type Configuration struct {
 }
 
 type hosts struct {
-	RsFQDN               string `mapstructure:"RS_FQDN"`
-	RcsFQDN              string `mapstructure:"RCS_FQDN"`
 	RcsUiFQDN            string `mapstructure:"RCS_UI_FQDN"`
 	IgFQDN               string `mapstructure:"IG_FQDN"`
 	IdentityPlatformFQDN string `mapstructure:"IDENTITY_PLATFORM_FQDN"`

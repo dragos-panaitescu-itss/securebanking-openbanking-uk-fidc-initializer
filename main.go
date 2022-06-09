@@ -123,6 +123,7 @@ func loadConfiguration() {
 		zap.S().Fatalw("Cannot load config:", "error", err)
 	}
 	config = common.Config
+	zap.S().Infof("Config is %s", types.ToStr(config))
 }
 
 func checks() {

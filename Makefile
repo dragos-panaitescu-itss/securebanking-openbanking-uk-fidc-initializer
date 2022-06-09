@@ -8,7 +8,7 @@ mod:
 	go mod download
 
 build: clean
-	go build -o setup
+	go build -o initialize
 
 test:
 	go test ./...
@@ -19,14 +19,14 @@ test-ci: mod
 	PATH=$(PATH):${localPath}/pact/bin go test ./...
 
 clean:
-	rm -f setup
+	rm -f initialize
 
 docker: clean mod
 ifndef tag
 	$(warning No tag supplied, latest assumed. supply tag with make docker tag=x.x.x service=...)
 	$(eval tag=latest)
 endif
-	env GOOS=linux GOARCH=amd64 go build -o setup
+	env GOOS=linux GOARCH=amd64 go build -o initialize
 	docker build -t eu.gcr.io/${gcr-repo}/securebanking/${service}:${tag} .
 	docker push eu.gcr.io/${gcr-repo}/securebanking/${service}:${tag}
 ifdef release-repo

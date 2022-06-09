@@ -5,14 +5,14 @@ metadata:
   name: securebanking-platform-config
 data:
   IG_FQDN: obdemo.dev.forgerock.financial
-  IDENTITY_PLATFORM_FQDN: iam.dev.forgerock.financial
+  IDENTITY_PLATFORM_FQDN: {{ .Values.environment.fr_platform.fqdn }}
   # CDK value: (Cloud Developer's Kit) development identity platform
   # CDM value: CDM (Cloud Deployment Model)
   # FIDC value: FIDC (Forgerock Identity Cloud) identity cloud platform
   ENVIRONMENT_TYPE: CDK
-  RS_FQDN: rs.dev.forgerock.financial
-  RCS_FQDN: rcs.dev.forgerock.financial
-  RCS_UI_FQDN: rcs-ui.dev.forgerock.financial
+  # The fully qualified domain on which the remote consent server that is to be used to gain consent from the user 
+  # will be available on. The ForgeRock platform must be configured to use this remote consent service.
+  RCS_UI_FQDN: rcs-ui.{{ .Values.environment.sbat.domain }}
   AM_REALM: alpha
   USER_OBJECT: user
   IG_CLIENT_ID: ig-client

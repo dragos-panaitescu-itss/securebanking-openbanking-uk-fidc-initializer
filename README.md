@@ -1,5 +1,10 @@
-## securebanking-openbanking-uk-fidc-initializer
+go mod download
+rm -f setup
+go build -o setupsecurebanking-openbanking-uk-fidc-initializer
+
 A service that configures an Identity platform to populate the secure open banking configuration for a secure banking deployment.
+
+**Note** this repository is still in active development. Please aim to check back often for updates. 
 
 ## Requirements
 
@@ -8,12 +13,73 @@ A service that configures an Identity platform to populate the secure open banki
 - [pact](https://github.com/pact-foundation/pact-go#installation-on-nix)
 
 ## Program configuration variables (environment program)
-The initializer has been build to populate the secure open banking configuration to Forgerock Identity platform to comply with:
-- [PSD2 directive](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32015L2366)
+The initializer configures an instance of the forgerock identity platform for use by the Secure Access Banking Toolkit (SBAT). In conjunction, the Internet Gateway deployed as part of the SBAT and the ForgeRock Identity Platform will address the requirements of;
+- [UK OpenBanking Specification](https://www.openbanking.org.uk/)
 - [Financial-grade API, Read and Write API Security Profile](https://standards.openbanking.org.uk/security-profiles/)
 
-The initializer application provides a default configuration yaml file (properties values to run de application), the default configuration yaml file is loaded using the [viper library](https://github.com/spf13/viper),
+
+
+## Building the Initializer
+
+To build the initializer you can use the make file;
+
+```bash
+$ make
+go mod download
+rm -f setup
+go build -o initialize
+```
+
+This will build an executable called `initialize` 
+
+### Build a docker image
+
+A Dockerfile is provided that will build a docker image based on the popular Alpine linux image. This can then be deployed into your SBAT environment as a Job and used to initialize your ForgeRock platform instance. 
+**Note:** The initializer is great for development environments, where it can be used to intialize a fresh ForgeRock platfrom as part of a CI/CD methodology. For production deployments, a GitOps approach to configuration may be more appropriate for your needs. 
+
+### Build the docker file
+
+The docker file can be built and pushed to your docker image registry (e.g. gcr, docker hub etc) using the docker build command;
+
+```bash
+$ export DOCKER_REPO=<your repo here>
+$ env GOOS=linux GOARCH=amd64 go build -o initialize
+$ docker build -t $DOCKER_REPO .
+$ docker push $DOCKER_REPO
+```
+
+## Deploying the Initializer
+
+The repository contains an example helm chart that can be used to deploy the intializer into kubernetes.
+
+Currently there are two helm charts. The one to use is the chart found in `_infra/helm/securebanking-openbanking-uk-iam-initializer`
+
+### Helm install
+
+In the example command below the iam initializer is being deployed into a namespace called local-dev-sbat where IG is running on a domain `https://sbat.openbanking.bigbank.com`. It is being used to configure an instance of the ForgeRock Identity Platform that is available at `https://iam.openbanking.bigbank.com`.
+
+```bash
+$ helm upgrade iam-init ./ --install --namespace local-dev-sbat \
+  --set-string environment.type=CDK \
+  --set-string environment.fr_platform.fqdn=iam.openbanking.bigbank.com
+  --set-string environment.sbat.domain=sbat.openbanking.bigbank.com --wait
+```
+
+
+
+## Initializer Configuration
+
+Other configuration that may be provided to the initializer;
+
+
+
+
+
+
+
+The initializer application provides a default configuration yaml file (properties values to run the application), the default configuration yaml file is loaded using the [viper library](https://github.com/spf13/viper),
 the initializer application supports a personalized configuration file (as a profile) that it can be personalized for each required environment following the below rules:
+
 - Path of environment file: `config/viper`
 - Pattern environment file name: `viper-${environment-profile.viper_config}-configuration.yaml`
 - Format configuration file (extension file): `yaml`
