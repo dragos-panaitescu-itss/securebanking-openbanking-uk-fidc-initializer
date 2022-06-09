@@ -68,14 +68,6 @@ $ helm upgrade iam-init ./ --install --namespace local-dev-sbat \
 
 ## Initializer Configuration
 
-Other configuration that may be provided to the initializer;
-
-| variable                                     | Default value                        | Description                                                                                                                                                                                                       |
-|----------------------------------------------|--------------------------------------|-----------------------------------------------------------------------------------------|
-| IG\_OAUTH2\_CLIENT_ID | ig-client | The name of the OAuth2 client that IG will use to authenticate to the identity platform. **note** This is only valid in the 
-
-
-
 
 
 The initializer application provides a default configuration yaml file (properties values to run the application), the default configuration yaml file is loaded using the [viper library](https://github.com/spf13/viper),
@@ -176,8 +168,8 @@ There are a variables used before load the configuration file and these variable
 
 | Environment variable   | default               | description                                |
 |------------------------|-----------------------|--------------------------------------------|
-| `IG.IG_CLIENT_ID`      | ig-client             | IG agent client                            |
-| `IG.IG_CLIENT_SECRET`  | add-here-the-password | IG agent password                          |
+| `IG.IG_CLIENT_ID`      | ig-client             | The initializer creates an OAuth2 Client that the SBAT IG will use to authenticate to the FR Platform to ensure that Api Client's can't bypass IG and use the FR Identity Platform APIs directly. The OAuth2 client will be created with this id|
+| `IG.IG_CLIENT_SECRET`  | add-here-the-password | The initializer creates an OAuth2 Client that the SBAT IG will use to authenticate to the FR Platform to ensure that Api Client's can't bypass IG and use the FR Identity Platform APIs directly. The OAuth2 client will be created with this password                          |
 | `IG.IG_RCS_SECRET`     | add-here-the-secret   | IG rcs secret for remote consent service   |
 | `IG.IG_SSA_SECRET`     | add-here-the-secret   | IG ssa secret for software publisher agent |
 | `IG.IG_IDM_USER`       | service_account.ig    | IG service user account                    |
