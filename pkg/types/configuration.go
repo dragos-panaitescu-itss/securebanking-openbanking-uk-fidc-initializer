@@ -55,6 +55,6 @@ type paths struct {
 }
 
 type users struct {
-	CdmAdminUsername string `mapstructure:"CDM_ADMIN_USERNAME"`
-	CdmAdminPassword string `mapstructure:"CDM_ADMIN_PASSWORD"`
+	CdmAdminUsername string `mapstructure:"FR_PLATFORM_ADMIN_USERNAME"`
+	CdmAdminPassword string `mapstructure:"FR_PLATFORM_ADMIN_PASSWORD"`
 }

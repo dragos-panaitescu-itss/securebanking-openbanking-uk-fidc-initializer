@@ -39,18 +39,18 @@ spec:
                       name: securebanking-platform-config
                       key: RCS_UI_FQDN
                 {{- if eq .Values.environment.type "FIDC" }}
-                - name: USERS.CDM_ADMIN_PASSWORD
+                - name: USERS.FR_PLATFORM_ADMIN_PASSWORD
                   valueFrom:
                     secretKeyRef:
                       name: initializer-secret
                       key: cdm-admin-password
-                - name: USERS.CDM_ADMIN_USERNAME
+                - name: USERS.FR_PLATFORM_ADMIN_USERNAME
                   valueFrom:
                     secretKeyRef:
                       name: initializer-secret
                       key: cdm-admin-user
                 {{- else }}
-                - name: USERS.CDM_ADMIN_PASSWORD
+                - name: USERS.FR_PLATFORM_ADMIN_PASSWORD
                   valueFrom:
                     secretKeyRef:
                       name: am-env-secrets

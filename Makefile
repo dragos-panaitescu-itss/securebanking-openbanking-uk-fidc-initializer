@@ -27,7 +27,7 @@ ifndef tag
 	$(eval tag=latest)
 endif
 	env GOOS=linux GOARCH=amd64 go build -o initialize
-	docker build -t eu.gcr.io/${gcr-repo}/securebanking/${service}:${tag} .
+	docker buildx build --platform linux/amd64  -t eu.gcr.io/${gcr-repo}/securebanking/${service}:${tag} .
 	docker push eu.gcr.io/${gcr-repo}/securebanking/${service}:${tag}
 ifdef release-repo
 	docker tag eu.gcr.io/${gcr-repo}/securebanking/${service}:${tag} eu.gcr.io/${release-repo}/securebanking/${service}:${tag}

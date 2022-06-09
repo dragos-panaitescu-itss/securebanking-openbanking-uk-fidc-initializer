@@ -66,12 +66,13 @@ $ helm upgrade iam-init ./ --install --namespace local-dev-sbat \
 ```
 
 
-
 ## Initializer Configuration
 
 Other configuration that may be provided to the initializer;
 
-
+| variable                                     | Default value                        | Description                                                                                                                                                                                                       |
+|----------------------------------------------|--------------------------------------|-----------------------------------------------------------------------------------------|
+| IG\_OAUTH2\_CLIENT_ID | ig-client | The name of the OAuth2 client that IG will use to authenticate to the identity platform. **note** This is only valid in the 
 
 
 
@@ -208,8 +209,8 @@ There are a variables used before load the configuration file and these variable
 
 | Environment variable       | default                        | description                                                               |
 |----------------------------|--------------------------------|---------------------------------------------------------------------------|
-| `USERS.CDM_ADMIN_USERNAME` | amadmin                        | Identity platform Username with admin grants (must exist previously)      |
-| `USERS.CDM_ADMIN_PASSWORD` | add-here-the-user-password     | Identity platform User password with admin grants (must exist previously) |
+| `USERS.FR_PLATFORM_ADMIN_USERNAME` | amadmin                        | Identity platform Username with admin grants (must exist previously)      |
+| `USERS.FR_PLATFROM_ADMIN_PASSWORD` | add-here-the-user-password     | Identity platform User password with admin grants (must exist previously) |
 
 </details>
 
