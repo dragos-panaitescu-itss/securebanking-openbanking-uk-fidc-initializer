@@ -1,4 +1,4 @@
-{{- if eq .Values.environment.type "CDK" }}
+{{- if eq .Values.environment.fr_platform.type "CDK" }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -9,10 +9,10 @@ data:
   # CDK value: (Cloud Developer's Kit) development identity platform
   # CDM value: CDM (Cloud Deployment Model)
   # FIDC value: FIDC (Forgerock Identity Cloud) identity cloud platform
-  ENVIRONMENT_TYPE: CDK
+  ENVIRONMENT_TYPE: {{ .Values.environment.fr_platform.type }}
   # The fully qualified domain on which the remote consent server that is to be used to gain consent from the user 
   # will be available on. The ForgeRock platform must be configured to use this remote consent service.
-  RCS_UI_FQDN: rcs-ui.{{ .Values.environment.sbat.domain }}
+  RCS_UI_FQDN: rcs-ui.{{ .Values.environment.sbat.fqdn }}
   AM_REALM: alpha
   USER_OBJECT: user
   IG_CLIENT_ID: ig-client
