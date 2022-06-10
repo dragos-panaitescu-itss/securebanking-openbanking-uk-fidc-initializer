@@ -210,6 +210,16 @@
                     "searchable": false,
                     "userEditable": true,
                     "properties": {
+                      "AccountId": {
+                        "title": "Account id",
+                        "type": "string",
+                        "viewable": true,
+                        "searchable": true,
+                        "userEditable": true,
+                        "description": "Account id",
+                        "minLength": null,
+                        "isVirtual": false
+                      },
                       "Identification": {
                         "title": "Identification",
                         "type": "string",
@@ -252,6 +262,7 @@
                       }
                     },
                     "order": [
+                      "AccountId",
                       "SchemeName",
                       "Identification",
                       "Name",
