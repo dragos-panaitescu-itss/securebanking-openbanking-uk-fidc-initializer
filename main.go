@@ -7,7 +7,6 @@ import (
 	"secure-banking-uk-initializer/pkg/common"
 	"secure-banking-uk-initializer/pkg/httprest"
 	platform "secure-banking-uk-initializer/pkg/identity-platform"
-	"secure-banking-uk-initializer/pkg/rs"
 	"secure-banking-uk-initializer/pkg/securebanking"
 	"secure-banking-uk-initializer/pkg/types"
 	"strconv"
@@ -53,13 +52,19 @@ func main() {
 	checkValidPlatformCert()
 	session := getIdentityPlatformSession()
 
-	// operation not supported on CDM (identity cloud platform)
+	// operation not supported on FIDC (identity cloud platform)
 	createIdentityPlatformOAuth2AdminClient(session)
+
+	//Make CDK looks like FIDC
 	createRealm(session, types.Realms.Instance().ALPHA)
+	//configure Identity platofrm (both CDK and FIDC) with non speicifc OB config
 	createServerConfig(session)
 
 	fmt.Println("Resty initialization....")
+
+	//get IDM auth code
 	session.Authenticate()
+	//to obtain cookies values
 	httprest.InitRestReaderWriter(session.Cookie, session.AuthToken.AccessToken)
 
 	fmt.Println("Attempt PSD2 authentication trees initialization...")
@@ -86,9 +91,6 @@ func main() {
 	platform.CreateIGServiceUser()
 	platform.CreateIGOAuth2Client()
 	platform.CreateIGPolicyAgent()
-	// Create and populate data for PSU user
-	userId := rs.CreatePSU()
-	rs.PopulateRSData(userId)
 
 	platform.ApplySystemClients(session.Cookie)
 
@@ -121,6 +123,7 @@ func loadConfiguration() {
 		zap.S().Fatalw("Cannot load config:", "error", err)
 	}
 	config = common.Config
+	zap.S().Infof("Config is %s", types.ToStr(config))
 }
 
 func checks() {
@@ -154,6 +157,8 @@ func getIdentityPlatformSession() *common.Session {
 	return platform.FromUserSession(c)
 }
 
+//This creates an admin user in CDK deployment that can be used to create new config. THis does not run when initializer is run against
+// FIDC
 func createIdentityPlatformOAuth2AdminClient(session *common.Session) {
 	// operation not supported on CDM (identity cloud platform)
 	if config.Environment.Type == types.Platform.Instance().CDK {
@@ -171,6 +176,9 @@ func createRealm(session *common.Session, realmName string) {
 	}
 }
 
+//sets org.forgerock.http.TrustTransactionHeader to true in AM's
+//https://<domain>/am/ui-admin/#configure/serverDefaults/advanced config
+//This makes AM trust the x-forgerock-transactionod header provided by IG and allows us to trace a trquest through their system
 func createServerConfig(session *common.Session) {
 	platform.CreateServerConfig(session.Cookie)
 }

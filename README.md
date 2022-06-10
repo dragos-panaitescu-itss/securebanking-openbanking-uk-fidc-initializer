@@ -1,5 +1,10 @@
-## securebanking-openbanking-uk-fidc-initializer
+go mod download
+rm -f setup
+go build -o setupsecurebanking-openbanking-uk-fidc-initializer
+
 A service that configures an Identity platform to populate the secure open banking configuration for a secure banking deployment.
+
+**Note** this repository is still in active development. Please aim to check back often for updates. 
 
 ## Requirements
 
@@ -8,12 +13,66 @@ A service that configures an Identity platform to populate the secure open banki
 - [pact](https://github.com/pact-foundation/pact-go#installation-on-nix)
 
 ## Program configuration variables (environment program)
-The initializer has been build to populate the secure open banking configuration to Forgerock Identity platform to comply with:
-- [PSD2 directive](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32015L2366)
+The initializer configures an instance of the forgerock identity platform for use by the Secure Access Banking Toolkit (SBAT). In conjunction, the Internet Gateway deployed as part of the SBAT and the ForgeRock Identity Platform will address the requirements of;
+- [UK OpenBanking Specification](https://www.openbanking.org.uk/)
 - [Financial-grade API, Read and Write API Security Profile](https://standards.openbanking.org.uk/security-profiles/)
 
-The initializer application provides a default configuration yaml file (properties values to run de application), the default configuration yaml file is loaded using the [viper library](https://github.com/spf13/viper),
+
+
+## Building the Initializer
+
+To build the initializer you can use the make file;
+
+```bash
+$ make
+go mod download
+rm -f setup
+go build -o initialize
+```
+
+This will build an executable called `initialize` 
+
+### Build a docker image
+
+A Dockerfile is provided that will build a docker image based on the popular Alpine linux image. This can then be deployed into your SBAT environment as a Job and used to initialize your ForgeRock platform instance. 
+**Note:** The initializer is great for development environments, where it can be used to intialize a fresh ForgeRock platfrom as part of a CI/CD methodology. For production deployments, a GitOps approach to configuration may be more appropriate for your needs. 
+
+### Build the docker file
+
+The docker file can be built and pushed to your docker image registry (e.g. gcr, docker hub etc) using the docker build command;
+
+```bash
+$ export DOCKER_REPO=<your repo here>
+$ env GOOS=linux GOARCH=amd64 go build -o initialize
+$ docker build -t $DOCKER_REPO .
+$ docker push $DOCKER_REPO
+```
+
+## Deploying the Initializer
+
+The repository contains an example helm chart that can be used to deploy the intializer into kubernetes.
+
+Currently there are two helm charts. The one to use is the chart found in `_infra/helm/securebanking-openbanking-uk-iam-initializer`
+
+### Helm install
+
+In the example command below the iam initializer is being deployed into a namespace called local-dev-sbat where IG is running on a domain `https://sbat.openbanking.bigbank.com`. It is being used to configure an instance of the ForgeRock Identity Platform that is available at `https://iam.openbanking.bigbank.com`.
+
+```bash
+$ helm upgrade iam-init ./ --install --namespace local-dev-sbat \
+  --set-string environment.type=CDK \
+  --set-string environment.fr_platform.fqdn=iam.openbanking.bigbank.com
+  --set-string environment.sbat.domain=sbat.openbanking.bigbank.com --wait
+```
+
+
+## Initializer Configuration
+
+
+
+The initializer application provides a default configuration yaml file (properties values to run the application), the default configuration yaml file is loaded using the [viper library](https://github.com/spf13/viper),
 the initializer application supports a personalized configuration file (as a profile) that it can be personalized for each required environment following the below rules:
+
 - Path of environment file: `config/viper`
 - Pattern environment file name: `viper-${environment-profile.viper_config}-configuration.yaml`
 - Format configuration file (extension file): `yaml`
@@ -109,8 +168,8 @@ There are a variables used before load the configuration file and these variable
 
 | Environment variable   | default               | description                                |
 |------------------------|-----------------------|--------------------------------------------|
-| `IG.IG_CLIENT_ID`      | ig-client             | IG agent client                            |
-| `IG.IG_CLIENT_SECRET`  | add-here-the-password | IG agent password                          |
+| `IG.IG_CLIENT_ID`      | ig-client             | The initializer creates an OAuth2 Client that the SBAT IG will use to authenticate to the FR Platform to ensure that Api Client's can't bypass IG and use the FR Identity Platform APIs directly. The OAuth2 client will be created with this id|
+| `IG.IG_CLIENT_SECRET`  | add-here-the-password | The initializer creates an OAuth2 Client that the SBAT IG will use to authenticate to the FR Platform to ensure that Api Client's can't bypass IG and use the FR Identity Platform APIs directly. The OAuth2 client will be created with this password                          |
 | `IG.IG_RCS_SECRET`     | add-here-the-secret   | IG rcs secret for remote consent service   |
 | `IG.IG_SSA_SECRET`     | add-here-the-secret   | IG ssa secret for software publisher agent |
 | `IG.IG_IDM_USER`       | service_account.ig    | IG service user account                    |
@@ -142,17 +201,10 @@ There are a variables used before load the configuration file and these variable
 
 | Environment variable       | default                        | description                                                               |
 |----------------------------|--------------------------------|---------------------------------------------------------------------------|
-| `USERS.CDM_ADMIN_USERNAME` | amadmin                        | Identity platform Username with admin grants (must exist previously)      |
-| `USERS.CDM_ADMIN_PASSWORD` | add-here-the-user-password     | Identity platform User password with admin grants (must exist previously) |
-| `USERS.PSU_USERNAME`       | add-here-the-psu-user-name     | Psu Username to (It will be created)                                      |
-| `USERS.PSU_PASSWORD`       | add-here-the-psu-user-password | Psu user password (It will be created)                                    |
+| `USERS.FR_PLATFORM_ADMIN_USERNAME` | amadmin                        | Identity platform Username with admin grants (must exist previously)      |
+| `USERS.FR_PLATFROM_ADMIN_PASSWORD` | add-here-the-user-password     | Identity platform User password with admin grants (must exist previously) |
+
 </details>
-
-**Namespaces variables**
-
-| Environment variable | default                                              | description                                                     |
-|----------------------|------------------------------------------------------|-----------------------------------------------------------------|
-| `NAMESPACES`         | [ns-env-one, ns-env-two, github-developer-user-name] | Array of developer namespaces/environments to populate PSU data |
 
 ## Json Identify platform configuration files
 Identity Platform JSON files configuration can be added to the config/defaults/${type} directory under either the [additional](./config/defaults/managed-objects/additional) or [openbanking](./config/defaults/managed-objects/openbanking) path. The files must be json and the filenames must match the name of the managed object.
@@ -198,10 +250,6 @@ spec:
 ## Running tests
 The tests run against a mockserver which is supplied by [Pact](https://docs.pact.io/). It is used specifically to test internal logic rather than to verify the provider contract.
 running the `make test-ci` target will download the required binaries to be able to run the pact tests. this target is used for github actions but can work locally too (if you do not have the pact bonaries installed)
-
-## Temporary Patch
-Creation of PSU user on AM and populate the user data to RS service for each environment.
-- For functional test purposes @See /rs folder.
 
 ### Commands
 | Command             | description                                                                                                          |

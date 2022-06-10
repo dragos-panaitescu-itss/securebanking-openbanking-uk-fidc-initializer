@@ -46,11 +46,11 @@ func CreateIGServiceUser() {
 // CreateIGOAuth2Client -
 func CreateIGOAuth2Client() {
 	if httprest.AlphaClientsExist(common.Config.Ig.IgClientId) {
-		zap.L().Info("Skipping creation of IG oauth2 client")
+		zap.S().Infof("Skipping creation of IG Oauth2 client. OAuth2 client %s already exists", common.Config.Ig.IgClientId)
 		return
 	}
 
-	zap.L().Info("Creating IG OAuth2 client")
+	zap.S().Infof("Creating IG OAuth2 client with id %s", common.Config.Ig.IgClientId)
 	b, err := ioutil.ReadFile(common.Config.Environment.Paths.ConfigIdentityPlatform + "ig-oauth2-client.json")
 	if err != nil {
 		panic(err)
@@ -64,10 +64,9 @@ func CreateIGOAuth2Client() {
 	oauth2Client.CoreOAuth2ClientConfig.Userpassword = common.Config.Ig.IgClientSecret
 	path := fmt.Sprintf("/am/json/alpha/realm-config/agents/OAuth2Client/%s", common.Config.Ig.IgClientId)
 	s := httprest.Client.Put(path, oauth2Client, map[string]string{
-		"Accept":           "application/json",
-		"Content-Type":     "application/json",
-		"Connection":       "keep-alive",
-		"X-Requested-With": "ForgeRock Identity Cloud Postman Collection",
+		"Accept":       "application/json",
+		"Content-Type": "application/json",
+		"Connection":   "keep-alive",
 	})
 
 	zap.S().Infow("IG OAuth2 Client", "statusCode", s)

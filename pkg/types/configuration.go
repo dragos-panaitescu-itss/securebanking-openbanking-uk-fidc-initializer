@@ -1,17 +1,20 @@
 package types
 
+import "fmt"
+
+func ToStr(config Configuration) string {
+	return fmt.Sprintf("Config is %#v", config)
+}
+
 type Configuration struct {
 	Environment environment `mapstructure:"ENVIRONMENT"`
 	Hosts       hosts       `mapstructure:"HOSTS"`
 	Identity    identity    `mapstructure:"IDENTITY"`
 	Ig          ig          `mapstructure:"IG"`
 	Users       users       `mapstructure:"USERS"`
-	Namespaces  []string    `mapstructure:"NAMESPACES"`
 }
 
 type hosts struct {
-	RsFQDN               string `mapstructure:"RS_FQDN"`
-	RcsFQDN              string `mapstructure:"RCS_FQDN"`
 	RcsUiFQDN            string `mapstructure:"RCS_UI_FQDN"`
 	IgFQDN               string `mapstructure:"IG_FQDN"`
 	IdentityPlatformFQDN string `mapstructure:"IDENTITY_PLATFORM_FQDN"`
@@ -52,8 +55,6 @@ type paths struct {
 }
 
 type users struct {
-	CdmAdminUsername string `mapstructure:"CDM_ADMIN_USERNAME"`
-	CdmAdminPassword string `mapstructure:"CDM_ADMIN_PASSWORD"`
-	PsuUsername      string `mapstructure:"PSU_USERNAME"`
-	PsuPassword      string `mapstructure:"PSU_PASSWORD"`
+	CdmAdminUsername string `mapstructure:"FR_PLATFORM_ADMIN_USERNAME"`
+	CdmAdminPassword string `mapstructure:"FR_PLATFORM_ADMIN_PASSWORD"`
 }
