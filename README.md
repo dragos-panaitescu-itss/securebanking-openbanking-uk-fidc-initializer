@@ -1,23 +1,18 @@
-go mod download
-rm -f setup
-go build -o setupsecurebanking-openbanking-uk-fidc-initializer
-
-A service that configures an Identity platform to populate the secure open banking configuration for a secure banking deployment.
+# securebanking-openbanking-uk-fidc-initializer
 
 **Note** this repository is still in active development. Please aim to check back often for updates. 
+
+The *securebanking-openbanking-uk-fidc-initializer* configures an instance of the [ForgeRock identity platform](https://www.forgerock.com/identity-and-access-management-platform) for use by the [Secure Banking Access Toolkit (SBAT)](https://github.com/SecureBankingAccessToolkit/SecureBankingAccessToolkit/wiki). The combination of an SBAT deployment and the ForgeRock Identity Platform will address the requirements of;
+- [UK OpenBanking Specification](https://www.openbanking.org.uk/)
+- [Financial-grade API, Read and Write API Security Profile](https://standards.openbanking.org.uk/security-profiles/)
+
+To understand how this initializer fits into the Secure Banking Access Toolkit please check out the SBAT documentation [here](https://github.com/SecureBankingAccessToolkit/SecureBankingAccessToolkit/wiki).
 
 ## Requirements
 
 - [go 1.15](https://golang.org/doc/install)
 - configure [gopath](https://golang.org/doc/gopath_code.html#GOPATH)
 - [pact](https://github.com/pact-foundation/pact-go#installation-on-nix)
-
-## Program configuration variables (environment program)
-The initializer configures an instance of the forgerock identity platform for use by the Secure Access Banking Toolkit (SBAT). In conjunction, the Internet Gateway deployed as part of the SBAT and the ForgeRock Identity Platform will address the requirements of;
-- [UK OpenBanking Specification](https://www.openbanking.org.uk/)
-- [Financial-grade API, Read and Write API Security Profile](https://standards.openbanking.org.uk/security-profiles/)
-
-
 
 ## Building the Initializer
 
@@ -64,6 +59,18 @@ $ helm upgrade iam-init ./ --install --namespace local-dev-sbat \
   --set-string environment.fr_platform.fqdn=iam.openbanking.bigbank.com
   --set-string environment.sbat.domain=sbat.openbanking.bigbank.com --wait
 ```
+
+### Helm Chart Values
+
+The following values may be supplied when installing/upgrading:
+
+| variable                       | Required | Default value | Description                                                  |
+| ------------------------------ | -------- | ------------- | ------------------------------------------------------------ |
+| iam_initializer_image_location | yes      | None          | The location of the docker image                             |
+| environment.fr_platform.fqdn   | yes      | None          | The Fully Qualified domain name on which the ForgeRock Identity Platform may be reached, e.g. iam.openbanking.bigbank.com |
+| environment.fr_platform.type   | no       | FIDC           | The type of ForgeRock Platform Deployment. Value values are:<br>- **CDK:** deploying against a deployment of the forgeops CDK<br>- **FIDC:** Deploying against a ForgeRock Identity Cloud instance |
+| environment.sbat.projectId     | yes      | None          | The GCP project in which the SBAT is deployed        |
+| environment.sbat.fqdn          | yes      | None          | The fqdn on which the SBAT components are deployed   |
 
 
 ## Initializer Configuration
