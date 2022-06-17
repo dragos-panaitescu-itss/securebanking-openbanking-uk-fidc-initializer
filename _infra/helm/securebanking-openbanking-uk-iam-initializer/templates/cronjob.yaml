@@ -13,7 +13,7 @@ spec:
         spec:
           containers:
             - name: iam-init
-              image: eu.gcr.io/sbat-gcr-develop/securebanking/secureopenbanking-uk-iam-initializer:latest
+              image: {{ tpl .Values.iam_initializer_image_location . }}
               imagePullPolicy: Always
               env:
                 - name: ENVIRONMENT.STRICT
@@ -38,17 +38,17 @@ spec:
                     configMapKeyRef:
                       name: securebanking-platform-config
                       key: RCS_UI_FQDN
-                {{- if eq .Values.environment.type "FIDC" }}
+                {{- if eq .Values.environment.fr_platform.type "FIDC" }}
                 - name: USERS.FR_PLATFORM_ADMIN_PASSWORD
                   valueFrom:
                     secretKeyRef:
                       name: initializer-secret
-                      key: cdm-admin-password
+                      key: fr-platform-admin-password
                 - name: USERS.FR_PLATFORM_ADMIN_USERNAME
                   valueFrom:
                     secretKeyRef:
                       name: initializer-secret
-                      key: cdm-admin-user
+                      key: fr-platform-admin-user
                 {{- else }}
                 - name: USERS.FR_PLATFORM_ADMIN_PASSWORD
                   valueFrom:
