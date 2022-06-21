@@ -321,6 +321,13 @@ func CreateBaseURLSourceService(cookie *http.Cookie) {
 	if err != nil {
 		panic(err)
 	}
+	bus := &types.BaseUrlSource{}
+	err = json.Unmarshal(b, bus)
+	bus.FixedValue = fmt.Sprintf("https://%s", common.Config.Hosts.IdentityPlatformFQDN)
+	b, err = json.Marshal(bus)
+	if err != nil {
+		panic(err)
+	}
 	path := fmt.Sprintf("https://%s/am/json/realms/root/realms/alpha/realm-config/services/baseurl?_action=create", common.Config.Hosts.IdentityPlatformFQDN)
 	resp, err := restClient.R().
 		SetHeader("Accept", "application/json").

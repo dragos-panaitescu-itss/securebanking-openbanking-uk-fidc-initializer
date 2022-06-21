@@ -170,3 +170,12 @@ type OAuth2Provider struct {
 	ID                              string                          `json:"_id"`
 	Type                            Type                            `json:"_type"`
 }
+
+type BaseUrlSource struct {
+	ExtensionClassName string `json:"extensionClassName"`
+	Source             string `json:"source"`
+	FixedValue         string `json:"fixedValue"`
+	ContextPath        string `json:"contextPath"`
+	ID                 string `json:"_id"`
+	Type               Type   `json:"_type"`
+}
