@@ -2,17 +2,19 @@ package common
 
 import (
 	"fmt"
-	"github.com/go-resty/resty/v2"
-	"go.uber.org/zap"
 	"net/http"
 	"net/url"
+
+	"github.com/go-resty/resty/v2"
+	"go.uber.org/zap"
 )
 
 // Session containing the access token and cookie
 type Session struct {
-	authCode  string
-	AuthToken AdminToken
-	Cookie    *http.Cookie
+	authCode     string
+	codeVerifier string
+	AuthToken    AdminToken
+	Cookie       *http.Cookie
 }
 
 // AdminToken returned by IDM
@@ -37,6 +39,10 @@ func (s *Session) Authenticate() (*http.Cookie, string) {
 func (s *Session) GetIDMAdminAuthCode() {
 	zap.L().Info("Getting Identity Platform admin auth code")
 	path := fmt.Sprintf("https://%s/am/oauth2/authorize", Config.Hosts.IdentityPlatformFQDN)
+	// Use a generated verifier and challenge
+	verifier, _ := CreateCodeVerifierWithLength(50)
+	s.codeVerifier = verifier.String()
+	codeChallenge := verifier.CodeChallengeS256()
 	resp, err := client.R().
 		SetHeader("Accept", "*/*").
 		SetQueryParams(map[string]string{
@@ -44,7 +50,7 @@ func (s *Session) GetIDMAdminAuthCode() {
 			"client_id":             "idmAdminClient",
 			"response_type":         "code",
 			"scope":                 "fr:idm:*",
-			"code_challenge":        "gX2yL78GGlz3QHsQZKPf96twOmUBKxn1-IXPd5_EHdA",
+			"code_challenge":        codeChallenge,
 			"code_challenge_method": "S256",
 		}).
 		SetCookie(s.Cookie).
@@ -62,7 +68,7 @@ func (s *Session) GetIDMAdminAuthCode() {
 		zap.S().Fatalw("Error parsing location header", "statusCode", resp.StatusCode(), "error", err)
 	}
 	zap.S().Infow("Got Location header from IDM", "Location", v)
-	authCode := v["https://"+Config.Hosts.IdentityPlatformFQDN+"/platform/appAuthHelperRedirect.html?code"][0]
+	authCode := v[fmt.Sprintf("https://%s/platform/appAuthHelperRedirect.html?code", Config.Hosts.IdentityPlatformFQDN)][0]
 	s.authCode = authCode
 }
 
@@ -81,7 +87,7 @@ func (s *Session) GetIDMAdminToken() {
 			"redirect_uri":  fmt.Sprintf("https://%s/platform/appAuthHelperRedirect.html", Config.Hosts.IdentityPlatformFQDN),
 			"client_id":     "idmAdminClient",
 			"code":          s.authCode,
-			"code_verifier": "codeverifier",
+			"code_verifier": s.codeVerifier,
 		}).
 		Post(path)
 
