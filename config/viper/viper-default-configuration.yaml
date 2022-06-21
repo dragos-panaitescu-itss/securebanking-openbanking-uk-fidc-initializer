@@ -16,6 +16,7 @@ ENVIRONMENT: # Root key to define the environment program properties
     CONFIG_SECURE_BANKING: config/defaults/secure-open-banking/ # Path folder for secure banking
     CONFIG_IDENTITY_PLATFORM: config/defaults/identity-platform/ # Path folder for generic platform configuration
 HOSTS:
+  BASE_DOMAIN: "*.forgerock.financial" # Used as the base path for rs fqdns
   IDENTITY_PLATFORM_FQDN: iam.dev.forgerock.financial # Identity platform Host name
   RCS_UI_FQDN: rcs-ui.dev.forgerock.financial # RCS user interface app host name (Consent user app)
   SCHEME: https # URI scheme, Syntax part of a generic URI
@@ -37,5 +38,5 @@ IDENTITY: # Root key for parameter values related with identity platform configu
   OBRI_SOFTWARE_PUBLISHER_AGENT_NAME: OBRI # software publisher agent name
   TEST_SOFTWARE_PUBLISHER_AGENT_NAME: test-publisher # test software publisher agent
 USERS: # Root key users to be created or to authenticate and authorize flows
-  FR_PLATFORM_ADMIN_USERNAME: amadmin     # Identity platform Username with admin grants (must exist previously)
-  FR_PLATFORM_ADMIN_PASSWORD: replace-me  # Identity platform User password with admin grants (must exist previously)
+  FR_PLATFORM_ADMIN_USERNAME: amadmin # Identity platform Username with admin grants (must exist previously)
+  FR_PLATFORM_ADMIN_PASSWORD: replace-me # Identity platform User password with admin grants (must exist previously)

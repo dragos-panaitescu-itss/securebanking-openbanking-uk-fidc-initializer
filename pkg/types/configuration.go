@@ -15,6 +15,7 @@ type Configuration struct {
 }
 
 type hosts struct {
+	BaseDomain           string `mapstructure:"BASE_DOMAIN"`
 	RcsUiFQDN            string `mapstructure:"RCS_UI_FQDN"`
 	IgFQDN               string `mapstructure:"IG_FQDN"`
 	IdentityPlatformFQDN string `mapstructure:"IDENTITY_PLATFORM_FQDN"`
