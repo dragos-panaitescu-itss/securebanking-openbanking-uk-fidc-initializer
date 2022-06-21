@@ -10,8 +10,9 @@ import (
 	"secure-banking-uk-initializer/pkg/types"
 	"strings"
 
-	"go.uber.org/zap"
 	"secure-banking-uk-initializer/pkg/common"
+
+	"go.uber.org/zap"
 )
 
 // CreatePolicyServiceUser -
@@ -130,6 +131,11 @@ func CreateAISPPolicy(policyScriptId string) {
 	if err != nil {
 		panic(err)
 	}
+	var resources []string
+	for _, s := range aisp.Resources {
+		resources = append(resources, strings.ReplaceAll(s, "{{HOSTS.BASE_DOMAIN}}", common.Config.Hosts.BaseDomain))
+	}
+	aisp.Resources = resources
 	aisp.Condition.ScriptID = policyScriptId
 	path := "/am/json/alpha/policies/?_action=create"
 	_, s := httprest.Client.Post(path, aisp, map[string]string{
@@ -158,6 +164,11 @@ func CreatePISPPolicy(policyScriptId string) {
 	if err != nil {
 		panic(err)
 	}
+	var resources []string
+	for _, s := range pisp.Resources {
+		resources = append(resources, strings.ReplaceAll(s, "{{HOSTS.BASE_DOMAIN}}", common.Config.Hosts.BaseDomain))
+	}
+	pisp.Resources = resources
 	pisp.Condition.ScriptID = policyScriptId
 	zap.S().Infow("PISP Policy", "policy", pisp)
 	path := "/am/json/alpha/policies/?_action=create"
