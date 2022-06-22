@@ -1,9 +1,14 @@
 package common
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
+	"html/template"
 	"net/http"
 	"net/url"
+	"path/filepath"
+	"secure-banking-uk-initializer/pkg/types"
 
 	"github.com/go-resty/resty/v2"
 	"go.uber.org/zap"
@@ -94,4 +99,26 @@ func (s *Session) GetIDMAdminToken() {
 	RaiseForStatus(err, resp.Error(), resp.StatusCode())
 
 	s.AuthToken = *token
+}
+
+//
+// Unmarshals the file into v after substituting the values of config.
+//
+// Substitution is performed using syntax as described in: https://pkg.go.dev/text/template
+//
+func Unmarshal(file string, config *types.Configuration, v any) error {
+	var err error
+	var b []byte
+	buf := bytes.NewBuffer(b)
+	tmpl, err := template.New(filepath.Base(file)).ParseFiles(file)
+	if err != nil {
+		return err
+	}
+	if err = tmpl.Execute(buf, config); err != nil {
+		return err
+	}
+	if err = json.Unmarshal(b, v); err != nil {
+		return err
+	}
+	return err
 }
