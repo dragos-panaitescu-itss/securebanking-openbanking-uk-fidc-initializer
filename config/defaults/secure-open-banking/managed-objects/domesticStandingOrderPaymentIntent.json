@@ -51,12 +51,12 @@
                 "nullable": false
               },
               "Status": {
-                "title": "Scheduled Payment Intent Status",
+                "title": "Standing Order Payment Intent Status",
                 "type": "string",
                 "viewable": true,
                 "searchable": true,
                 "userEditable": true,
-                "description": "Scheduled Payment Intent Status",
+                "description": "Standing Order Payment Intent Status",
                 "isVirtual": false,
                 "nullable": false
               },
@@ -443,7 +443,7 @@
                   "CreditorAccount",
                   "FirstPaymentAmount"
                 ],
-                "description": "The Initiation payload is sent by the initiating party to the ASPSP. It is used to request movement of funds from the debtor account to a creditor for a single scheduled domestic payment.",
+                "description": "The Initiation payload is sent by the initiating party to the ASPSP. It is used to request movement of funds from the debtor account to a creditor for a single standing order domestic payment.",
                 "isVirtual": false,
                 "nullable": false
               },
@@ -873,7 +873,7 @@
             "userEditable": false,
             "returnByDefault": false,
             "reverseRelationship": true,
-            "reversePropertyName": "domesticScheduledPaymentIntents",
+            "reversePropertyName": "domesticStandingOrderPaymentIntents",
             "validate": false,
             "properties": {
               "_ref": {
@@ -914,7 +914,7 @@
             "userEditable": false,
             "returnByDefault": false,
             "reverseRelationship": true,
-            "reversePropertyName": "domesticScheduledPaymentIntents",
+            "reversePropertyName": "domesticStandingOrderPaymentIntents",
             "validate": false,
             "properties": {
               "_ref": {
