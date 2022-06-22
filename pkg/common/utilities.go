@@ -1,11 +1,17 @@
 package common
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
-	"github.com/go-resty/resty/v2"
-	"go.uber.org/zap"
 	"net/http"
 	"net/url"
+	"path/filepath"
+	"secure-banking-uk-initializer/pkg/types"
+	"text/template"
+
+	"github.com/go-resty/resty/v2"
+	"go.uber.org/zap"
 )
 
 // Session containing the access token and cookie
@@ -88,4 +94,25 @@ func (s *Session) GetIDMAdminToken() {
 	RaiseForStatus(err, resp.Error(), resp.StatusCode())
 
 	s.AuthToken = *token
+}
+
+//
+// Unmarshals the file into v after substituting the values of config.
+//
+// Substitution is performed using syntax as described in: https://pkg.go.dev/text/template
+//
+func Unmarshal(file string, config *types.Configuration, v interface{}) error {
+	var err error
+	var buf bytes.Buffer
+	tmpl, err := template.New(filepath.Base(file)).ParseFiles(file)
+	if err != nil {
+		return err
+	}
+	if err = tmpl.Execute(&buf, config); err != nil {
+		return err
+	}
+	if err = json.Unmarshal(buf.Bytes(), v); err != nil {
+		return err
+	}
+	return err
 }
