@@ -150,27 +150,17 @@ func CreateAISPPolicy(policyScriptId string) {
 
 // CreatePISPPolicy -
 func CreatePISPPolicy(policyScriptId string) {
-	if httprest.PolicyExists("PISP Policy") {
-		zap.L().Info("Skipping creation of PISP policy")
+	zap.L().Info("Creating PISP policy")
+	pisp := &types.CreatePolicy{}
+	if err := common.Unmarshal(common.Config.Environment.Paths.ConfigSecureBanking+"pisp-policy.json", &common.Config, pisp); err != nil {
+		panic(err)
+	}
+	if httprest.PolicyExists(pisp.Name) {
+		zap.L().Info(fmt.Sprintf("Skipping creation of %s", pisp.Name))
 		return
 	}
-	zap.L().Info("Creating PISP policy")
-	b, err := ioutil.ReadFile(common.Config.Environment.Paths.ConfigSecureBanking + "pisp-policy.json")
-	if err != nil {
-		panic(err)
-	}
-	pisp := &types.CreatePolicy{}
-	err = json.Unmarshal(b, pisp)
-	if err != nil {
-		panic(err)
-	}
-	var resources []string
-	for _, s := range pisp.Resources {
-		resources = append(resources, strings.ReplaceAll(s, "{{HOSTS.BASE_DOMAIN}}", common.Config.Hosts.BaseDomain))
-	}
-	pisp.Resources = resources
 	pisp.Condition.ScriptID = policyScriptId
-	zap.S().Infow("PISP Policy", "policy", pisp)
+	zap.S().Infow(pisp.Name, "policy", pisp)
 	path := "/am/json/alpha/policies/?_action=create"
 	_, s := httprest.Client.Post(path, pisp, map[string]string{
 		"Accept":             "*/*",
