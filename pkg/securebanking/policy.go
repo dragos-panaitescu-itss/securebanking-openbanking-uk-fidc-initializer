@@ -10,23 +10,21 @@ import (
 	"secure-banking-uk-initializer/pkg/types"
 	"strings"
 
-	"go.uber.org/zap"
 	"secure-banking-uk-initializer/pkg/common"
+
+	"go.uber.org/zap"
 )
 
 // CreatePolicyServiceUser -
 func CreatePolicyServiceUser() {
-	if httprest.ServiceIdentityExists(common.Config.Identity.ServiceAccountPolicy) {
+	if httprest.ServiceIdentityExists(common.Config.Identity.ServiceAccountPolicyUser) {
 		zap.L().Info("Skipping creation of Policy service user")
 		return
 	}
-
-	b, err := ioutil.ReadFile(common.Config.Environment.Paths.ConfigSecureBanking + "create-policy-service-user.json")
-	if err != nil {
-		panic(err)
-	}
+	serviceUser := &types.ServiceUser{}
+	common.Unmarshal(common.Config.Environment.Paths.ConfigSecureBanking+"create-policy-service-user.json", &common.Config, serviceUser)
 	path := "/openidm/managed/user/?_action=create"
-	_, s := httprest.Client.Post(path, b, map[string]string{
+	_, s := httprest.Client.Post(path, serviceUser, map[string]string{
 		"Accept":       "*/*",
 		"Content-Type": "application/json",
 		"Connection":   "keep-alive",

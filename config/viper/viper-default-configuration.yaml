@@ -32,10 +32,13 @@ IDENTITY: # Root key for parameter values related with identity platform configu
   AM_REALM: alpha # The realm used for secure banking
   IDM_CLIENT_ID: policy-client # Placeholder to create Open Banking Dynamic Policy script
   IDM_CLIENT_SECRET: password # Placeholder to create Open Banking Dynamic Policy script
-  SERVICE_ACCOUNT_POLICY: service_account.policy # Service account for Open banking policy
+  SERVICE_ACCOUNT_POLICY_USER: service_account.policy # Service account for Open banking policy
+  SERVICE_ACCOUNT_POLICY_PASSWORD: 0penBanking! # Service account for Open banking policy
+  SERVICE_ACCOUNT_POLICY_EMAIL: obst@forgerock.com # Service account for Open banking policy
   REMOTE_CONSENT_ID: secure-open-banking-rcs # Identification of remote consent agent
   OBRI_SOFTWARE_PUBLISHER_AGENT_NAME: OBRI # software publisher agent name
   TEST_SOFTWARE_PUBLISHER_AGENT_NAME: test-publisher # test software publisher agent
 USERS: # Root key users to be created or to authenticate and authorize flows
-  FR_PLATFORM_ADMIN_USERNAME: amadmin     # Identity platform Username with admin grants (must exist previously)
-  FR_PLATFORM_ADMIN_PASSWORD: replace-me  # Identity platform User password with admin grants (must exist previously)
+  FR_PLATFORM_ADMIN_USERNAME: amadmin # Identity platform Username with admin grants (must exist previously)
+  FR_PLATFORM_ADMIN_PASSWORD: replace-me # Identity platform User password with admin grants (must exist previously)
+

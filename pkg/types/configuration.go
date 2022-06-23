@@ -22,13 +22,15 @@ type hosts struct {
 }
 
 type identity struct {
-	AmRealm                    string `mapstructure:"AM_REALM"`
-	IdmClientId                string `mapstructure:"IDM_CLIENT_ID"`
-	IdmClientSecret            string `mapstructure:"IDM_CLIENT_SECRET"`
-	RemoteConsentId            string `mapstructure:"REMOTE_CONSENT_ID"`
-	ObriSoftwarePublisherAgent string `mapstructure:"OBRI_SOFTWARE_PUBLISHER_AGENT_NAME"`
-	TestSoftwarePublisherAgent string `mapstructure:"TEST_SOFTWARE_PUBLISHER_AGENT_NAME"`
-	ServiceAccountPolicy       string `mapstructure:"SERVICE_ACCOUNT_POLICY"`
+	AmRealm                      string `mapstructure:"AM_REALM"`
+	IdmClientId                  string `mapstructure:"IDM_CLIENT_ID"`
+	IdmClientSecret              string `mapstructure:"IDM_CLIENT_SECRET"`
+	RemoteConsentId              string `mapstructure:"REMOTE_CONSENT_ID"`
+	ObriSoftwarePublisherAgent   string `mapstructure:"OBRI_SOFTWARE_PUBLISHER_AGENT_NAME"`
+	TestSoftwarePublisherAgent   string `mapstructure:"TEST_SOFTWARE_PUBLISHER_AGENT_NAME"`
+	ServiceAccountPolicyUser     string `mapstructure:"SERVICE_ACCOUNT_POLICY_USER"`
+	ServiceAccountPolicyPassword string `mapstructure:"SERVICE_ACCOUNT_POLICY_PASSWORD"`
+	ServiceAccountPolicyEmail    string `mapstructure:"SERVICE_ACCOUNT_POLICY_EMAIL"`
 }
 
 type ig struct {
