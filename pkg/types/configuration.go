@@ -15,16 +15,20 @@ type Configuration struct {
 }
 
 type hosts struct {
-	RcsUiFQDN            string `mapstructure:"RCS_UI_FQDN"`
-	IgFQDN               string `mapstructure:"IG_FQDN"`
-	IdentityPlatformFQDN string `mapstructure:"IDENTITY_PLATFORM_FQDN"`
-	Scheme               string `mapstructure:"SCHEME"`
+	BaseFQDN             string   `mapstructure:"BASE_FQDN"`
+	WildcardFQDN         string   `mapstructure:"WILDCARD_FQDN"`
+	RcsUiFQDN            string   `mapstructure:"RCS_UI_FQDN"`
+	IgFQDN               string   `mapstructure:"IG_FQDN"`
+	IdentityPlatformFQDN string   `mapstructure:"IDENTITY_PLATFORM_FQDN"`
+	Scheme               string   `mapstructure:"SCHEME"`
+	IgAudienceFQDNs      []string `mapstructure:"IG_AUDIENCE_FQDNS"`
 }
 
 type identity struct {
 	AmRealm                      string `mapstructure:"AM_REALM"`
 	IdmClientId                  string `mapstructure:"IDM_CLIENT_ID"`
 	IdmClientSecret              string `mapstructure:"IDM_CLIENT_SECRET"`
+	PolicyClientSecret           string `mapstructure:"POLICY_CLIENT_SECRET"`
 	RemoteConsentId              string `mapstructure:"REMOTE_CONSENT_ID"`
 	ObriSoftwarePublisherAgent   string `mapstructure:"OBRI_SOFTWARE_PUBLISHER_AGENT_NAME"`
 	TestSoftwarePublisherAgent   string `mapstructure:"TEST_SOFTWARE_PUBLISHER_AGENT_NAME"`

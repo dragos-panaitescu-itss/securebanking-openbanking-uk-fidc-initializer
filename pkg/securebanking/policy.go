@@ -8,7 +8,6 @@ import (
 	"net/http"
 	"secure-banking-uk-initializer/pkg/httprest"
 	"secure-banking-uk-initializer/pkg/types"
-	"strings"
 
 	"secure-banking-uk-initializer/pkg/common"
 
@@ -41,17 +40,12 @@ func CreatePolicyEvaluationScript(cookie *http.Cookie) string {
 		return id
 	}
 
-	b, err := ioutil.ReadFile(common.Config.Environment.Paths.ConfigSecureBanking + "policy-evaluation-script.js")
+	b, err := common.Template(common.Config.Environment.Paths.ConfigSecureBanking+"policy-evaluation-script.js", &common.Config)
 	if err != nil {
 		panic(err)
 	}
-	rawPolicyString := string(b)
-	rawPolicyString = strings.ReplaceAll(rawPolicyString, "{{IDM_CLIENT_ID}}", common.Config.Identity.IdmClientId)
-	rawPolicyString = strings.ReplaceAll(rawPolicyString, "{{IDM_CLIENT_SECRET}}", common.Config.Identity.IdmClientSecret)
-	rawPolicyString = strings.ReplaceAll(rawPolicyString, "{{IG_IDM_USER}}", common.Config.Ig.IgIdmUser)
-	rawPolicyString = strings.ReplaceAll(rawPolicyString, "{{IG_IDM_PASSWORD}}", common.Config.Ig.IgIdmPassword)
 
-	scriptB64 := b64.StdEncoding.EncodeToString([]byte(rawPolicyString))
+	scriptB64 := b64.StdEncoding.EncodeToString(b)
 
 	policyScript := &types.PolicyEvaluationScript{
 		Name:        "Open Banking Dynamic Policy",
@@ -90,16 +84,11 @@ func CreateOpenBankingPolicySet() {
 	}
 
 	zap.L().Info("Creating Open Banking policy set")
-	b, err := ioutil.ReadFile(common.Config.Environment.Paths.ConfigSecureBanking + "ob-policy-set.json")
+	ps := &types.OpenBankingPolicySet{}
+	err := common.Unmarshal(common.Config.Environment.Paths.ConfigSecureBanking+"ob-policy-set.json", &common.Config, ps)
 	if err != nil {
 		panic(err)
 	}
-	ps := &types.OpenBankingPolicySet{}
-	err = json.Unmarshal(b, ps)
-	if err != nil {
-		zap.S().Fatalw("Error unmarshalling policy set", "error", err)
-	}
-	ps.Realm = "/alpha"
 	zap.S().Infow("Open Banking Policy set unmarshaled", "policy-set", ps)
 	path := "/am/json/alpha/applications/?_action=create"
 	_, s := httprest.Client.Post(path, ps, map[string]string{
@@ -119,12 +108,9 @@ func CreateAISPPolicy(policyScriptId string) {
 		return
 	}
 	zap.L().Info("Creating AISP policy")
-	b, err := ioutil.ReadFile(common.Config.Environment.Paths.ConfigSecureBanking + "aisp-policy.json")
-	if err != nil {
-		panic(err)
-	}
+
 	aisp := &types.CreatePolicy{}
-	err = json.Unmarshal(b, aisp)
+	err := common.Unmarshal(common.Config.Environment.Paths.ConfigSecureBanking+"aisp-policy.json", &common.Config, aisp)
 	if err != nil {
 		panic(err)
 	}
@@ -146,13 +132,8 @@ func CreatePISPPolicy(policyScriptId string) {
 		zap.L().Info("Skipping creation of PISP policy")
 		return
 	}
-	zap.L().Info("Creating PISP policy")
-	b, err := ioutil.ReadFile(common.Config.Environment.Paths.ConfigSecureBanking + "pisp-policy.json")
-	if err != nil {
-		panic(err)
-	}
 	pisp := &types.CreatePolicy{}
-	err = json.Unmarshal(b, pisp)
+	err := common.Unmarshal(common.Config.Environment.Paths.ConfigSecureBanking+"pisp-policy.json", &common.Config, pisp)
 	if err != nil {
 		panic(err)
 	}

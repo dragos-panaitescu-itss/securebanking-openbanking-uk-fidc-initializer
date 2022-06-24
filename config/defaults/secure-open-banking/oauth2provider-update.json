@@ -53,21 +53,12 @@
       "token|org.forgerock.oauth2.core.TokenResponseTypeHandler"
     ],
     "tokenCompressionEnabled": false,
-    "allowedAudienceValues": [
-      "https://obdemo.dev.forgerock.financial/am/oauth2/realms/root/realms/alpha/access_token",
-      "https://obdemo.nightly.forgerock.financial/am/oauth2/realms/root/realms/alpha/access_token",
-      "https://obdemo.andra-racovita.forgerock.financial/am/oauth2/realms/root/realms/alpha/access_token",
-      "https://obdemo.mariantiris.forgerock.financial/am/oauth2/realms/root/realms/alpha/access_token",
-      "https://obdemo.christian-brindley.forgerock.financial/am/oauth2/realms/root/realms/alpha/access_token",
-      "https://obdemo.bohocode.forgerock.financial/am/oauth2/realms/root/realms/alpha/access_token",
-      "https://obdemo.jorgesanchezperez.forgerock.financial/am/oauth2/realms/root/realms/alpha/access_token",
-      "https://obdemo.joycegilding-forgerock.forgerock.financial/am/oauth2/realms/root/realms/alpha/access_token"
-    ],
+    "allowedAudienceValues": [],
     "scopeImplementationClass": "org.forgerock.openam.oauth2.OpenAMScopeValidator",
     "tlsCertificateRevocationCheckingEnabled": false
   },
   "coreOIDCConfig": {
-    "oidcClaimsScript": "{{oidcClaimsScriptId}}",
+    "oidcClaimsScript": "",
     "supportedClaims": [
       "acr",
       "openbanking_intent_id"

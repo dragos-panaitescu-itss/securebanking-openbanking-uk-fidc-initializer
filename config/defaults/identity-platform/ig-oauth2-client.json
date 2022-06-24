@@ -5,8 +5,7 @@
       "inherited": false,
       "value": "Active"
     },
-    
-    "userpassword": "{{igClientSecret}}",
+    "userpassword": "{{.Ig.IgClientSecret}}",
     "clientType": {
       "inherited": false,
       "value": "Confidential"

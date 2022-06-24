@@ -1,7 +1,7 @@
 {
     "extensionClassName": "",
     "source": "FIXED_VALUE",
-    "fixedValue": "https://iam.dev.forgerock.financial",
+    "fixedValue": "https://{{.Hosts.IdentityPlatformFQDN}}",
     "contextPath": "/am",
     "_id": "",
     "_type": {

@@ -1,6 +1,6 @@
 {
   "coreOAuth2ClientConfig": {
-    "userpassword": "{{policyClientSecret}}",
+    "userpassword": "{{ .Identity.PolicyClientSecret }}",
     "loopbackInterfaceRedirection": {
       "inherited": false,
       "value": false

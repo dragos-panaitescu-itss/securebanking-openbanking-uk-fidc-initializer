@@ -116,3 +116,16 @@ func Unmarshal(file string, config *types.Configuration, v interface{}) error {
 	}
 	return err
 }
+
+func Template(file string, config *types.Configuration) ([]byte, error) {
+	var err error
+	var buf bytes.Buffer
+	tmpl, err := template.New(filepath.Base(file)).ParseFiles(file)
+	if err != nil {
+		return buf.Bytes(), err
+	}
+	if err = tmpl.Execute(&buf, config); err != nil {
+		return buf.Bytes(), err
+	}
+	return buf.Bytes(), err
+}

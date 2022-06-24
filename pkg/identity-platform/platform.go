@@ -8,7 +8,6 @@ import (
 	"secure-banking-uk-initializer/pkg/common"
 	"secure-banking-uk-initializer/pkg/httprest"
 	"secure-banking-uk-initializer/pkg/types"
-	"strings"
 
 	"go.uber.org/zap"
 )
@@ -51,17 +50,13 @@ func CreateIGOAuth2Client() {
 	}
 
 	zap.S().Infof("Creating IG OAuth2 client with id %s", common.Config.Ig.IgClientId)
-	b, err := ioutil.ReadFile(common.Config.Environment.Paths.ConfigIdentityPlatform + "ig-oauth2-client.json")
+	oauth2Client := &types.OAuth2Client{}
+
+	err := common.Unmarshal(common.Config.Environment.Paths.ConfigIdentityPlatform+"ig-oauth2-client.json", &common.Config, oauth2Client)
 	if err != nil {
 		panic(err)
 	}
 
-	oauth2Client := &types.OAuth2Client{}
-	err = json.Unmarshal(b, oauth2Client)
-	if err != nil {
-		panic(err)
-	}
-	oauth2Client.CoreOAuth2ClientConfig.Userpassword = common.Config.Ig.IgClientSecret
 	path := fmt.Sprintf("/am/json/alpha/realm-config/agents/OAuth2Client/%s", common.Config.Ig.IgClientId)
 	s := httprest.Client.Put(path, oauth2Client, map[string]string{
 		"Accept":       "application/json",
@@ -95,20 +90,12 @@ func CreateIGPolicyAgent() {
 
 func CreateIdentityPlatformOAuth2AdminClient(cookie *http.Cookie) {
 	zap.L().Info("Creating Identity Platform admin oauth2 client")
-	b, e := ioutil.ReadFile(common.Config.Environment.Paths.ConfigIdentityPlatform + "oauth2-admin-client.json")
+
+	oauth2Client := &types.OAuth2Client{}
+	e := common.Unmarshal(common.Config.Environment.Paths.ConfigIdentityPlatform+"oauth2-admin-client.json", &common.Config, oauth2Client)
 	if e != nil {
 		panic(e)
 	}
-	oauth2Client := &types.OAuth2Client{}
-	err := json.Unmarshal(b, oauth2Client)
-	if err != nil {
-		return
-	}
-	var redirects []string
-	for _, uri := range oauth2Client.CoreOAuth2ClientConfig.RedirectionUris.Value {
-		redirects = append(redirects, strings.ReplaceAll(uri, "{{IDENTITY_PLATFORM_FQDN}}", common.Config.Hosts.IdentityPlatformFQDN))
-	}
-	oauth2Client.CoreOAuth2ClientConfig.RedirectionUris.Value = redirects
 	zap.S().Debugw("Admin client request", "body", oauth2Client)
 	path := "https://" + common.Config.Hosts.IdentityPlatformFQDN + "/am/json/realm-config/agents/OAuth2Client/idmAdminClient"
 	resp, err := restClient.R().

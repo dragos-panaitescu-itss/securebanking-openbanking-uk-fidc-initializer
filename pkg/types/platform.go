@@ -25,3 +25,12 @@ type ResultFilter struct {
 	Result      []Result `json:"result"`
 	ResultCount int      `json:"resultCount,omitempty"`
 }
+
+type Source struct {
+	ExtensionClassName string `json:"extensionClassName"`
+	Source             string `json:"source"`
+	FixedValue         string `json:"fixedValue"`
+	ContextPath        string `json:"contextPath"`
+	ID                 string `json:"_id"`
+	Type               Type   `json:"_type"`
+}

@@ -268,19 +268,20 @@ func CreateOIDCClaimsScript(cookie *http.Cookie) string {
 
 // UpdateOAuth2Provider - update the oauth 2 provider, must supply the claimScript ID
 func UpdateOAuth2Provider(claimsScriptID string) {
-	if oauth2ProviderExists("oauth-oidc") {
-		zap.L().Info("OAuth2 provider exists")
-		return
-	}
-	b, err := ioutil.ReadFile(common.Config.Environment.Paths.ConfigSecureBanking + "oauth2provider-update.json")
+
+	oauth2Provider := &types.OAuth2Provider{}
+	err := common.Unmarshal(common.Config.Environment.Paths.ConfigSecureBanking+"oauth2provider-update.json", &common.Config, oauth2Provider)
 	if err != nil {
 		panic(err)
 	}
 
-	oauth2Provider := &types.OAuth2Provider{}
-	err = json.Unmarshal(b, oauth2Provider)
-	if err != nil {
-		panic(err)
+	if oauth2ProviderExists(oauth2Provider.Type.ID) {
+		zap.L().Info("OAuth2 provider exists")
+		return
+	}
+
+	for _, v := range common.Config.Hosts.IgAudienceFQDNs {
+		oauth2Provider.AdvancedOAuth2Config.AllowedAudienceValues = append(oauth2Provider.AdvancedOAuth2Config.AllowedAudienceValues, fmt.Sprintf("https://%s/am/oauth2/realms/root/realms/alpha/access_token", v))
 	}
 	oauth2Provider.CoreOIDCConfig.OidcClaimsScript = claimsScriptID
 	zap.S().Infow("Updating OAuth2 provider", "claimScriptId", oauth2Provider.CoreOIDCConfig.OidcClaimsScript)
@@ -317,7 +318,8 @@ func oauth2ProviderExists(id string) bool {
 func CreateBaseURLSourceService(cookie *http.Cookie) {
 	zap.S().Info("Creating BaseURLSource service in the alpha realm")
 
-	b, err := ioutil.ReadFile(common.Config.Environment.Paths.ConfigSecureBanking + "create-base-url-source.json")
+	s := &types.Source{}
+	err := common.Unmarshal(common.Config.Environment.Paths.ConfigSecureBanking+"create-base-url-source.json", &common.Config, s)
 	if err != nil {
 		panic(err)
 	}
@@ -328,7 +330,7 @@ func CreateBaseURLSourceService(cookie *http.Cookie) {
 		SetHeader("Content-Type", "application/json").
 		SetContentLength(true).
 		SetCookie(cookie).
-		SetBody(b).
+		SetBody(s).
 		Post(path)
 
 	zap.S().Info("resp is " + resp.String())

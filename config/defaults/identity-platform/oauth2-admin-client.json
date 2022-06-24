@@ -16,7 +16,7 @@
     "redirectionUris": {
       "inherited": false,
       "value": [
-        "https://{{IDENTITY_PLATFORM_FQDN}}/platform/appAuthHelperRedirect.html"
+        "https://{{.Hosts.IdentityPlatformFQDN}}/platform/appAuthHelperRedirect.html"
       ]
     },
     "scopes": {

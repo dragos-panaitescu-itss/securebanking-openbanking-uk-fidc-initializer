@@ -1,11 +1,11 @@
 function getIdmClientDetails() {
     return {
-        "id": "{{IDM_CLIENT_ID}}",
-        "secret": "{{IDM_CLIENT_SECRET}}",
+        "id": "{{ .Identity.IdmClientId }}",
+        "secret": "{{ .Identity.IdmClientSecret }}",
         "endpoint": "http://am/am/oauth2/realms/root/realms/alpha/access_token",
         "scope": "fr:idm:*",
-        "idmAdminUsername": "{{IG_IDM_USER}}",
-        "idmAdminPassword": "{{IG_IDM_PASSWORD}}"
+        "idmAdminUsername": "{{ .Ig.IgIdmUser }}",
+        "idmAdminPassword": "{{ .Ig.IgIdmPassword }}"
     }
 }
 
@@ -16,42 +16,42 @@ logger.message(script_name + ": starting")
 
 var accountsAndTransactionsPermissions = [{
     name: "READACCOUNTSBASIC",
-    property: {permission: "ReadAccountsBasic", requestType: "accounts"}
+    property: { permission: "ReadAccountsBasic", requestType: "accounts" }
 },
-    {name: "READACCOUNTSDETAIL", property: {permission: "ReadAccountsDetail", requestType: "accounts"}},
-    {name: "READBALANCES", property: {permission: "ReadBalances", requestType: "balances"}},
-    {name: "READBENEFICIARIESBASIC", property: {permission: "ReadBeneficiariesBasic", requestType: "beneficiaries"}},
-    {name: "READBENEFICIARIESDETAIL", property: {permission: "ReadBeneficiariesDetail", requestType: "beneficiaries"}},
-    {name: "READDIRECTDEBITS", property: {permission: "ReadDirectDebits", requestType: "direct-debits"}},
-    {name: "READOFFERS", property: {permission: "ReadOffers", requestType: "offers"}},
-    {name: "READPAN", property: {permission: "ReadPAN", requestType: ""}},
-    {name: "READPARTY", property: {permission: "ReadParty", requestType: "party"}},
-    {name: "READPARTIES", property: {permission: "ReadParty", requestType: "parties"}},
-    {name: "READPARTYPSU", property: {permission: "ReadPartyPSU", requestType: "party"}},
-    {name: "READPRODUCT", property: {permission: "ReadProducts", requestType: "product"}},
-    {name: "READPRODUCTS", property: {permission: "ReadProducts", requestType: "products"}},
-    {
-        name: "READSCHEDULEDPAYMENTSBASIC",
-        property: {permission: "ReadScheduledPaymentsBasic", requestType: "scheduled-payments"}
-    },
-    {
-        name: "READSCHEDULEDPAYMENTSDETAIL",
-        property: {permission: "ReadScheduledPaymentsDetail", requestType: "scheduled-payments"}
-    },
-    {
-        name: "READSTANDINGORDERSBASIC",
-        property: {permission: "ReadStandingOrdersBasic", requestType: "standing-orders"}
-    },
-    {
-        name: "READSTANDINGORDERSDETAIL",
-        property: {permission: "ReadStandingOrdersDetail", requestType: "standing-orders"}
-    },
-    {name: "READSTATEMENTSBASIC", property: {permission: "ReadStatementsBasic", requestType: "statements"}},
-    {name: "READSTATEMENTSDETAIL", property: {permission: "ReadStatementsDetail", requestType: "statements"}},
-    {name: "READTRANSACTIONSBASIC", property: {permission: "ReadTransactionsBasic", requestType: "transactions"}},
-    {name: "READTRANSACTIONSCREDITS", property: {permission: "ReadTransactionsCredits", requestType: "transactions"}},
-    {name: "READTRANSACTIONSDEBITS", property: {permission: "ReadTransactionsDebits", requestType: "transactions"}},
-    {name: "READTRANSACTIONSDETAIL", property: {permission: "ReadTransactionsDetail", requestType: "transactions"}}
+{ name: "READACCOUNTSDETAIL", property: { permission: "ReadAccountsDetail", requestType: "accounts" } },
+{ name: "READBALANCES", property: { permission: "ReadBalances", requestType: "balances" } },
+{ name: "READBENEFICIARIESBASIC", property: { permission: "ReadBeneficiariesBasic", requestType: "beneficiaries" } },
+{ name: "READBENEFICIARIESDETAIL", property: { permission: "ReadBeneficiariesDetail", requestType: "beneficiaries" } },
+{ name: "READDIRECTDEBITS", property: { permission: "ReadDirectDebits", requestType: "direct-debits" } },
+{ name: "READOFFERS", property: { permission: "ReadOffers", requestType: "offers" } },
+{ name: "READPAN", property: { permission: "ReadPAN", requestType: "" } },
+{ name: "READPARTY", property: { permission: "ReadParty", requestType: "party" } },
+{ name: "READPARTIES", property: { permission: "ReadParty", requestType: "parties" } },
+{ name: "READPARTYPSU", property: { permission: "ReadPartyPSU", requestType: "party" } },
+{ name: "READPRODUCT", property: { permission: "ReadProducts", requestType: "product" } },
+{ name: "READPRODUCTS", property: { permission: "ReadProducts", requestType: "products" } },
+{
+    name: "READSCHEDULEDPAYMENTSBASIC",
+    property: { permission: "ReadScheduledPaymentsBasic", requestType: "scheduled-payments" }
+},
+{
+    name: "READSCHEDULEDPAYMENTSDETAIL",
+    property: { permission: "ReadScheduledPaymentsDetail", requestType: "scheduled-payments" }
+},
+{
+    name: "READSTANDINGORDERSBASIC",
+    property: { permission: "ReadStandingOrdersBasic", requestType: "standing-orders" }
+},
+{
+    name: "READSTANDINGORDERSDETAIL",
+    property: { permission: "ReadStandingOrdersDetail", requestType: "standing-orders" }
+},
+{ name: "READSTATEMENTSBASIC", property: { permission: "ReadStatementsBasic", requestType: "statements" } },
+{ name: "READSTATEMENTSDETAIL", property: { permission: "ReadStatementsDetail", requestType: "statements" } },
+{ name: "READTRANSACTIONSBASIC", property: { permission: "ReadTransactionsBasic", requestType: "transactions" } },
+{ name: "READTRANSACTIONSCREDITS", property: { permission: "ReadTransactionsCredits", requestType: "transactions" } },
+{ name: "READTRANSACTIONSDEBITS", property: { permission: "ReadTransactionsDebits", requestType: "transactions" } },
+{ name: "READTRANSACTIONSDETAIL", property: { permission: "ReadTransactionsDetail", requestType: "transactions" } }
 ];
 
 function getPermissionAccountAndTransactions(name) {
