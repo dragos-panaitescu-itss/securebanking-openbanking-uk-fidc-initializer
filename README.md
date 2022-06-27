@@ -21,7 +21,7 @@ To build the initializer you can use the make file;
 ```bash
 $ make
 go mod download
-rm -f setup
+rm -f initialize
 go build -o initialize
 ```
 
@@ -75,8 +75,6 @@ The following values may be supplied when installing/upgrading:
 
 ## Initializer Configuration
 
-
-
 The initializer application provides a default configuration yaml file (properties values to run the application), the default configuration yaml file is loaded using the [viper library](https://github.com/spf13/viper),
 the initializer application supports a personalized configuration file (as a profile) that it can be personalized for each required environment following the below rules:
 
@@ -91,8 +89,8 @@ the initializer application supports a personalized configuration file (as a pro
 
 > :memo: All the variables/properties values provides by the configuration file can be overwritten using environment variables or a kubernetes config map.
 > ```shell
-> go build -o setup \
-> env ENVIRONMENT.VERBOSE=true ./setup
+> go build -o initialize \
+> env ENVIRONMENT.VERBOSE=true ./initialize
 > ```
 
 #### ConfigMap for variables mount example
@@ -116,16 +114,16 @@ The configuration file is loaded from the path `config/viper` following the patt
 where the environment/profile can be specified by environment variable, passing that environment variable to the program.
 **Examples**
 ```shell
-go build -o setup
+go build -o initialize
 ```
 ```shell
-env ENVIRONMENT.VIPER_CONFIG=MY-ENVIRONMENT-PROFILE-VIPER_CONFIG ./setup
+env ENVIRONMENT.VIPER_CONFIG=MY-ENVIRONMENT-PROFILE-VIPER_CONFIG ./initialize
 ```
 > The application will attempt to load the configuration file `viper-MY-ENVIRONMENT-PROFILE-VIPER_CONFIG-configuration.yaml`
 
 **Other example**
 ```shell
-env ENVIRONMENT.VIPER_CONFIG=MY-ENVIRONMENT-PROFILE-VIPER_CONFIG ENVIRONMENT.VERBOSE=true ... ./setup
+env ENVIRONMENT.VIPER_CONFIG=MY-ENVIRONMENT-PROFILE-VIPER_CONFIG ENVIRONMENT.VERBOSE=true ... ./initialize
 ```
 
 #### Configuration variables
@@ -258,12 +256,23 @@ spec:
 The tests run against a mockserver which is supplied by [Pact](https://docs.pact.io/). It is used specifically to test internal logic rather than to verify the provider contract.
 running the `make test-ci` target will download the required binaries to be able to run the pact tests. this target is used for github actions but can work locally too (if you do not have the pact bonaries installed)
 
+## Test locally the program against an environment
+For default the deployment will pull the latest initializer image, the latest image is generated when a PR is merged into master.
+When a PR is created a github action is triggered to build and push the initializer image tagged with the PR-NUMBER.
+To test the initializer against an environment follow the below steps:
+  - Build the program `go mod tidy` and `go build -o initialize`
+  - Set your configuration, follow the section [initialize configuration](#initializer-configuration)
+  - Run the program:
+    - `./initialize` with the default configuration
+    - `env ENVIRONMENT.VIPER_CONFIG=${MY-PROFILE} ./initialize` to set your configuration profile
+
 ### Commands
-| Command             | description                                                                                                          |
-|---------------------|----------------------------------------------------------------------------------------------------------------------|
-| `go mod tidy`       | add missing and remove unused modules                                                                                |
-| `go build -o setup` | compiles the packages named by the import paths, along with their dependencies, but it does not install the results. |
-| `go run`            | compiles and runs the named main Go package                                                                          |
-| `./setup`           | run the compiled program                                                                                             |
+| Command                  | description                                                                                                          |
+|--------------------------|----------------------------------------------------------------------------------------------------------------------|
+| `go mod tidy`            | add missing and remove unused modules                                                                                |
+| `go build -o initialize` | compiles the packages named by the import paths, along with their dependencies, but it does not install the results. |
+| `go run`                 | compiles and runs the named main Go package                                                                          |
+| `./initialize`           | run the compiled program                                                                                             |
 
 > For more information about go command `go help`
+
