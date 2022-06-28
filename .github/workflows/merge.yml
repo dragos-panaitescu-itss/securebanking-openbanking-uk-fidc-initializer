@@ -7,7 +7,7 @@ on:
       - README.md
 
 env:
-  SERVICE_NAME: secureopenbanking-uk-fidc-initializer
+  SERVICE_NAME: secureopenbanking-uk-iam-initializer
   GIT_SHA_SHORT: $(echo ${{ github.sha }} | cut -c1-7)
 
 jobs:
