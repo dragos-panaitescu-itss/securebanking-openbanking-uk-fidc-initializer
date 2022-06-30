@@ -29,7 +29,8 @@ HOSTS:
     - obdemo.christian-brindley.forgerock.financial
     - obdemo.bohocode.forgerock.financial
     - obdemo.jorgesanchezperez.forgerock.financial
-    - obdemo.joycegilding-forgerock.forgerock.financial
+    - obdemo.frlaura-jianu.forgerock.financial
+    - obdemo.dbadham-fr.forgerock.financial
 IG: # Root key for parameter values related with IG platform component service configuration
   IG_CLIENT_ID: ig-client # The name of the OAuth2 Client ID to be used by IG to authenticate to the FR Platform
   IG_CLIENT_SECRET: password # The OAuth2 client secret to be used by IG to authenticate to the FR Platform
