@@ -214,6 +214,9 @@ function findIntentType(api) {
     else if (api === "domestic-scheduled-payments" || api === "domestic-scheduled-payment-consents") {
         return "domesticScheduledPaymentIntent"
     }
+    else if (api === "domestic-standing-orders" || api === "domestic-standing-order-consents") {
+        return "domesticStandingOrderIntent"
+    }
     return null
 }
 
@@ -234,24 +237,34 @@ function getIntent(intentId, intentType) {
     return intent
 }
 
+function deepCompare(arg1, arg2) {
+    if (Object.prototype.toString.call(arg1) === Object.prototype.toString.call(arg2)){
+        if (Object.prototype.toString.call(arg1) === '[object Object]' || Object.prototype.toString.call(arg1) === '[object Array]' ){
+            if (Object.keys(arg1).length !== Object.keys(arg2).length ){
+                return false;
+            }
+            return (Object.keys(arg1).every(function(key){
+                return deepCompare(arg1[key],arg2[key]);
+            }));
+        }
+        return (arg1===arg2);
+    }
+    return false;
+}
 
 function initiationMatch(initiationRequest, initiation) {
 
     // TODO: do comparison at object level, like JSONAssert()
 
     var initiationRequestObj = JSON.parse(stringFromArray(base64decode(initiationRequest)))
+    if(initiation.DebtorAccount && initiation.DebtorAccount.AccountId)
+    {
+        delete initiation.DebtorAccount.AccountId;
+    }
+    logger.message(script_name + ": initiationRequestObj " + JSON.stringify(initiationRequestObj))
+    logger.message(script_name + ": initiation " + JSON.stringify(initiation))
 
-    var match =
-        (initiationRequestObj.InstructionIdentification == initiation.InstructionIdentification) &&
-        (initiationRequestObj.EndToEndIdentification == initiation.EndToEndIdentification) &&
-        (initiationRequestObj.InstructedAmount.Amount == initiation.InstructedAmount.Amount) &&
-        (initiationRequestObj.InstructedAmount.Currency == initiation.InstructedAmount.Currency) &&
-        (initiationRequestObj.CreditorAccount.SchemeName == initiation.CreditorAccount.SchemeName) &&
-        (initiationRequestObj.CreditorAccount.Name == initiation.CreditorAccount.Name) &&
-        (initiationRequestObj.CreditorAccount.SecondaryIdentification == initiation.CreditorAccount.SecondaryIdentification) &&
-        (initiationRequestObj.RemittanceInformation.Reference == initiation.RemittanceInformation.Reference) &&
-        (initiationRequestObj.RemittanceInformation.Unstructured == initiation.RemittanceInformation.Unstructured)
-
+    var match = deepCompare(initiationRequestObj, initiation)
 
     if (!match) {
         logger.warning(script_name + ": Mismatch between request [" + JSON.stringify(initiationRequestObj) + "] and consent [" + JSON.stringify(initiation) + "]");
@@ -303,7 +316,7 @@ if (intentType === "accountAccessIntent") {
             dataAuthorised(permissions, apiRequest.data)
     }
 
-} else if (intentType === "domesticPaymentIntent" || intentType === "domesticScheduledPaymentIntent") {
+} else if (intentType === "domesticPaymentIntent" || intentType === "domesticScheduledPaymentIntent" || intentType === "domesticStandingOrderIntent") {
     logger.message(script_name + ": Domestic Payments Intent");
 
     var status = intent.Data.Status
