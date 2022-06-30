@@ -215,7 +215,7 @@ function findIntentType(api) {
         return "domesticScheduledPaymentIntent"
     }
     else if (api === "domestic-standing-orders" || api === "domestic-standing-order-consents") {
-        return "domesticStandingOrderPaymentIntent"
+        return "domesticStandingOrderIntent"
     }
     return null
 }
@@ -313,7 +313,7 @@ if (intentType === "accountAccessIntent") {
             dataAuthorised(permissions, apiRequest.data)
     }
 
-} else if (intentType === "domesticPaymentIntent" || intentType === "domesticScheduledPaymentIntent" || intentType === "domesticStandingOrderPaymentIntent") {
+} else if (intentType === "domesticPaymentIntent" || intentType === "domesticScheduledPaymentIntent" || intentType === "domesticStandingOrderIntent") {
     logger.message(script_name + ": Domestic Payments Intent");
 
     var status = intent.Data.Status
