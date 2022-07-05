@@ -16,43 +16,45 @@ logger.message(script_name + ": starting")
 
 var accountsAndTransactionsPermissions = [{
     name: "READACCOUNTSBASIC",
-    property: { permission: "ReadAccountsBasic", requestType: "accounts" }
+    property: {permission: "ReadAccountsBasic", requestType: "accounts"}
 },
-{ name: "READACCOUNTSDETAIL", property: { permission: "ReadAccountsDetail", requestType: "accounts" } },
-{ name: "READBALANCES", property: { permission: "ReadBalances", requestType: "balances" } },
-{ name: "READBENEFICIARIESBASIC", property: { permission: "ReadBeneficiariesBasic", requestType: "beneficiaries" } },
-{ name: "READBENEFICIARIESDETAIL", property: { permission: "ReadBeneficiariesDetail", requestType: "beneficiaries" } },
-{ name: "READDIRECTDEBITS", property: { permission: "ReadDirectDebits", requestType: "direct-debits" } },
-{ name: "READOFFERS", property: { permission: "ReadOffers", requestType: "offers" } },
-{ name: "READPAN", property: { permission: "ReadPAN", requestType: "" } },
-{ name: "READPARTY", property: { permission: "ReadParty", requestType: "party" } },
-{ name: "READPARTIES", property: { permission: "ReadParty", requestType: "parties" } },
-{ name: "READPARTYPSU", property: { permission: "ReadPartyPSU", requestType: "party" } },
-{ name: "READPRODUCT", property: { permission: "ReadProducts", requestType: "product" } },
-{ name: "READPRODUCTS", property: { permission: "ReadProducts", requestType: "products" } },
-{
-    name: "READSCHEDULEDPAYMENTSBASIC",
-    property: { permission: "ReadScheduledPaymentsBasic", requestType: "scheduled-payments" }
-},
-{
-    name: "READSCHEDULEDPAYMENTSDETAIL",
-    property: { permission: "ReadScheduledPaymentsDetail", requestType: "scheduled-payments" }
-},
-{
-    name: "READSTANDINGORDERSBASIC",
-    property: { permission: "ReadStandingOrdersBasic", requestType: "standing-orders" }
-},
-{
-    name: "READSTANDINGORDERSDETAIL",
-    property: { permission: "ReadStandingOrdersDetail", requestType: "standing-orders" }
-},
-{ name: "READSTATEMENTSBASIC", property: { permission: "ReadStatementsBasic", requestType: "statements" } },
-{ name: "READSTATEMENTSDETAIL", property: { permission: "ReadStatementsDetail", requestType: "statements" } },
-{ name: "READTRANSACTIONSBASIC", property: { permission: "ReadTransactionsBasic", requestType: "transactions" } },
-{ name: "READTRANSACTIONSCREDITS", property: { permission: "ReadTransactionsCredits", requestType: "transactions" } },
-{ name: "READTRANSACTIONSDEBITS", property: { permission: "ReadTransactionsDebits", requestType: "transactions" } },
-{ name: "READTRANSACTIONSDETAIL", property: { permission: "ReadTransactionsDetail", requestType: "transactions" } }
+    {name: "READACCOUNTSDETAIL", property: {permission: "ReadAccountsDetail", requestType: "accounts"}},
+    {name: "READBALANCES", property: {permission: "ReadBalances", requestType: "balances"}},
+    {name: "READBENEFICIARIESBASIC", property: {permission: "ReadBeneficiariesBasic", requestType: "beneficiaries"}},
+    {name: "READBENEFICIARIESDETAIL", property: {permission: "ReadBeneficiariesDetail", requestType: "beneficiaries"}},
+    {name: "READDIRECTDEBITS", property: {permission: "ReadDirectDebits", requestType: "direct-debits"}},
+    {name: "READOFFERS", property: {permission: "ReadOffers", requestType: "offers"}},
+    {name: "READPAN", property: {permission: "ReadPAN", requestType: ""}},
+    {name: "READPARTY", property: {permission: "ReadParty", requestType: "party"}},
+    {name: "READPARTIES", property: {permission: "ReadParty", requestType: "parties"}},
+    {name: "READPARTYPSU", property: {permission: "ReadPartyPSU", requestType: "party"}},
+    {name: "READPRODUCT", property: {permission: "ReadProducts", requestType: "product"}},
+    {name: "READPRODUCTS", property: {permission: "ReadProducts", requestType: "products"}},
+    {
+        name: "READSCHEDULEDPAYMENTSBASIC",
+        property: {permission: "ReadScheduledPaymentsBasic", requestType: "scheduled-payments"}
+    },
+    {
+        name: "READSCHEDULEDPAYMENTSDETAIL",
+        property: {permission: "ReadScheduledPaymentsDetail", requestType: "scheduled-payments"}
+    },
+    {
+        name: "READSTANDINGORDERSBASIC",
+        property: {permission: "ReadStandingOrdersBasic", requestType: "standing-orders"}
+    },
+    {
+        name: "READSTANDINGORDERSDETAIL",
+        property: {permission: "ReadStandingOrdersDetail", requestType: "standing-orders"}
+    },
+    {name: "READSTATEMENTSBASIC", property: {permission: "ReadStatementsBasic", requestType: "statements"}},
+    {name: "READSTATEMENTSDETAIL", property: {permission: "ReadStatementsDetail", requestType: "statements"}},
+    {name: "READTRANSACTIONSBASIC", property: {permission: "ReadTransactionsBasic", requestType: "transactions"}},
+    {name: "READTRANSACTIONSCREDITS", property: {permission: "ReadTransactionsCredits", requestType: "transactions"}},
+    {name: "READTRANSACTIONSDEBITS", property: {permission: "ReadTransactionsDebits", requestType: "transactions"}},
+    {name: "READTRANSACTIONSDETAIL", property: {permission: "ReadTransactionsDetail", requestType: "transactions"}}
 ];
+
+var paymentsIntents = ["domesticPaymentIntent", "domesticScheduledPaymentIntent", "domesticStandingOrderIntent", "internationalPaymentIntent"];
 
 function getPermissionAccountAndTransactions(name) {
     for (var i = 0; i < accountsAndTransactionsPermissions.length; i++) {
@@ -207,14 +209,11 @@ function getIdmAccessToken() {
 function findIntentType(api) {
     if (getRequestTypeAccountAndTransactions(api) != null) {
         return "accountAccessIntent"
-    }
-    else if (api === "domestic-payments" || api === "domestic-payment-consents") {
+    } else if (api === "domestic-payments" || api === "domestic-payment-consents") {
         return "domesticPaymentIntent"
-    }
-    else if (api === "domestic-scheduled-payments" || api === "domestic-scheduled-payment-consents") {
+    } else if (api === "domestic-scheduled-payments" || api === "domestic-scheduled-payment-consents") {
         return "domesticScheduledPaymentIntent"
-    }
-    else if (api === "domestic-standing-orders" || api === "domestic-standing-order-consents") {
+    } else if (api === "domestic-standing-orders" || api === "domestic-standing-order-consents") {
         return "domesticStandingOrderIntent"
     }
     return null
@@ -238,16 +237,16 @@ function getIntent(intentId, intentType) {
 }
 
 function deepCompare(arg1, arg2) {
-    if (Object.prototype.toString.call(arg1) === Object.prototype.toString.call(arg2)){
-        if (Object.prototype.toString.call(arg1) === '[object Object]' || Object.prototype.toString.call(arg1) === '[object Array]' ){
-            if (Object.keys(arg1).length !== Object.keys(arg2).length ){
+    if (Object.prototype.toString.call(arg1) === Object.prototype.toString.call(arg2)) {
+        if (Object.prototype.toString.call(arg1) === '[object Object]' || Object.prototype.toString.call(arg1) === '[object Array]') {
+            if (Object.keys(arg1).length !== Object.keys(arg2).length) {
                 return false;
             }
-            return (Object.keys(arg1).every(function(key){
-                return deepCompare(arg1[key],arg2[key]);
+            return (Object.keys(arg1).every(function (key) {
+                return deepCompare(arg1[key], arg2[key]);
             }));
         }
-        return (arg1===arg2);
+        return (arg1 === arg2);
     }
     return false;
 }
@@ -255,8 +254,7 @@ function deepCompare(arg1, arg2) {
 
 function initiationMatch(initiationRequest, initiation) {
     var initiationRequestObj = JSON.parse(stringFromArray(base64decode(initiationRequest)))
-    if(initiation.DebtorAccount && initiation.DebtorAccount.AccountId)
-    {
+    if (initiation.DebtorAccount && initiation.DebtorAccount.AccountId) {
         delete initiation.DebtorAccount.AccountId;
     }
     logger.message(script_name + ": initiationRequestObj " + JSON.stringify(initiationRequestObj))
@@ -313,14 +311,14 @@ if (intentType === "accountAccessIntent") {
             dataAuthorised(permissions, apiRequest.data)
     }
 
-} else if (intentType === "domesticPaymentIntent" || intentType === "domesticScheduledPaymentIntent" || intentType === "domesticStandingOrderIntent") {
-    logger.message(script_name + ": Domestic Payments Intent");
+} else if (paymentsIntents.indexOf(intentType) !== -1) {
+    logger.message(script_name + ": Payments Intent");
 
     var status = intent.Data.Status
     var userResourceOwner = new Array(intent.user._id)
 
     if (status !== STATUS_AUTHORISED) {
-        logger.message(script_name + "-[Domestic Payments]: Rejecting request - status [" + status + "]")
+        logger.message(script_name + "-[Payments]: Rejecting request - status [" + status + "]")
         authorized = false
     } else {
         responseAttributes.put("userResourceOwner", userResourceOwner);
@@ -329,12 +327,12 @@ if (intentType === "accountAccessIntent") {
         if (requestMethod != null) {
             switch (requestMethod) {
                 case "POST":
-                    logger.message(script_name + "-[Domestic Payments]: POST request");
+                    logger.message(script_name + "-[Payments]: POST request");
                     var initiation = environment.get("initiation").iterator().next()
                     authorized = initiationMatch(initiation, intent.Data.Initiation)
                     break;
                 case "GET":
-                    logger.message(script_name + "-[Domestic Payments]: GET request");
+                    logger.message(script_name + "-[Payments]: GET request");
                     authorized = true
                     break;
                 default:
