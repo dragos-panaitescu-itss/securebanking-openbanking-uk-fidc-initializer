@@ -215,6 +215,8 @@ function findIntentType(api) {
         return "domesticScheduledPaymentIntent"
     } else if (api === "domestic-standing-orders" || api === "domestic-standing-order-consents") {
         return "domesticStandingOrderIntent"
+    } else if (api === "international-payments" || api === "international-payment-consents") {
+        return "internationalPaymentIntent"
     }
     return null
 }
