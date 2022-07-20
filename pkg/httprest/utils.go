@@ -7,9 +7,9 @@ import (
 	"secure-banking-uk-initializer/pkg/types"
 )
 
-// AlphaClientsExist - Will return true if clients exist in the alpha realm.
-func AlphaClientsExist(clientName string) bool {
-	path := "/am/json/realms/root/realms/alpha/realm-config/agents/OAuth2Client?_queryFilter=true&_pageSize=10&_fields=coreOAuth2ClientConfig/status,coreOAuth2ClientConfig/agentgroup"
+// OAuth2AgentClientsExist - Will return true if clients exist in the configured realm.
+func OAuth2AgentClientsExist(clientName string) bool {
+	path := "/am/json/realms/root/realms/" + common.Config.Identity.AmRealm + "/realm-config/agents/OAuth2Client?_queryFilter=true&_pageSize=10&_fields=coreOAuth2ClientConfig/status,coreOAuth2ClientConfig/agentgroup"
 	result := &types.AmResult{}
 	b, _ := Client.Get(path, map[string]string{
 		"Accept":             "application/json",
@@ -28,8 +28,8 @@ func AlphaClientsExist(clientName string) bool {
 }
 
 func GetScriptIdByName(name string) string {
-	path := "/am/json/realms/alpha/scripts?_prettyPrint=true&_queryFilter=name+eq+%22" + url.QueryEscape(name) + "%22&_sortKeys=name"
-	//path := "/am/json/alpha/scripts?_pageSize=20&_sortKeys=name&_queryFilter=true&_pagedResultsOffset=0"
+	path := "/am/json/realms/" + common.Config.Identity.AmRealm + "/scripts?_prettyPrint=true&_queryFilter=name+eq+%22" + url.QueryEscape(name) + "%22&_sortKeys=name"
+	//path := "/am/json/" + realm + "/scripts?_pageSize=20&_sortKeys=name&_queryFilter=true&_pagedResultsOffset=0"
 	consent := &types.AmResult{}
 	b, _ := Client.Get(path, map[string]string{
 		"Accept":             "application/json",
@@ -48,7 +48,7 @@ func GetScriptIdByName(name string) string {
 }
 
 func PolicySetExists(name string) bool {
-	path := "/am/json/alpha/applications?_pageSize=20&_sortKeys=name&_queryFilter=name+eq+%22%5E(%3F!sunAMDelegationService%24).*%22&_pagedResultsOffset=0"
+	path := "/am/json/" + common.Config.Identity.AmRealm + "/applications?_pageSize=20&_sortKeys=name&_queryFilter=name+eq+%22%5E(%3F!sunAMDelegationService%24).*%22&_pagedResultsOffset=0"
 	serviceIdentity := &types.AmResult{}
 	b, _ := Client.Get(path, map[string]string{
 		"Accept":             "application/json",
@@ -67,7 +67,7 @@ func PolicySetExists(name string) bool {
 }
 
 func PolicyExists(name string) bool {
-	path := "/am/json/alpha/policies?_pageSize=20&_sortKeys=name&_queryFilter=applicationName+eq+%22Open%20Banking%22&_pagedResultsOffset=0"
+	path := "/am/json/" + common.Config.Identity.AmRealm + "/policies?_pageSize=20&_sortKeys=name&_queryFilter=applicationName+eq+%22Open%20Banking%22&_pagedResultsOffset=0"
 	serviceIdentity := &types.AmResult{}
 	b, _ := Client.Get(path, map[string]string{
 		"Accept":             "application/json",
@@ -85,13 +85,13 @@ func PolicyExists(name string) bool {
 	})
 }
 
-// ServiceIdentityExists will check for service identities in the alpha realm
+// ServiceIdentityExists will check for service identities in the configured realm
 //   When CDK is removed, these entities might still be persisted. this gives us
 //   an indication that we do not need to initialize the environment
 func ServiceIdentityExists(identity string) bool {
 	filter := "?_queryFilter=uid+eq+%22" + url.QueryEscape(identity) + "%22&_fields=username"
-	path := "/am/json/realms/root/realms/alpha/users" + filter
-	//path := "/am/json/realms/root/realms/alpha/users/" + identity + "?_fields=username"
+	path := "/am/json/realms/root/realms/" + common.Config.Identity.AmRealm + "/users" + filter
+	//path := "/am/json/realms/root/realms/" + common.Config.Identity.AmRealm + "/users/" + identity + "?_fields=username"
 	serviceIdentityFilter := &types.ResultFilter{}
 	b, _ := Client.Get(path, map[string]string{
 		"Accept":             "application/json",

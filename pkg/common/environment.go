@@ -35,9 +35,10 @@ func ConfigureLogger() (*zap.Logger, error) {
 
 	if verbose {
 		configZap := zap.NewProductionConfig()
-		configZap.Level = zap.NewAtomicLevelAt(zap.DebugLevel)
+		//configZap.Level = zap.NewAtomicLevelAt(zap.DebugLevel)
 		// disable sampling to ensure we get all log messages
 		configZap.Sampling = nil
+		configZap.Level.SetLevel(zap.DebugLevel)
 		return configZap.Build(zap.AddCaller())
 	}
 	return zap.NewProduction(zap.AddCaller())

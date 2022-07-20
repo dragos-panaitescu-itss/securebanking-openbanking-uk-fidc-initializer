@@ -17,18 +17,3 @@ func (p *platform) Instance() platform {
 func newPlatformStruct() platform {
 	return platform{CDK: "CDK", CDM: "CDM", FIDC: "FIDC"}
 }
-
-type realms struct {
-	// CDK (Cloud Developer's Kit) development identity platform
-	ALPHA string "alpha"
-	// CDM (Cloud Deployment Model) identity cloud platform
-	BRAVO string "bravo"
-}
-
-func (p *realms) Instance() realms {
-	return newRealmStruct()
-}
-
-func newRealmStruct() realms {
-	return realms{ALPHA: "alpha", BRAVO: "bravo"}
-}

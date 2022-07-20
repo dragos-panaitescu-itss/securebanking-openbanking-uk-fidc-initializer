@@ -10,17 +10,17 @@ import (
 	mocks "secure-banking-uk-initializer/pkg/mocks/am"
 )
 
-func TestFindExistingAlphaClient(t *testing.T) {
+func TestFindExistingOAuth2AgentClient(t *testing.T) {
 	mockRestReaderWriter := &mocks.RestReaderWriter{}
 	httprest.Client = mockRestReaderWriter
 	buffer, _ := ioutil.ReadFile("client-check-test.json")
 	mockRestReaderWriter.On("Get", mock.Anything, mock.Anything).
 		Return(buffer)
 
-	b := httprest.AlphaClientsExist("Doesnt existy")
+	b := httprest.OAuth2AgentClientsExist("Doesnt existy")
 	assert.False(t, b)
 	mockRestReaderWriter.AssertCalled(t, "Get", mock.Anything, mock.Anything)
 
-	b = httprest.AlphaClientsExist("ig-client")
+	b = httprest.OAuth2AgentClientsExist("ig-client")
 	assert.True(t, b)
 }

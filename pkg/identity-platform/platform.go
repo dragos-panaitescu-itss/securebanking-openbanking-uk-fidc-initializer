@@ -44,7 +44,7 @@ func CreateIGServiceUser() {
 
 // CreateIGOAuth2Client -
 func CreateIGOAuth2Client() {
-	if httprest.AlphaClientsExist(common.Config.Ig.IgClientId) {
+	if httprest.OAuth2AgentClientsExist(common.Config.Ig.IgClientId) {
 		zap.S().Infof("Skipping creation of IG Oauth2 client. OAuth2 client %s already exists", common.Config.Ig.IgClientId)
 		return
 	}
@@ -57,7 +57,7 @@ func CreateIGOAuth2Client() {
 		panic(err)
 	}
 
-	path := fmt.Sprintf("/am/json/alpha/realm-config/agents/OAuth2Client/%s", common.Config.Ig.IgClientId)
+	path := fmt.Sprintf("/am/json/"+common.Config.Identity.AmRealm+"/realm-config/agents/OAuth2Client/%s", common.Config.Ig.IgClientId)
 	s := httprest.Client.Put(path, oauth2Client, map[string]string{
 		"Accept":       "application/json",
 		"Content-Type": "application/json",
@@ -77,7 +77,7 @@ func CreateIGPolicyAgent() {
 			Inherited: false,
 		},
 	}
-	path := fmt.Sprintf("/am/json/realms/root/realms/alpha/realm-config/agents/IdentityGatewayAgent/%s", common.Config.Ig.IgAgentId)
+	path := fmt.Sprintf("/am/json/realms/root/realms/"+common.Config.Identity.AmRealm+"/realm-config/agents/IdentityGatewayAgent/%s", common.Config.Ig.IgAgentId)
 	s := httprest.Client.Put(path, policyAgent, map[string]string{
 		"Accept":           "application/json",
 		"Content-Type":     "application/json",
@@ -114,9 +114,9 @@ func CreateIdentityPlatformOAuth2AdminClient(cookie *http.Cookie) {
 }
 
 // CreateRealm creates the realm for a new deployment of CDK
-func CreateRealm(cookie *http.Cookie, realmName string) {
-	zap.L().Info("Creating Alpha Realm")
-	b, err := ioutil.ReadFile(common.Config.Environment.Paths.ConfigIdentityPlatform + realmName + "-realm.json")
+func CreateRealm(cookie *http.Cookie) {
+	zap.S().Infof("Creating '%s' Realm", common.Config.Identity.AmRealm)
+	b, err := common.Template(common.Config.Environment.Paths.ConfigIdentityPlatform+"realm-template.json", &common.Config)
 	if err != nil {
 		panic(err)
 	}
@@ -132,11 +132,12 @@ func CreateRealm(cookie *http.Cookie, realmName string) {
 
 	common.RaiseForStatus(err, resp.Error(), resp.StatusCode())
 
-	zap.S().Infow("Alpha Realm Created", "statusCode", resp.StatusCode())
+	zap.S().Infow(common.Config.Identity.AmRealm+" Realm Created", "statusCode", resp.StatusCode())
 }
 
 // RealmExist check if the realm exist
-func RealmExist(cookie *http.Cookie, realm string) bool {
+func RealmExist(cookie *http.Cookie) bool {
+	zap.S().Infof("Checking if '%s' Realm already exist", common.Config.Identity.AmRealm)
 	var realmExist = false
 	path := fmt.Sprintf("https://%s/am/json/global-config/realms?_queryFilter=true", common.Config.Hosts.IdentityPlatformFQDN)
 	serviceIdentityFilter := &types.ResultFilter{}
@@ -155,11 +156,11 @@ func RealmExist(cookie *http.Cookie, realm string) bool {
 	}
 
 	for _, s := range serviceIdentityFilter.Result {
-		if s.Name == realm {
+		if s.Name == common.Config.Identity.AmRealm {
 			realmExist = true
 		}
 	}
-	zap.S().Infow("Check realm exist", "realm", realm, "exist", realmExist)
+	zap.S().Infow("Check realm exist", "realm", common.Config.Identity.AmRealm, "exist", realmExist)
 	return realmExist
 }
 

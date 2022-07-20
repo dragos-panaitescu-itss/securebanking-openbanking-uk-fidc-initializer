@@ -29,7 +29,7 @@ func createPSD2CustomerAuthenticationUsernameNode() {
 	}
 
 	zap.S().Debugw("PSD2CustomerAuthentication username node", "body", string(b))
-	path := "/am/json/realms/root/realms/alpha/realm-config/authentication/authenticationtrees/nodes/UsernameCollectorNode/ada9ef86-d550-4591-b9dc-5751e7adbb62"
+	path := "/am/json/realms/root/realms/" + common.Config.Identity.AmRealm + "/realm-config/authentication/authenticationtrees/nodes/UsernameCollectorNode/ada9ef86-d550-4591-b9dc-5751e7adbb62"
 	status := httprest.Client.Put(path, b, map[string]string{
 		"Accept":             "*/*",
 		"Content-Type":       "application/json",
@@ -48,7 +48,7 @@ func createPSD2CustomerAuthenticationPasswordNode() {
 	}
 
 	zap.S().Debugw("PSD2CustomerAuthentication Password node", "body", string(b))
-	path := "/am/json/realms/root/realms/alpha/realm-config/authentication/authenticationtrees/nodes/PasswordCollectorNode/1db869b1-09de-4a8e-b340-e0563891c3bf"
+	path := "/am/json/realms/root/realms/" + common.Config.Identity.AmRealm + "/realm-config/authentication/authenticationtrees/nodes/PasswordCollectorNode/1db869b1-09de-4a8e-b340-e0563891c3bf"
 	status := httprest.Client.Put(path, b, map[string]string{
 		"Accept":             "*/*",
 		"Content-Type":       "application/json",
@@ -67,7 +67,7 @@ func createPSD2CustomerAuthenticationTree() {
 	}
 
 	zap.S().Debugw("PSD2CustomerAuthentication tree", "body", string(b))
-	path := "/am/json/realms/root/realms/alpha/realm-config/authentication/authenticationtrees/trees/PSD2CustomerAuthentication"
+	path := "/am/json/realms/root/realms/" + common.Config.Identity.AmRealm + "/realm-config/authentication/authenticationtrees/trees/PSD2CustomerAuthentication"
 	status := httprest.Client.Put(path, b, map[string]string{
 		"Accept":             "*/*",
 		"Content-Type":       "application/json",
@@ -86,7 +86,7 @@ func createPSD2SecureCustomerAuthenticationUsernameNode() {
 	}
 
 	zap.S().Debugw("PSD2CustomerAuthentication username node", "body", string(b))
-	path := "/am/json/realms/root/realms/alpha/realm-config/authentication/authenticationtrees/nodes/UsernameCollectorNode/ee0efdc1-9fba-4323-95ef-ec468f6ad30c"
+	path := "/am/json/realms/root/realms/" + common.Config.Identity.AmRealm + "/realm-config/authentication/authenticationtrees/nodes/UsernameCollectorNode/ee0efdc1-9fba-4323-95ef-ec468f6ad30c"
 	status := httprest.Client.Put(path, b, map[string]string{
 		"Accept":             "*/*",
 		"Content-Type":       "application/json",
@@ -105,7 +105,7 @@ func createPSD2SecureCustomerAuthenticationPasswordNode() {
 	}
 
 	zap.S().Debugw("PSD2CustomerAuthentication Password node", "body", string(b))
-	path := "/am/json/realms/root/realms/alpha/realm-config/authentication/authenticationtrees/nodes/PasswordCollectorNode/4785b3c1-5dc9-4883-b01e-2f1b6bfda50e"
+	path := "/am/json/realms/root/realms/" + common.Config.Identity.AmRealm + "/realm-config/authentication/authenticationtrees/nodes/PasswordCollectorNode/4785b3c1-5dc9-4883-b01e-2f1b6bfda50e"
 	status := httprest.Client.Put(path, b, map[string]string{
 		"Accept":             "*/*",
 		"Content-Type":       "application/json",
@@ -124,7 +124,7 @@ func createPSD2SecureCustomerAuthenticationTree() {
 	}
 
 	zap.S().Debugw("Login tree PSD2CustomerAuthentication", "body", string(b))
-	path := "/am/json/realms/root/realms/alpha/realm-config/authentication/authenticationtrees/trees/PSD2SecureCustomerAuthentication"
+	path := "/am/json/realms/root/realms/" + common.Config.Identity.AmRealm + "/realm-config/authentication/authenticationtrees/trees/PSD2SecureCustomerAuthentication"
 	status := httprest.Client.Put(path, b, map[string]string{
 		"Accept":             "*/*",
 		"Content-Type":       "application/json",

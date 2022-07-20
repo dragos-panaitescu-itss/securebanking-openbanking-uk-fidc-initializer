@@ -18,7 +18,7 @@ func ApplySystemClients(cookie *http.Cookie) {
 	}
 
 	zap.S().Debugw("oauth2 system client request", "body", oauth2Client)
-	path := fmt.Sprintf("https://%s/am/json/alpha/realm-config/agents/OAuth2Client/end-user-ui", common.Config.Hosts.IdentityPlatformFQDN)
+	path := fmt.Sprintf("https://%s/am/json/"+common.Config.Identity.AmRealm+"/realm-config/agents/OAuth2Client/end-user-ui", common.Config.Hosts.IdentityPlatformFQDN)
 	resp, err := restClient.R().
 		SetHeader("Accept", "application/json").
 		SetHeader("Content-Type", "application/json").

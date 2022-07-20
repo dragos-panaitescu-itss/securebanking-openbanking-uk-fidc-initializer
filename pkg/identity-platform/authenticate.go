@@ -31,7 +31,6 @@ func GetCookieNameFromAm() string {
 //    returns the Session object with embedded session cookie
 func FromUserSession(cookieName string) *common.Session {
 	zap.L().Info("Getting an admin session from Identity Platform")
-
 	path := fmt.Sprintf("https://%s/am/json/realms/root/authenticate?authIndexType=service&authIndexValue=ldapService", common.Config.Hosts.IdentityPlatformFQDN)
 
 	zap.S().Infow("Path to authenticate the user", "path", path)

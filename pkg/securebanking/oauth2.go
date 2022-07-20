@@ -84,7 +84,7 @@ func CreateSecureBankingRemoteConsentService() {
 		},
 		Userpassword: common.Config.Ig.IgRcsSecret,
 	}
-	path := "/am/json/realms/root/realms/alpha/realm-config/agents/RemoteConsentAgent/" + remoteConsentId
+	path := "/am/json/realms/root/realms/" + common.Config.Identity.AmRealm + "/realm-config/agents/RemoteConsentAgent/" + remoteConsentId
 
 	s := httprest.Client.Put(path, rc, map[string]string{
 		"Accept":             "*/*",
@@ -96,7 +96,7 @@ func CreateSecureBankingRemoteConsentService() {
 }
 
 func remoteConsentExists(name string) bool {
-	path := "/am/json/realms/root/realms/alpha/realm-config/agents/RemoteConsentAgent?_queryFilter=true&_pageSize=10&_fields=agentgroup"
+	path := "/am/json/realms/root/realms/" + common.Config.Identity.AmRealm + "/realm-config/agents/RemoteConsentAgent?_queryFilter=true&_pageSize=10&_fields=agentgroup"
 	consent := &types.AmResult{}
 	b, _ := httprest.Client.Get(path, map[string]string{
 		"Accept":             "application/json",
@@ -150,7 +150,7 @@ func CreateSoftwarePublisherAgentOBRI() {
 			Value:     "https://service.directory.ob.forgerock.financial/api/directory/keys/jwk_uri",
 		},
 	}
-	path := "/am/json/realms/root/realms/alpha/realm-config/agents/SoftwarePublisher/" + common.Config.Identity.ObriSoftwarePublisherAgent
+	path := "/am/json/realms/root/realms/" + common.Config.Identity.AmRealm + "/realm-config/agents/SoftwarePublisher/" + common.Config.Identity.ObriSoftwarePublisherAgent
 	s := httprest.Client.Put(path, pa, map[string]string{
 		"Accept":             "*/*",
 		"Connection":         "keep-alive",
@@ -196,7 +196,7 @@ func CreateSoftwarePublisherAgentTestPublisher() {
 			Inherited: false,
 		},
 	}
-	path := "/am/json/realms/root/realms/alpha/realm-config/agents/SoftwarePublisher/" + common.Config.Identity.TestSoftwarePublisherAgent
+	path := "/am/json/realms/root/realms/" + common.Config.Identity.AmRealm + "/realm-config/agents/SoftwarePublisher/" + common.Config.Identity.TestSoftwarePublisherAgent
 	s := httprest.Client.Put(path, pa, map[string]string{
 		"Accept":             "*/*",
 		"Connection":         "keep-alive",
@@ -207,7 +207,7 @@ func CreateSoftwarePublisherAgentTestPublisher() {
 }
 
 func softwarePublisherAgentExists(name string) bool {
-	path := "/am/json/realms/root/realms/alpha/realm-config/agents/SoftwarePublisher?_queryFilter=true&_pageSize=10&_fields=agentgroup"
+	path := "/am/json/realms/root/realms/" + common.Config.Identity.AmRealm + "/realm-config/agents/SoftwarePublisher?_queryFilter=true&_pageSize=10&_fields=agentgroup"
 	agent := &types.AmResult{}
 	b, _ := httprest.Client.Get(path, map[string]string{
 		"Accept":             "application/json",
@@ -234,7 +234,7 @@ func CreateOIDCClaimsScript(cookie *http.Cookie) string {
 		panic(err)
 	}
 
-	path := fmt.Sprintf("https://%s/am/json/alpha/scripts/?_action=create", common.Config.Hosts.IdentityPlatformFQDN)
+	path := fmt.Sprintf("https://%s/am/json/"+common.Config.Identity.AmRealm+"/scripts/?_action=create", common.Config.Hosts.IdentityPlatformFQDN)
 
 	claimsScript := &types.RequestScript{}
 
@@ -281,11 +281,13 @@ func UpdateOAuth2Provider(claimsScriptID string) {
 	}
 
 	for _, v := range common.Config.Hosts.IgAudienceFQDNs {
-		oauth2Provider.AdvancedOAuth2Config.AllowedAudienceValues = append(oauth2Provider.AdvancedOAuth2Config.AllowedAudienceValues, fmt.Sprintf("https://%s/am/oauth2/realms/root/realms/alpha/access_token", v))
+		oauth2Provider.AdvancedOAuth2Config.AllowedAudienceValues = append(
+			oauth2Provider.AdvancedOAuth2Config.AllowedAudienceValues,
+			fmt.Sprintf("https://%s/am/oauth2/realms/root/realms/"+common.Config.Identity.AmRealm+"/access_token", v))
 	}
 	oauth2Provider.CoreOIDCConfig.OidcClaimsScript = claimsScriptID
 	zap.S().Infow("Updating OAuth2 provider", "claimScriptId", oauth2Provider.CoreOIDCConfig.OidcClaimsScript)
-	path := "/am/json/alpha/realm-config/services/oauth-oidc"
+	path := "/am/json/" + common.Config.Identity.AmRealm + "/realm-config/services/oauth-oidc"
 	s := httprest.Client.Put(path, oauth2Provider, map[string]string{
 		"Accept":           "*/*",
 		"Content-Type":     "application/json",
@@ -297,7 +299,7 @@ func UpdateOAuth2Provider(claimsScriptID string) {
 }
 
 func oauth2ProviderExists(id string) bool {
-	path := "/am/json/realms/root/realms/alpha/realm-config/services?_queryFilter=true"
+	path := "/am/json/realms/root/realms/" + common.Config.Identity.AmRealm + "/realm-config/services?_queryFilter=true"
 	r := &types.AmResult{}
 	b, _ := httprest.Client.Get(path, map[string]string{
 		"Accept":             "application/json",
@@ -316,14 +318,14 @@ func oauth2ProviderExists(id string) bool {
 }
 
 func CreateBaseURLSourceService(cookie *http.Cookie) {
-	zap.S().Info("Creating BaseURLSource service in the alpha realm")
+	zap.S().Info("Creating BaseURLSource service in the " + common.Config.Identity.AmRealm + " realm")
 
 	s := &types.Source{}
 	err := common.Unmarshal(common.Config.Environment.Paths.ConfigSecureBanking+"create-base-url-source.json", &common.Config, s)
 	if err != nil {
 		panic(err)
 	}
-	path := fmt.Sprintf("https://%s/am/json/realms/root/realms/alpha/realm-config/services/baseurl?_action=create", common.Config.Hosts.IdentityPlatformFQDN)
+	path := fmt.Sprintf("https://%s/am/json/realms/root/realms/"+common.Config.Identity.AmRealm+"/realm-config/services/baseurl?_action=create", common.Config.Hosts.IdentityPlatformFQDN)
 	resp, err := restClient.R().
 		SetHeader("Accept", "application/json").
 		SetHeader("Accept-API-Version", "protocol=1.0,resource=1.0").
@@ -335,9 +337,9 @@ func CreateBaseURLSourceService(cookie *http.Cookie) {
 
 	zap.S().Info("resp is " + resp.String())
 	if resp != nil && resp.StatusCode() == 409 {
-		zap.S().Info("Did not create BaseURLSource service in alpha realm. It already exists.")
+		zap.S().Info("Did not create BaseURLSource service in " + common.Config.Identity.AmRealm + " realm. It already exists.")
 	} else {
 		common.RaiseForStatus(err, resp.Error(), resp.StatusCode())
-		zap.S().Info("Created Base URL Service in AM's alpha realm")
+		zap.S().Info("Created Base URL Service in AM's " + common.Config.Identity.AmRealm + " realm")
 	}
 }

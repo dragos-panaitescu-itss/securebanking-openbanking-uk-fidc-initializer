@@ -2,7 +2,7 @@ function getIdmClientDetails() {
     return {
         "id": "{{ .Identity.IdmClientId }}",
         "secret": "{{ .Identity.IdmClientSecret }}",
-        "endpoint": "http://am/am/oauth2/realms/root/realms/alpha/access_token",
+        "endpoint": "http://am/am/oauth2/realms/root/realms/{{ .Identity.AmRealm }}/access_token",
         "scope": "fr:idm:*",
         "idmAdminUsername": "{{ .Ig.IgIdmUser }}",
         "idmAdminPassword": "{{ .Ig.IgIdmPassword }}"
@@ -14,10 +14,8 @@ STATUS_AUTHORISED = "Authorised"
 var script_name = "policy_evaluation_script.js"
 logger.message(script_name + ": starting")
 
-var accountsAndTransactionsPermissions = [{
-    name: "READACCOUNTSBASIC",
-    property: {permission: "ReadAccountsBasic", requestType: "accounts"}
-},
+var accountsAndTransactionsPermissions = [
+    {name: "READACCOUNTSBASIC", property: { permission: "ReadAccountsBasic", requestType: "accounts"}},
     {name: "READACCOUNTSDETAIL", property: {permission: "ReadAccountsDetail", requestType: "accounts"}},
     {name: "READBALANCES", property: {permission: "ReadBalances", requestType: "balances"}},
     {name: "READBENEFICIARIESBASIC", property: {permission: "ReadBeneficiariesBasic", requestType: "beneficiaries"}},
@@ -30,22 +28,10 @@ var accountsAndTransactionsPermissions = [{
     {name: "READPARTYPSU", property: {permission: "ReadPartyPSU", requestType: "party"}},
     {name: "READPRODUCT", property: {permission: "ReadProducts", requestType: "product"}},
     {name: "READPRODUCTS", property: {permission: "ReadProducts", requestType: "products"}},
-    {
-        name: "READSCHEDULEDPAYMENTSBASIC",
-        property: {permission: "ReadScheduledPaymentsBasic", requestType: "scheduled-payments"}
-    },
-    {
-        name: "READSCHEDULEDPAYMENTSDETAIL",
-        property: {permission: "ReadScheduledPaymentsDetail", requestType: "scheduled-payments"}
-    },
-    {
-        name: "READSTANDINGORDERSBASIC",
-        property: {permission: "ReadStandingOrdersBasic", requestType: "standing-orders"}
-    },
-    {
-        name: "READSTANDINGORDERSDETAIL",
-        property: {permission: "ReadStandingOrdersDetail", requestType: "standing-orders"}
-    },
+    {name: "READSCHEDULEDPAYMENTSBASIC", property: {permission: "ReadScheduledPaymentsBasic", requestType: "scheduled-payments"}},
+    {name: "READSCHEDULEDPAYMENTSDETAIL", property: {permission: "ReadScheduledPaymentsDetail", requestType: "scheduled-payments"}},
+    {name: "READSTANDINGORDERSBASIC",property: {permission: "ReadStandingOrdersBasic", requestType: "standing-orders"}},
+    {name: "READSTANDINGORDERSDETAIL",property: {permission: "ReadStandingOrdersDetail", requestType: "standing-orders"}},
     {name: "READSTATEMENTSBASIC", property: {permission: "ReadStatementsBasic", requestType: "statements"}},
     {name: "READSTATEMENTSDETAIL", property: {permission: "ReadStatementsDetail", requestType: "statements"}},
     {name: "READTRANSACTIONSBASIC", property: {permission: "ReadTransactionsBasic", requestType: "transactions"}},

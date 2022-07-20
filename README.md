@@ -64,13 +64,13 @@ $ helm upgrade iam-init ./ --install --namespace local-dev-sbat \
 
 The following values may be supplied when installing/upgrading:
 
-| variable                       | Required | Default value | Description                                                  |
-| ------------------------------ | -------- | ------------- | ------------------------------------------------------------ |
-| iam_initializer_image_location | yes      | None          | The location of the docker image                             |
-| environment.fr_platform.fqdn   | yes      | None          | The Fully Qualified domain name on which the ForgeRock Identity Platform may be reached, e.g. iam.openbanking.bigbank.com |
-| environment.fr_platform.type   | no       | FIDC           | The type of ForgeRock Platform Deployment. Value values are:<br>- **CDK:** deploying against a deployment of the forgeops CDK<br>- **FIDC:** Deploying against a ForgeRock Identity Cloud instance |
-| environment.sbat.projectId     | yes      | None          | The GCP project in which the SBAT is deployed        |
-| environment.sbat.fqdn          | yes      | None          | The fqdn on which the SBAT components are deployed   |
+| variable                       | Required | Default value | Description                                                                                                                                                                                        |
+|--------------------------------|----------|---------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| iam_initializer_image_location | yes      | None          | The location of the docker image                                                                                                                                                                   |
+| environment.fr_platform.fqdn   | yes      | None          | The Fully Qualified domain name on which the ForgeRock Identity Platform may be reached, e.g. iam.openbanking.bigbank.com                                                                          |
+| environment.fr_platform.type   | no       | FIDC          | The type of ForgeRock Platform Deployment. Value values are:<br>- **CDK:** deploying against a deployment of the forgeops CDK<br>- **FIDC:** Deploying against a ForgeRock Identity Cloud instance |
+| environment.sbat.projectId     | yes      | None          | The GCP project in which the SBAT is deployed                                                                                                                                                      |
+| environment.sbat.fqdn          | yes      | None          | The fqdn on which the SBAT components are deployed                                                                                                                                                 |
 
 
 ## Initializer Configuration
@@ -171,16 +171,16 @@ There are a variables used before load the configuration file and these variable
 <summary>Table</summary>
 <!-- always an empty line before table -->
 
-| Environment variable   | default               | description                                |
-|------------------------|-----------------------|--------------------------------------------|
-| `IG.IG_CLIENT_ID`      | ig-client             | The initializer creates an OAuth2 Client that the SBAT IG will use to authenticate to the FR Platform to ensure that Api Client's can't bypass IG and use the FR Identity Platform APIs directly. The OAuth2 client will be created with this id|
-| `IG.IG_CLIENT_SECRET`  | add-here-the-password | The initializer creates an OAuth2 Client that the SBAT IG will use to authenticate to the FR Platform to ensure that Api Client's can't bypass IG and use the FR Identity Platform APIs directly. The OAuth2 client will be created with this password                          |
-| `IG.IG_RCS_SECRET`     | add-here-the-secret   | IG rcs secret for remote consent service   |
-| `IG.IG_SSA_SECRET`     | add-here-the-secret   | IG ssa secret for software publisher agent |
-| `IG.IG_IDM_USER`       | service_account.ig    | IG service user account                    |
-| `IG.IG_IDM_PASSWORD`   | add-here-the-password | IG service user account password           |
-| `IG.IG_AGENT_ID`       | ig-agent              | IG agent id for IG policy agent            |
-| `IG.IG_AGENT_PASSWORD` | add-here-the-password | Ig agent password for IG policy agent      |
+| Environment variable   | default               | description                                                                                                                                                                                                                                            |
+|------------------------|-----------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `IG.IG_CLIENT_ID`      | ig-client             | The initializer creates an OAuth2 Client that the SBAT IG will use to authenticate to the FR Platform to ensure that Api Client's can't bypass IG and use the FR Identity Platform APIs directly. The OAuth2 client will be created with this id       |
+| `IG.IG_CLIENT_SECRET`  | add-here-the-password | The initializer creates an OAuth2 Client that the SBAT IG will use to authenticate to the FR Platform to ensure that Api Client's can't bypass IG and use the FR Identity Platform APIs directly. The OAuth2 client will be created with this password |
+| `IG.IG_RCS_SECRET`     | add-here-the-secret   | IG rcs secret for remote consent service                                                                                                                                                                                                               |
+| `IG.IG_SSA_SECRET`     | add-here-the-secret   | IG ssa secret for software publisher agent                                                                                                                                                                                                             |
+| `IG.IG_IDM_USER`       | service_account.ig    | IG service user account                                                                                                                                                                                                                                |
+| `IG.IG_IDM_PASSWORD`   | add-here-the-password | IG service user account password                                                                                                                                                                                                                       |
+| `IG.IG_AGENT_ID`       | ig-agent              | IG agent id for IG policy agent                                                                                                                                                                                                                        |
+| `IG.IG_AGENT_PASSWORD` | add-here-the-password | Ig agent password for IG policy agent                                                                                                                                                                                                                  |
 </details>
 
 **Identity variables**
@@ -204,10 +204,10 @@ There are a variables used before load the configuration file and these variable
 <summary>Table</summary>
 <!-- always an empty line before table -->
 
-| Environment variable       | default                        | description                                                               |
-|----------------------------|--------------------------------|---------------------------------------------------------------------------|
-| `USERS.FR_PLATFORM_ADMIN_USERNAME` | amadmin                        | Identity platform Username with admin grants (must exist previously)      |
-| `USERS.FR_PLATFROM_ADMIN_PASSWORD` | add-here-the-user-password     | Identity platform User password with admin grants (must exist previously) |
+| Environment variable               | default                                                    | description                                                               |
+|------------------------------------|------------------------------------------------------------|---------------------------------------------------------------------------|
+| `USERS.FR_PLATFORM_ADMIN_USERNAME` | amadmin (for cloud platform needs to be used a admin user) | Identity platform Username with admin grants (must exist previously)      |
+| `USERS.FR_PLATFROM_ADMIN_PASSWORD` | replace-me                                                 | Identity platform User password with admin grants (must exist previously) |
 
 </details>
 
@@ -271,8 +271,8 @@ To test the initializer against an environment follow the below steps:
 |--------------------------|----------------------------------------------------------------------------------------------------------------------|
 | `go mod tidy`            | add missing and remove unused modules                                                                                |
 | `go build -o initialize` | compiles the packages named by the import paths, along with their dependencies, but it does not install the results. |
-| `go run`                 | compiles and runs the named main Go package                                                                          |
 | `./initialize`           | run the compiled program                                                                                             |
+| `go run`                 | compiles and runs the named main Go package                                                                          |
 
 > For more information about go command `go help`
 

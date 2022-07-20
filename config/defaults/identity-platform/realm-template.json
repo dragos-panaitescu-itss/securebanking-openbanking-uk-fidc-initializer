@@ -1,5 +1,5 @@
 {
-  "name":"alpha",
+  "name":"{{.Identity.AmRealm}}",
   "active":true,
   "parentPath":"/",
   "aliases":[]

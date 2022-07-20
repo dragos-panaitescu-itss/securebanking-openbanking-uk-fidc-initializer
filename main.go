@@ -20,13 +20,18 @@ import (
 // init function is execute before main to initialize the program,
 // this function is called when the package is initialized
 func init() {
-	fmt.Println("initializing the program.....")
+	fmt.Println("initializing the program with defaults.....")
 	viper.AutomaticEnv()
 	viper.SetDefault("ENVIRONMENT.VERBOSE", false)
 	viper.SetDefault("ENVIRONMENT.STRICT", true)
 	viper.SetDefault("ENVIRONMENT.VIPER_CONFIG", "default")
+	viper.SetDefault("IDENTITY.AM_REALM", "alpha")
+	// load default logger
+	fmt.Println("initializing the default logger.....")
 	loadLogger()
 	loadConfiguration()
+	// load logger again to update the level set in the configuration file
+	loadLogger()
 	checks()
 	// after call 'loadConfiguration' we have an object with all configuration mapped
 	if common.Config.Environment.Verbose {
@@ -56,8 +61,8 @@ func main() {
 	createIdentityPlatformOAuth2AdminClient(session)
 
 	//Make CDK looks like FIDC
-	createRealm(session, types.Realms.Instance().ALPHA)
-	//configure Identity platofrm (both CDK and FIDC) with non speicifc OB config
+	createRealm(session)
+	//configure Identity platform (both CDK and FIDC) with non speicifc OB config
 	createServerConfig(session)
 
 	fmt.Println("Resty initialization....")
@@ -152,9 +157,9 @@ func checkValidPlatformCert() {
 
 func getIdentityPlatformSession() *common.Session {
 	zap.L().Info("Get CookieName")
-	c := platform.GetCookieNameFromAm()
+	cookieName := platform.GetCookieNameFromAm()
 	zap.L().Info("Get user session")
-	return platform.FromUserSession(c)
+	return platform.FromUserSession(cookieName)
 }
 
 //This creates an admin user in CDK deployment that can be used to create new config. THis does not run when initializer is run against
@@ -169,10 +174,10 @@ func createIdentityPlatformOAuth2AdminClient(session *common.Session) {
 	}
 }
 
-func createRealm(session *common.Session, realmName string) {
+func createRealm(session *common.Session) {
 	// the alpha realm exist in identity cloud by default
-	if !platform.RealmExist(session.Cookie, realmName) {
-		platform.CreateRealm(session.Cookie, realmName)
+	if !platform.RealmExist(session.Cookie) {
+		platform.CreateRealm(session.Cookie)
 	}
 }
 

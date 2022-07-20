@@ -57,7 +57,7 @@ func CreatePolicyEvaluationScript(cookie *http.Cookie) string {
 
 	zap.L().Info("Creating policy evaluation script")
 
-	path := fmt.Sprintf("https://%s/am/json/alpha/scripts/?_action=create", common.Config.Hosts.IdentityPlatformFQDN)
+	path := fmt.Sprintf("https://%s/am/json/"+common.Config.Identity.AmRealm+"/scripts/?_action=create", common.Config.Hosts.IdentityPlatformFQDN)
 	scriptBody := &types.RequestScript{}
 	resp, err := restClient.R().
 		SetHeader("Accept", "*/*").
@@ -90,7 +90,7 @@ func CreateOpenBankingPolicySet() {
 		panic(err)
 	}
 	zap.S().Infow("Open Banking Policy set unmarshaled", "policy-set", ps)
-	path := "/am/json/alpha/applications/?_action=create"
+	path := "/am/json/" + common.Config.Identity.AmRealm + "/applications/?_action=create"
 	_, s := httprest.Client.Post(path, ps, map[string]string{
 		"Accept":             "*/*",
 		"Content-Type":       "application/json",
@@ -115,7 +115,7 @@ func CreateAISPPolicy(policyScriptId string) {
 		panic(err)
 	}
 	aisp.Condition.ScriptID = policyScriptId
-	path := "/am/json/alpha/policies/?_action=create"
+	path := "/am/json/" + common.Config.Identity.AmRealm + "/policies/?_action=create"
 	_, s := httprest.Client.Post(path, aisp, map[string]string{
 		"Accept":             "*/*",
 		"Content-Type":       "application/json",
@@ -139,7 +139,7 @@ func CreatePISPPolicy(policyScriptId string) {
 	}
 	pisp.Condition.ScriptID = policyScriptId
 	zap.S().Infow("PISP Policy", "policy", pisp)
-	path := "/am/json/alpha/policies/?_action=create"
+	path := "/am/json/" + common.Config.Identity.AmRealm + "/policies/?_action=create"
 	_, s := httprest.Client.Post(path, pisp, map[string]string{
 		"Accept":             "*/*",
 		"Content-Type":       "application/json",
@@ -152,7 +152,7 @@ func CreatePISPPolicy(policyScriptId string) {
 
 // CreatePolicyEngineOAuth2Client -
 func CreatePolicyEngineOAuth2Client() {
-	if httprest.AlphaClientsExist("policy-client") {
+	if httprest.OAuth2AgentClientsExist("policy-client") {
 		zap.L().Info("Skipping creation of policy engine oauth2 client")
 		return
 	}
@@ -169,7 +169,7 @@ func CreatePolicyEngineOAuth2Client() {
 	}
 	engineClient.CoreOAuth2ClientConfig.Userpassword = "password"
 	zap.S().Infow("Engine client body", "engine", engineClient)
-	path := "/am/json/alpha/realm-config/agents/OAuth2Client/policy-client"
+	path := "/am/json/" + common.Config.Identity.AmRealm + "/realm-config/agents/OAuth2Client/policy-client"
 	s := httprest.Client.Put(path, engineClient, map[string]string{
 		"Accept":           "application/json",
 		"Content-Type":     "application/json",
