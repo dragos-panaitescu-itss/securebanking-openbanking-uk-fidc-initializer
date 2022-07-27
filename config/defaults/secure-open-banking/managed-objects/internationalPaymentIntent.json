@@ -499,13 +499,14 @@
                           },
                           "AddressLine": {
                             "title": "Address Line",
-                            "type": "string",
+                            "type": "array",
                             "viewable": true,
                             "searchable": false,
                             "userEditable": true,
                             "description": "Information that locates and identifies a specific address, as defined by postal services, presented in free format text.",
-                            "minLength": 1,
-                            "maxLength": 70,
+                            "items": {
+                              "type": "string"
+                            },
                             "isVirtual": false
                           }
                         },
@@ -675,13 +676,14 @@
                           },
                           "AddressLine": {
                             "title": "Address Line",
-                            "type": "string",
+                            "type": "array",
                             "viewable": true,
                             "searchable": false,
                             "userEditable": true,
                             "description": "Information that locates and identifies a specific address, as defined by postal services, presented in free format text.",
-                            "minLength": 1,
-                            "maxLength": 70,
+                            "items": {
+                              "type": "string"
+                            },
                             "isVirtual": false
                           }
                         },
@@ -1062,13 +1064,14 @@
                 "properties": {
                   "AddressLine": {
                     "title": "Address Line",
-                    "type": "string",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
                     "viewable": true,
                     "searchable": false,
                     "userEditable": true,
                     "description": "Information that locates and identifies a specific address, as defined by postal services, that is presented in free format text.",
-                    "minLength": 1,
-                    "maxLength": 70,
                     "isVirtual": false
                   },
                   "StreetName": {

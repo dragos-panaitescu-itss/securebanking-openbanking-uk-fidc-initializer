@@ -17,30 +17,48 @@
               "viewable": true,
               "searchable": true,
               "userEditable": true,
+              "description": null,
+              "isVirtual": false,
+              "nullable": false,
               "properties": {
                 "ConsentId": {
-                  "title": "Payment Intent Id",
+                  "title": "Scheduled Payment Intent Id",
                   "type": "string",
                   "viewable": true,
                   "searchable": true,
-                  "userEditable": true
+                  "userEditable": true,
+                  "minLength": 1,
+                  "maxLength": 128,
+                  "description": "OB: Unique identification as assigned by the ASPSP to uniquely identify the consent resource.",
+                  "nullable": false
                 },
                 "CreationDateTime": {
                   "title": "Creation Date Time",
                   "type": "string",
                   "viewable": true,
                   "searchable": true,
-                  "userEditable": true
+                  "userEditable": true,
+                  "description": "Date and time at which the resource was created.",
+                  "nullable": false
+                },
+                "Permission": {
+                  "title": "Permission",
+                  "type": "string",
+                  "viewable": true,
+                  "searchable": true,
+                  "description": "Specifies the Open Banking service request types.",
+                  "userEditable": true,
+                  "nullable": false
                 },
                 "Status": {
-                  "title": "Payment Intent Status",
+                  "title": "Scheduled Payment Intent Status",
                   "type": "string",
                   "viewable": true,
                   "searchable": true,
                   "userEditable": true,
-                  "description": "Payment Intent Status",
-                  "minLength": null,
-                  "isVirtual": false
+                  "description": "Scheduled Payment Intent Status",
+                  "isVirtual": false,
+                  "nullable": false
                 },
                 "StatusUpdateDateTime": {
                   "title": "Status Update Date Time",
@@ -48,9 +66,9 @@
                   "viewable": true,
                   "searchable": true,
                   "userEditable": true,
-                  "description": null,
-                  "minLength": null,
-                  "isVirtual": false
+                  "description": "Date and time at which the consent resource status was updated.",
+                  "isVirtual": false,
+                  "nullable": false
                 },
                 "ExpectedExecutionDateTime": {
                   "title": "Expected Execution Date Time",
@@ -58,8 +76,7 @@
                   "viewable": true,
                   "searchable": false,
                   "userEditable": true,
-                  "description": null,
-                  "minLength": null,
+                  "description": "Expected execution date and time for the payment resource.",
                   "isVirtual": false
                 },
                 "ExpectedSettlementDateTime": {
@@ -68,8 +85,7 @@
                   "viewable": true,
                   "searchable": false,
                   "userEditable": true,
-                  "description": null,
-                  "minLength": null,
+                  "description": "Expected settlement date and time for the payment resource.",
                   "isVirtual": false
                 },
                 "CutOffDateTime": {
@@ -78,8 +94,16 @@
                   "viewable": true,
                   "searchable": false,
                   "userEditable": true,
-                  "description": null,
-                  "minLength": null,
+                  "description": "Specified cut-off date and time for the payment consent.",
+                  "isVirtual": false
+                },
+                "ReadRefundAccount": {
+                  "title": "Read Refund Account",
+                  "type": "string",
+                  "viewable": true,
+                  "searchable": false,
+                  "userEditable": true,
+                  "description": "Specifies to share the refund account details with PISP",
                   "isVirtual": false
                 },
                 "Charges": {
@@ -105,9 +129,11 @@
                       "viewable": true,
                       "searchable": false,
                       "userEditable": true,
-                      "description": null,
-                      "minLength": null,
-                      "isVirtual": false
+                      "description": "Unique identification as assigned by an instructing party for an instructed party to unambiguously identify the instruction.",
+                      "minLength": 1,
+                      "maxLength": 35,
+                      "isVirtual": false,
+                      "nullable": false
                     },
                     "EndToEndIdentification": {
                       "title": "End To End Identification",
@@ -115,8 +141,9 @@
                       "viewable": true,
                       "searchable": false,
                       "userEditable": true,
-                      "description": null,
-                      "minLength": null,
+                      "description": "Unique identification assigned by the initiating party to unambiguously identify the transaction. This identification is passed on, unchanged, throughout the entire end-to-end chain.",
+                      "minLength": 1,
+                      "maxLength": 35,
                       "isVirtual": false
                     },
                     "LocalInstrument": {
@@ -125,8 +152,17 @@
                       "viewable": true,
                       "searchable": false,
                       "userEditable": true,
-                      "description": null,
-                      "minLength": null,
+                      "description": "User community specific instrument.",
+                      "isVirtual": false
+                    },
+                    "RequestedExecutionDateTime": {
+                      "title": "Requested Execution Date Time",
+                      "type": "string",
+                      "viewable": true,
+                      "searchable": false,
+                      "userEditable": true,
+                      "description": "Date at which the initiating party requests the clearing agent to process the payment. ",
+                      "nullable": false,
                       "isVirtual": false
                     },
                     "InstructedAmount": {
@@ -142,8 +178,7 @@
                           "viewable": true,
                           "searchable": false,
                           "userEditable": true,
-                          "description": null,
-                          "minLength": null,
+                          "description": "A number of monetary units specified in an active currency where the unit of currency is explicit and compliant with ISO 4217.",
                           "isVirtual": false
                         },
                         "Currency": {
@@ -152,8 +187,7 @@
                           "viewable": true,
                           "searchable": false,
                           "userEditable": true,
-                          "description": null,
-                          "minLength": null,
+                          "description": "A code allocated to a currency by a Maintenance Agency under an international identification scheme, as described in the latest edition of the international standard ISO 4217 \"Codes for the representation of currencies and funds\".",
                           "isVirtual": false
                         }
                       },
@@ -161,7 +195,7 @@
                         "Amount",
                         "Currency"
                       ],
-                      "description": null,
+                      "description": "Amount of money to be moved between the debtor and creditor, before deduction of charges, expressed in the currency as ordered by the initiating party.",
                       "isVirtual": false,
                       "required": [
                         "Amount",
@@ -186,25 +220,16 @@
                           "minLength": null,
                           "isVirtual": false
                         },
-                        "SchemeName": {
-                          "title": "Scheme Name",
-                          "type": "string",
-                          "viewable": true,
-                          "searchable": false,
-                          "userEditable": true,
-                          "description": null,
-                          "minLength": null,
-                          "isVirtual": false
-                        },
                         "Identification": {
-                          "title": "Debtor Identification",
+                          "title": "Identification",
                           "type": "string",
                           "viewable": true,
                           "searchable": false,
                           "userEditable": true,
-                          "description": "Debtor Identification",
-                          "minLength": null,
-                          "isVirtual": false
+                          "description": "Identification assigned by an institution to identify an account. This identification is known by the account owner.",
+                          "maxLength": 256,
+                          "isVirtual": false,
+                          "nullable": false
                         },
                         "Name": {
                           "title": "Name",
@@ -212,9 +237,18 @@
                           "viewable": true,
                           "searchable": false,
                           "userEditable": true,
-                          "description": null,
-                          "minLength": null,
+                          "description": "Name of the account, as assigned by the account servicing institution.  Usage The account name is the name or names of the account owner(s) represented at an account level. The account name is not the product name or the nickname of the account.",
                           "isVirtual": false
+                        },
+                        "SchemeName": {
+                          "title": "Scheme Name",
+                          "type": "string",
+                          "viewable": true,
+                          "searchable": false,
+                          "userEditable": true,
+                          "description": "Name of the identification scheme, in a coded form as published in an external list.",
+                          "isVirtual": false,
+                          "nullable": false
                         },
                         "SecondaryIdentification": {
                           "title": "Secondary Identification",
@@ -222,8 +256,8 @@
                           "viewable": true,
                           "searchable": false,
                           "userEditable": true,
-                          "description": null,
-                          "minLength": null,
+                          "description": "This is secondary identification of the account, as assigned by the account servicing institution.  This can be used by building societies to additionally identify accounts with a roll number (in addition to a sort code and account number combination)",
+                          "maxLength": 34,
                           "isVirtual": false
                         }
                       },
@@ -234,9 +268,12 @@
                         "Name",
                         "SecondaryIdentification"
                       ],
-                      "description": null,
-                      "isVirtual": false,
-                      "nullable": false
+                      "required": [
+                        "SchemeName",
+                        "Identification"
+                      ],
+                      "description": "Unambiguous identification of the account of the debtor to which a debit entry will be made as a result of the transaction.",
+                      "isVirtual": false
                     },
                     "CreditorAccount": {
                       "title": "Creditor Account",
@@ -245,25 +282,16 @@
                       "searchable": false,
                       "userEditable": true,
                       "properties": {
-                        "SchemeName": {
-                          "title": "Scheme Name",
-                          "type": "string",
-                          "viewable": true,
-                          "searchable": false,
-                          "userEditable": true,
-                          "description": null,
-                          "minLength": null,
-                          "isVirtual": false
-                        },
                         "Identification": {
-                          "title": "Creditor Identification",
+                          "title": "Identification",
                           "type": "string",
                           "viewable": true,
                           "searchable": false,
                           "userEditable": true,
-                          "description": "Creditor Identification",
-                          "minLength": null,
-                          "isVirtual": false
+                          "description": "Identification assigned by an institution to identify an account. This identification is known by the account owner.",
+                          "maxLength": 256,
+                          "isVirtual": false,
+                          "nullable": false
                         },
                         "Name": {
                           "title": "Name",
@@ -271,9 +299,19 @@
                           "viewable": true,
                           "searchable": false,
                           "userEditable": true,
-                          "description": null,
-                          "minLength": null,
-                          "isVirtual": false
+                          "description": "Name of the account, as assigned by the account servicing institution.  Usage The account name is the name or names of the account owner(s) represented at an account level. The account name is not the product name or the nickname of the account.",
+                          "isVirtual": false,
+                          "nullable": false
+                        },
+                        "SchemeName": {
+                          "title": "Scheme Name",
+                          "type": "string",
+                          "viewable": true,
+                          "searchable": false,
+                          "userEditable": true,
+                          "description": "Name of the identification scheme, in a coded form as published in an external list.",
+                          "isVirtual": false,
+                          "nullable": false
                         },
                         "SecondaryIdentification": {
                           "title": "Secondary Identification",
@@ -281,8 +319,8 @@
                           "viewable": true,
                           "searchable": false,
                           "userEditable": true,
-                          "description": null,
-                          "minLength": null,
+                          "description": "This is secondary identification of the account, as assigned by the account servicing institution.  This can be used by building societies to additionally identify accounts with a roll number (in addition to a sort code and account number combination)",
+                          "maxLength": 34,
                           "isVirtual": false
                         }
                       },
@@ -292,7 +330,7 @@
                         "Name",
                         "SecondaryIdentification"
                       ],
-                      "description": null,
+                      "description": "Unambiguous identification of the account of the creditor to which a credit entry will be posted as a result of the payment transaction.",
                       "isVirtual": false,
                       "required": [
                         "SchemeName",
@@ -314,8 +352,7 @@
                           "viewable": true,
                           "searchable": false,
                           "userEditable": true,
-                          "description": null,
-                          "minLength": null,
+                          "description": "Identifies the nature of the postal address.",
                           "isVirtual": false
                         },
                         "Department": {
@@ -324,8 +361,9 @@
                           "viewable": true,
                           "searchable": false,
                           "userEditable": true,
-                          "description": null,
-                          "minLength": null,
+                          "description": "Identification of a division of a large organisation or building.",
+                          "minLength": 1,
+                          "maxLength": 70,
                           "isVirtual": false
                         },
                         "SubDepartment": {
@@ -334,8 +372,9 @@
                           "viewable": true,
                           "searchable": false,
                           "userEditable": true,
-                          "description": null,
-                          "minLength": null,
+                          "description": "Identification of a sub-division of a large organisation or building.",
+                          "minLength": 1,
+                          "maxLength": 70,
                           "isVirtual": false
                         },
                         "StreetName": {
@@ -344,8 +383,9 @@
                           "viewable": true,
                           "searchable": false,
                           "userEditable": true,
-                          "description": null,
-                          "minLength": null,
+                          "description": "Name of a street or thoroughfare.",
+                          "minLength": 1,
+                          "maxLength": 70,
                           "isVirtual": false
                         },
                         "BuildingNumber": {
@@ -354,8 +394,10 @@
                           "viewable": true,
                           "searchable": false,
                           "userEditable": true,
-                          "description": null,
-                          "minLength": null,
+                          "description": "Number that identifies the position of a building on a street.",
+                          "minLength": 1,
+                          "maxLength": 16,
+                          "isVirtual": false,
                           "isVirtual": false
                         },
                         "PostCode": {
@@ -364,8 +406,9 @@
                           "viewable": true,
                           "searchable": false,
                           "userEditable": true,
-                          "description": null,
-                          "minLength": null,
+                          "description": "Identifier consisting of a group of letters and/or numbers that is added to a postal address to assist the sorting of mail.",
+                          "minLength": 1,
+                          "maxLength": 16,
                           "isVirtual": false
                         },
                         "TownName": {
@@ -374,8 +417,9 @@
                           "viewable": true,
                           "searchable": false,
                           "userEditable": true,
-                          "description": null,
-                          "minLength": null,
+                          "description": "Name of a built-up area, with defined boundaries, and a local government.",
+                          "minLength": 1,
+                          "maxLength": 35,
                           "isVirtual": false
                         },
                         "CountrySubDivision": {
@@ -384,8 +428,9 @@
                           "viewable": true,
                           "searchable": false,
                           "userEditable": true,
-                          "description": null,
-                          "minLength": null,
+                          "description": "Identifies a subdivision of a country such as state, region, county.",
+                          "minLength": 1,
+                          "maxLength": 35,
                           "isVirtual": false
                         },
                         "Country": {
@@ -394,19 +439,20 @@
                           "viewable": true,
                           "searchable": false,
                           "userEditable": true,
-                          "description": null,
-                          "minLength": null,
+                          "description": "Nation with its own government.",
                           "isVirtual": false
                         },
                         "AddressLine": {
                           "title": "Address Line",
                           "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
                           "viewable": true,
                           "searchable": false,
                           "userEditable": true,
-                          "items": {
-                            "type": "string"
-                          }
+                          "description": "Information that locates and identifies a specific address, as defined by postal services, presented in free format text.",
+                          "isVirtual": false
                         }
                       },
                       "order": [
@@ -421,9 +467,8 @@
                         "Country",
                         "AddressLine"
                       ],
-                      "description": null,
-                      "isVirtual": false,
-                      "nullable": false
+                      "description": "Information that locates and identifies a specific address, as defined by postal services.",
+                      "isVirtual": false
                     },
                     "RemittanceInformation": {
                       "title": "Remittance Information",
@@ -438,8 +483,9 @@
                           "viewable": true,
                           "searchable": false,
                           "userEditable": true,
-                          "description": null,
-                          "minLength": null,
+                          "description": "Information supplied to enable the matching/reconciliation of an entry with the items that the payment is intended to settle, such as commercial invoices in an accounts' receivable system, in an unstructured form.",
+                          "minLength": 1,
+                          "maxLength": 140,
                           "isVirtual": false
                         },
                         "Reference": {
@@ -448,8 +494,9 @@
                           "viewable": true,
                           "searchable": false,
                           "userEditable": true,
-                          "description": null,
-                          "minLength": null,
+                          "description": "Unique reference, as assigned by the creditor, to unambiguously refer to the payment transaction.",
+                          "minLength": 1,
+                          "maxLength": 35,
                           "isVirtual": false
                         }
                       },
@@ -457,9 +504,8 @@
                         "Unstructured",
                         "Reference"
                       ],
-                      "description": null,
-                      "isVirtual": false,
-                      "nullable": false
+                      "description": "Information supplied to enable the matching of an entry with the items that the transfer is intended to settle, such as commercial invoices in an accounts' receivable system.",
+                      "isVirtual": false
                     },
                     "SupplementaryData": {
                       "title": "Supplementary Data",
@@ -475,6 +521,7 @@
                     "InstructionIdentification",
                     "EndToEndIdentification",
                     "LocalInstrument",
+                    "RequestedExecutionDateTime",
                     "InstructedAmount",
                     "DebtorAccount",
                     "CreditorAccount",
@@ -482,7 +529,13 @@
                     "RemittanceInformation",
                     "SupplementaryData"
                   ],
-                  "description": null,
+                  "required": [
+                    "InstructionIdentification",
+                    "RequestedExecutionDateTime",
+                    "InstructedAmount",
+                    "CreditorAccount"
+                  ],
+                  "description": "The Initiation payload is sent by the initiating party to the ASPSP. It is used to request movement of funds from the debtor account to a creditor for a single domestic payment.",
                   "isVirtual": false,
                   "nullable": false
                 },
@@ -499,9 +552,9 @@
                       "viewable": true,
                       "searchable": false,
                       "userEditable": true,
-                      "description": null,
-                      "minLength": null,
-                      "isVirtual": false
+                      "description": "Type of authorisation flow requested.",
+                      "isVirtual": false,
+                      "nullable": false
                     },
                     "CompletionDateTime": {
                       "title": "Completion Date Time",
@@ -509,8 +562,7 @@
                       "viewable": true,
                       "searchable": false,
                       "userEditable": true,
-                      "description": null,
-                      "minLength": null,
+                      "description": "Date and time at which the requested authorisation flow must be completed.All dates in the JSON payloads are represented in ISO 8601 date-time format.",
                       "isVirtual": false
                     }
                   },
@@ -518,9 +570,58 @@
                     "AuthorisationType",
                     "CompletionDateTime"
                   ],
-                  "description": null,
-                  "isVirtual": false,
-                  "nullable": false
+                  "required": [
+                    "AuthorisationType"
+                  ],
+                  "description": "Type of authorisation flow requested.",
+                  "isVirtual": false
+                },
+                "SCASupportData": {
+                  "title": "SCA Support Data",
+                  "type": "object",
+                  "viewable": true,
+                  "searchable": false,
+                  "userEditable": true,
+                  "properties": {
+                    "AppliedAuthenticationApproach": {
+                      "title": "Applied Authentication Approach",
+                      "type": "string",
+                      "viewable": true,
+                      "searchable": false,
+                      "userEditable": true,
+                      "description": "This field indicates whether the PSU was subject to SCA performed by the TPP",
+                      "maxLength": 40,
+                      "isVirtual": false
+                    },
+                    "ReferencePaymentOrderId": {
+                      "title": "Reference Payment Order Id",
+                      "type": "string",
+                      "viewable": true,
+                      "searchable": false,
+                      "userEditable": true,
+                      "description": "If the payment is recurring, then this field is populated with the transaction identifier of the previous payment occurrence so that the ASPSP can verify that the PISP, amount and the payee are the same as the previous occurrence.",
+                      "minLength": 1,
+                      "maxLength": 40,
+                      "isVirtual": false
+                    },
+                    "RequestedSCAExemptionType": {
+                      "title": "Requested SCA Exemption Type",
+                      "type": "string",
+                      "viewable": true,
+                      "searchable": false,
+                      "userEditable": true,
+                      "description": "This field allows a PISP to request specific SCA Exemption for a Payment Initiation",
+                      "minLength": null,
+                      "isVirtual": false
+                    }
+                  },
+                  "order": [
+                    "AppliedAuthenticationApproach",
+                    "ReferencePaymentOrderId",
+                    "RequestedSCAExemptionType"
+                  ],
+                  "description": "Supporting Data provided by TPP, when requesting SCA Exemption.",
+                  "isVirtual": false
                 }
               },
               "order": [
@@ -531,13 +632,21 @@
                 "ExpectedExecutionDateTime",
                 "ExpectedSettlementDateTime",
                 "CutOffDateTime",
+                "ReadRefundAccount",
+                "Permission",
                 "Charges",
                 "Initiation",
-                "Authorisation"
+                "Authorisation",
+                "SCASupportData"
               ],
-              "description": "Data",
-              "isVirtual": false,
-              "nullable": false
+              "required": [
+                "ConsentId",
+                "CreationDateTime",
+                "Status",
+                "StatusUpdateDateTime",
+                "Permission",
+                "Initiation"
+              ]
             },
             "Risk": {
               "title": "Risk",
@@ -552,8 +661,7 @@
                   "viewable": true,
                   "searchable": false,
                   "userEditable": true,
-                  "description": null,
-                  "minLength": null,
+                  "description": "Specifies the payment context",
                   "isVirtual": false
                 },
                 "MerchantCategoryCode": {
@@ -562,8 +670,9 @@
                   "viewable": true,
                   "searchable": false,
                   "userEditable": true,
-                  "description": null,
-                  "minLength": null,
+                  "description": "Category code conform to ISO 18245, related to the type of services or goods the merchant provides for the transaction.",
+                  "minLength": 3,
+                  "maxLength": 4,
                   "isVirtual": false
                 },
                 "MerchantCustomerIdentification": {
@@ -572,8 +681,9 @@
                   "viewable": true,
                   "searchable": false,
                   "userEditable": true,
-                  "description": null,
-                  "minLength": null,
+                  "description": "The unique customer identifier of the PSU with the merchant.",
+                  "minLength": 1,
+                  "maxLength": 70,
                   "isVirtual": false
                 },
                 "DeliveryAddress": {
@@ -589,9 +699,11 @@
                       "viewable": true,
                       "searchable": false,
                       "userEditable": true,
+                      "description": "Information that locates and identifies a specific address, as defined by postal services, that is presented in free format text.",
                       "items": {
                         "type": "string"
-                      }
+                      },
+                      "isVirtual": false
                     },
                     "StreetName": {
                       "title": "Street Name",
@@ -599,8 +711,9 @@
                       "viewable": true,
                       "searchable": false,
                       "userEditable": true,
-                      "description": null,
-                      "minLength": null,
+                      "description": "Name of a street or thoroughfare.",
+                      "minLength": 1,
+                      "maxLength": 70,
                       "isVirtual": false
                     },
                     "BuildingNumber": {
@@ -609,8 +722,9 @@
                       "viewable": true,
                       "searchable": false,
                       "userEditable": true,
-                      "description": null,
-                      "minLength": null,
+                      "description": "Number that identifies the position of a building on a street.",
+                      "minLength": 1,
+                      "maxLength": 16,
                       "isVirtual": false
                     },
                     "PostCode": {
@@ -619,8 +733,9 @@
                       "viewable": true,
                       "searchable": false,
                       "userEditable": true,
-                      "description": null,
-                      "minLength": null,
+                      "description": "Identifier consisting of a group of letters and/or numbers that is added to a postal address to assist the sorting of mail.",
+                      "minLength": 1,
+                      "maxLength": 16,
                       "isVirtual": false
                     },
                     "TownName": {
@@ -629,19 +744,22 @@
                       "viewable": true,
                       "searchable": false,
                       "userEditable": true,
-                      "description": null,
-                      "minLength": null,
-                      "isVirtual": false
+                      "description": "Name of a built-up area, with defined boundaries, and a local government.",
+                      "minLength": 1,
+                      "maxLength": 35,
+                      "isVirtual": false,
+                      "nullable": false
                     },
                     "CountrySubDivision": {
                       "title": "Country Sub Division",
-                      "type": "array",
+                      "type": "string",
                       "viewable": true,
                       "searchable": false,
                       "userEditable": true,
-                      "items": {
-                        "type": "string"
-                      }
+                      "description": "Identifies a subdivision of a country such as state, region, county.",
+                      "minLength": 1,
+                      "maxLength": 35,
+                      "isVirtual": false
                     },
                     "Country": {
                       "title": "Country",
@@ -649,8 +767,7 @@
                       "viewable": true,
                       "searchable": false,
                       "userEditable": true,
-                      "description": null,
-                      "minLength": null,
+                      "description": "Nation with its own government, occupying a particular territory.",
                       "isVirtual": false
                     }
                   },
@@ -663,13 +780,12 @@
                     "CountrySubDivision",
                     "Country"
                   ],
-                  "description": null,
+                  "description": "Information that locates and identifies a specific address, as defined by postal services or in free format text.",
                   "isVirtual": false,
                   "required": [
                     "TownName",
                     "Country"
-                  ],
-                  "nullable": false
+                  ]
                 }
               },
               "order": [
@@ -678,9 +794,113 @@
                 "MerchantCustomerIdentification",
                 "DeliveryAddress"
               ],
-              "description": null,
+              "description": "The Risk section is sent by the initiating party to the ASPSP. It is used to specify additional details for risk scoring for Payments.",
               "isVirtual": false,
               "nullable": false
+            },
+            "Links": {
+              "title": "Links",
+              "type": "object",
+              "viewable": true,
+              "searchable": false,
+              "userEditable": true,
+              "properties": {
+                "First": {
+                  "title": "First",
+                  "type": "string",
+                  "viewable": true,
+                  "searchable": false,
+                  "userEditable": true,
+                  "description": null,
+                  "isVirtual": false
+                },
+                "Last": {
+                  "title": "Last",
+                  "type": "string",
+                  "viewable": true,
+                  "searchable": false,
+                  "userEditable": true,
+                  "description": null,
+                  "isVirtual": false
+                },
+                "Next": {
+                  "title": "Next",
+                  "type": "string",
+                  "viewable": true,
+                  "searchable": false,
+                  "userEditable": true,
+                  "description": null,
+                  "isVirtual": false
+                },
+                "Prev": {
+                  "title": "Prev",
+                  "type": "string",
+                  "viewable": true,
+                  "searchable": false,
+                  "userEditable": true,
+                  "description": null,
+                  "isVirtual": false
+                },
+                "Self": {
+                  "title": "Self",
+                  "type": "string",
+                  "viewable": true,
+                  "searchable": false,
+                  "userEditable": true,
+                  "description": null,
+                  "isVirtual": false,
+                  "nullable": false
+                }
+              },
+              "order": [
+                "First",
+                "Last",
+                "Next",
+                "Prev",
+                "Self"
+              ],
+              "required": [
+                "Self"
+              ],
+              "description": "Links relevant to the payload",
+              "isVirtual": false
+            },
+            "Meta": {
+              "title": "Meta",
+              "type": "object",
+              "viewable": true,
+              "searchable": false,
+              "userEditable": true,
+              "properties": {
+                "FirstAvailableDateTime": {
+                  "title": "First Available Date Time",
+                  "type": "string",
+                  "viewable": true,
+                  "searchable": false,
+                  "userEditable": true,
+                  "description": "All dates in the JSON payloads are represented in ISO 8601 date-time format.",
+                  "isVirtual": false
+                },
+                "LastAvailableDateTime": {
+                  "title": "Last Available Date Time",
+                  "type": "string",
+                  "viewable": true,
+                  "searchable": false,
+                  "userEditable": true,
+                  "description": "All dates in the JSON payloads are represented in ISO 8601 date-time format. ",
+                  "isVirtual": false
+                }
+              },
+              "order": [
+                "FirstAvailableDateTime",
+                "LastAvailableDateTime",
+                "TotalPages"
+              ],
+              "required": [
+                "Self"
+              ],
+              "description": "Meta Data relevant to the payload",
+              "isVirtual": false
             },
             "user": {
               "title": "User",
@@ -774,6 +994,8 @@
           "order": [
             "Data",
             "Risk",
+            "Links",
+            "Meta",
             "user",
             "apiClient"
           ],
