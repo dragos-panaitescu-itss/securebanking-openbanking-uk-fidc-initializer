@@ -6,7 +6,6 @@ cron: "* * * * *"
 # FIDC value: FIDC (Forgerock Identity Cloud) identity cloud platform
 environment:
   type: FIDC
-  namespace: dev
   
   # RaiseForStatus will exit if go resty returns an error in STRICT mode,
   # be it client error, server error or other. Turning off (false)
