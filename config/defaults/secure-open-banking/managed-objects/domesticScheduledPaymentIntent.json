@@ -129,7 +129,8 @@
                       "description": "Specifies which party/parties will bear the charges associated with the processing of the payment transaction.\nValues:\n - BorneByCreditor\n - BorneByDebtor\n - FollowingServiceLevel\n - Shared",
                       "isVirtual": false,
                       "deleteQueryConfig": false
-                    },"Amount": {
+                    },
+                    "Amount": {
                       "title": "Amount",
                       "type": "object",
                       "viewable": true,
@@ -176,7 +177,17 @@
                       "description": "Charge type, in a coded form.\nValues:\n - UK.OBIE.CHAPSOut",
                       "isVirtual": false,
                       "deleteQueryConfig": false
-                    }
+                    },
+                    "order": [
+                      "ChargeBearer",
+                      "Type",
+                      "Amount"
+                    ],
+                    "required": [
+                      "ChargeBearer",
+                      "Type",
+                      "Amount"
+                    ]
                   }
                 }
               },
