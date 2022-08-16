@@ -945,6 +945,77 @@
                 "isVirtual": false,
                 "nullable": false
               },
+              "ExchangeRateInformation": {
+                "title": "Exchange Rate Information",
+                "type": "object",
+                "viewable": true,
+                "searchable": false,
+                "userEditable": true,
+                "properties": {
+                  "ContractIdentification": {
+                    "title": "Contract Identification",
+                    "type": "string",
+                    "viewable": true,
+                    "searchable": false,
+                    "userEditable": true,
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "description": "A number of monetary units specified in an active currency where the unit of currency is explicit and compliant with ISO 4217.",
+                    "isVirtual": false
+                  },
+                  "ExchangeRate": {
+                    "title": "Exchange Rate",
+                    "type": "string",
+                    "viewable": true,
+                    "searchable": false,
+                    "userEditable": true,
+                    "description": "The factor used for conversion of an amount from one currency to another. This reflects the price at which one currency was bought with another currency.",
+                    "isVirtual": false
+                  },
+                  "ExpirationDateTime": {
+                    "title": "Expiration Date Time",
+                    "type": "string",
+                    "viewable": true,
+                    "searchable": false,
+                    "userEditable": true,
+                    "description": "Specified date and time the exchange rate agreement will expire.All dates in the JSON payloads are represented in ISO 8601 date-time format. \nAll date-time fields in responses must include the timezone. An example is below:\n2017-04-05T10:43:07+00:00",
+                    "isVirtual": false
+                  },
+                  "RateType": {
+                    "title": "Rate Type",
+                    "type": "string",
+                    "viewable": true,
+                    "searchable": false,
+                    "userEditable": true,
+                    "description": "Specifies the type used to complete the currency exchange.\nValues:\n - Actual\n - Agreed\n - Indicative",
+                    "isVirtual": false
+                  },
+                  "UnitCurrency": {
+                    "title": "Unit Currency",
+                    "type": "string",
+                    "viewable": true,
+                    "searchable": false,
+                    "userEditable": true,
+                    "description": "Currency in which the rate of exchange is expressed in a currency exchange. In the example 1GBP = xxxCUR, the unit currency is GBP.\nPattern: ^[A-Z]{3,3}$",
+                    "isVirtual": false
+                  }
+                },
+                "order": [
+                  "ContractIdentification",
+                  "ExchangeRate",
+                  "RateType",
+                  "UnitCurrency",
+                  "ExpirationDateTime"
+                ],
+                "description": "Provides details on the currency exchange rate and contract.",
+                "isVirtual": false,
+                "required": [
+                  "RateType",
+                  "UnitCurrency",
+                  "ExchangeRate"
+                ],
+                "nullable": false
+              },
               "Authorisation": {
                 "title": "Authorisation",
                 "type": "object",
@@ -1100,6 +1171,7 @@
               "ReadRefundAccount",
               "Permission",
               "Charges",
+              "ExchangeRateInformation",
               "Debtor",
               "Initiation",
               "Authorisation",
