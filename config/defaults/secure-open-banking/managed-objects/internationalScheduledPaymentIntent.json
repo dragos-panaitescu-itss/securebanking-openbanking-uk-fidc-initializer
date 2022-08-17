@@ -874,7 +874,7 @@
                       },
                       "ExchangeRate": {
                         "title": "Exchange Rate",
-                        "type": "string",
+                        "type": "number",
                         "viewable": true,
                         "searchable": false,
                         "userEditable": true,
@@ -967,7 +967,7 @@
                   },
                   "ExchangeRate": {
                     "title": "Exchange Rate",
-                    "type": "string",
+                    "type": "number",
                     "viewable": true,
                     "searchable": false,
                     "userEditable": true,
