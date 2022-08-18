@@ -7,8 +7,8 @@
       "schema": {
         "$schema": "http://forgerock.org/json-schema#",
         "type": "object",
-        "title": "Domestic Standing Order Intent",
-        "description": "Domestic Standing Order Intent",
+        "title": "Domestic Standing Order Payment Intent",
+        "description": "Domestic Standing Order Payment Intent",
         "icon": "fa-money",
         "properties": {
           "Data": {
@@ -51,12 +51,12 @@
                 "nullable": false
               },
               "Status": {
-                "title": "Standing Order Intent Status",
+                "title": "Standing Order Payment Intent Status",
                 "type": "string",
                 "viewable": true,
                 "searchable": true,
                 "userEditable": true,
-                "description": "Standing Order Intent Status",
+                "description": "Standing Order Payment Intent Status",
                 "isVirtual": false,
                 "nullable": false
               },
@@ -734,13 +734,14 @@
                 "properties": {
                   "AddressLine": {
                     "title": "Address Line",
-                    "type": "string",
+                    "type": "array",
                     "viewable": true,
                     "searchable": false,
                     "userEditable": true,
                     "description": "Information that locates and identifies a specific address, as defined by postal services, that is presented in free format text.",
-                    "minLength": 1,
-                    "maxLength": 70,
+                    "items": {
+                      "type": "string"
+                    },
                     "isVirtual": false
                   },
                   "StreetName": {
