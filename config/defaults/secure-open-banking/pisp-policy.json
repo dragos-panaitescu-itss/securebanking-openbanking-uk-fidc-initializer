@@ -4,6 +4,8 @@
   "description": "",
   "resources": [
     "https://rs.{{- if .Hosts.WildcardFQDN -}}{{ .Hosts.WildcardFQDN }}{{- else -}}{{ .Hosts.BaseFQDN }}{{- end }}:443/open-banking/*/pisp/domestic-payment-consents/*/funds-confirmation",
+    "https://rs.{{- if .Hosts.WildcardFQDN -}}{{ .Hosts.WildcardFQDN }}{{- else -}}{{ .Hosts.BaseFQDN }}{{- end }}:443/open-banking/*/pisp/international-payment-consents/*/funds-confirmation",
+    "https://rs.{{- if .Hosts.WildcardFQDN -}}{{ .Hosts.WildcardFQDN }}{{- else -}}{{ .Hosts.BaseFQDN }}{{- end }}:443/open-banking/*/pisp/international-scheduled-payment-consents/*/funds-confirmation",
     "https://rs.{{- if .Hosts.WildcardFQDN -}}{{ .Hosts.WildcardFQDN }}{{- else -}}{{ .Hosts.BaseFQDN }}{{- end }}:443/open-banking/*/pisp/domestic-payments",
     "https://rs.{{- if .Hosts.WildcardFQDN -}}{{ .Hosts.WildcardFQDN }}{{- else -}}{{ .Hosts.BaseFQDN }}{{- end }}:443/open-banking/*/pisp/domestic-payments/*",
     "https://rs.{{- if .Hosts.WildcardFQDN -}}{{ .Hosts.WildcardFQDN }}{{- else -}}{{ .Hosts.BaseFQDN }}{{- end }}:443/open-banking/*/pisp/domestic-payments/*/payment-details",
