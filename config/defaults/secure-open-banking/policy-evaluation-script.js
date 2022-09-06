@@ -10,12 +10,12 @@ function getIdmClientDetails() {
 }
 
 // Constants
-STATUS_AUTHORISED = "Authorised"
+var statusList = ["Authorised", "Consumed"];
 var script_name = "policy_evaluation_script.js"
 logger.message(script_name + ": starting")
 
 var accountsAndTransactionsPermissions = [
-    {name: "READACCOUNTSBASIC", property: { permission: "ReadAccountsBasic", requestType: "accounts"}},
+    {name: "READACCOUNTSBASIC", property: {permission: "ReadAccountsBasic", requestType: "accounts"}},
     {name: "READACCOUNTSDETAIL", property: {permission: "ReadAccountsDetail", requestType: "accounts"}},
     {name: "READBALANCES", property: {permission: "ReadBalances", requestType: "balances"}},
     {name: "READBENEFICIARIESBASIC", property: {permission: "ReadBeneficiariesBasic", requestType: "beneficiaries"}},
@@ -241,7 +241,6 @@ function deepCompare(arg1, arg2) {
     return false;
 }
 
-
 function initiationMatch(initiationRequest, initiation) {
     var initiationRequestObj = JSON.parse(stringFromArray(base64decode(initiationRequest)))
     if (initiation.DebtorAccount && initiation.DebtorAccount.AccountId) {
@@ -274,7 +273,7 @@ if (intentType === "accountAccessIntent") {
     // The responseAttributes expected always and array as value
     var userResourceOwner = new Array(intent.user._id)
 
-    if (status != STATUS_AUTHORISED) {
+    if (statusList.indexOf(status) == -1) {
         logger.message(script_name + "-[Account Access]: Rejecting request - status [" + status + "]")
         authorized = false
     } else if (apiRequest.id == null) {
@@ -307,7 +306,7 @@ if (intentType === "accountAccessIntent") {
     var status = intent.Data.Status
     var userResourceOwner = new Array(intent.user._id)
 
-    if (status !== STATUS_AUTHORISED) {
+    if (statusList.indexOf(status) == -1) {
         logger.message(script_name + "-[Payments]: Rejecting request - status [" + status + "]")
         authorized = false
     } else {
