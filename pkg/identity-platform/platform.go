@@ -59,9 +59,10 @@ func CreateIGOAuth2Client() {
 
 	path := fmt.Sprintf("/am/json/"+common.Config.Identity.AmRealm+"/realm-config/agents/OAuth2Client/%s", common.Config.Ig.IgClientId)
 	s := httprest.Client.Put(path, oauth2Client, map[string]string{
-		"Accept":       "application/json",
-		"Content-Type": "application/json",
-		"Connection":   "keep-alive",
+		"Accept":           "application/json",
+		"Content-Type":     "application/json",
+		"Connection":       "keep-alive",
+		"X-Requested-With": "securebanking-openbanking-uk-fidc-initializer",
 	})
 
 	zap.S().Infow("IG OAuth2 Client", "statusCode", s)

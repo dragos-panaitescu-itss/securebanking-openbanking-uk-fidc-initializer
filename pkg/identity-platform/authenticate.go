@@ -38,8 +38,8 @@ func FromUserSession(cookieName string) *common.Session {
 	resp, err := restClient.R().
 		SetHeader("Accept", "application/json").
 		SetHeader("Accept-API-Version", "resource=2.0, protocol=1.0").
-		SetHeader("X-OpenAM-Username", common.Config.Users.CdmAdminUsername).
-		SetHeader("X-OpenAM-Password", common.Config.Users.CdmAdminPassword).
+		SetHeader("X-OpenAM-Username", common.Config.Users.FrPlatformAdminUsername).
+		SetHeader("X-OpenAM-Password", common.Config.Users.FrPlatformAdminPassword).
 		Post(path)
 
 	common.RaiseForStatus(err, resp.Error(), resp.StatusCode())
