@@ -1,23 +1,21 @@
 function getIdmClientDetails() {
     return {
-        "id": "{{IDM_CLIENT_ID}}",
-        "secret": "{{IDM_CLIENT_SECRET}}",
-        "endpoint": "http://am/am/oauth2/realms/root/realms/alpha/access_token",
+        "id": "{{ .Identity.IdmClientId }}",
+        "secret": "{{ .Identity.IdmClientSecret }}",
+        "endpoint": "http://am/am/oauth2/realms/root/realms/{{ .Identity.AmRealm }}/access_token",
         "scope": "fr:idm:*",
-        "idmAdminUsername": "{{IG_IDM_USER}}",
-        "idmAdminPassword": "{{IG_IDM_PASSWORD}}"
+        "idmAdminUsername": "{{ .Ig.IgIdmUser }}",
+        "idmAdminPassword": "{{ .Ig.IgIdmPassword }}"
     }
 }
 
 // Constants
-STATUS_AUTHORISED = "Authorised"
+var statusList = ["Authorised", "Consumed"];
 var script_name = "policy_evaluation_script.js"
 logger.message(script_name + ": starting")
 
-var accountsAndTransactionsPermissions = [{
-    name: "READACCOUNTSBASIC",
-    property: {permission: "ReadAccountsBasic", requestType: "accounts"}
-},
+var accountsAndTransactionsPermissions = [
+    {name: "READACCOUNTSBASIC", property: {permission: "ReadAccountsBasic", requestType: "accounts"}},
     {name: "READACCOUNTSDETAIL", property: {permission: "ReadAccountsDetail", requestType: "accounts"}},
     {name: "READBALANCES", property: {permission: "ReadBalances", requestType: "balances"}},
     {name: "READBENEFICIARIESBASIC", property: {permission: "ReadBeneficiariesBasic", requestType: "beneficiaries"}},
@@ -30,22 +28,10 @@ var accountsAndTransactionsPermissions = [{
     {name: "READPARTYPSU", property: {permission: "ReadPartyPSU", requestType: "party"}},
     {name: "READPRODUCT", property: {permission: "ReadProducts", requestType: "product"}},
     {name: "READPRODUCTS", property: {permission: "ReadProducts", requestType: "products"}},
-    {
-        name: "READSCHEDULEDPAYMENTSBASIC",
-        property: {permission: "ReadScheduledPaymentsBasic", requestType: "scheduled-payments"}
-    },
-    {
-        name: "READSCHEDULEDPAYMENTSDETAIL",
-        property: {permission: "ReadScheduledPaymentsDetail", requestType: "scheduled-payments"}
-    },
-    {
-        name: "READSTANDINGORDERSBASIC",
-        property: {permission: "ReadStandingOrdersBasic", requestType: "standing-orders"}
-    },
-    {
-        name: "READSTANDINGORDERSDETAIL",
-        property: {permission: "ReadStandingOrdersDetail", requestType: "standing-orders"}
-    },
+    {name: "READSCHEDULEDPAYMENTSBASIC", property: {permission: "ReadScheduledPaymentsBasic", requestType: "scheduled-payments"}},
+    {name: "READSCHEDULEDPAYMENTSDETAIL", property: {permission: "ReadScheduledPaymentsDetail", requestType: "scheduled-payments"}},
+    {name: "READSTANDINGORDERSBASIC",property: {permission: "ReadStandingOrdersBasic", requestType: "standing-orders"}},
+    {name: "READSTANDINGORDERSDETAIL",property: {permission: "ReadStandingOrdersDetail", requestType: "standing-orders"}},
     {name: "READSTATEMENTSBASIC", property: {permission: "ReadStatementsBasic", requestType: "statements"}},
     {name: "READSTATEMENTSDETAIL", property: {permission: "ReadStatementsDetail", requestType: "statements"}},
     {name: "READTRANSACTIONSBASIC", property: {permission: "ReadTransactionsBasic", requestType: "transactions"}},
@@ -256,9 +242,6 @@ function deepCompare(arg1, arg2) {
 }
 
 function initiationMatch(initiationRequest, initiation) {
-
-    // TODO: do comparison at object level, like JSONAssert()
-
     var initiationRequestObj = JSON.parse(stringFromArray(base64decode(initiationRequest)))
     if (initiation.DebtorAccount && initiation.DebtorAccount.AccountId) {
         delete initiation.DebtorAccount.AccountId;
@@ -266,8 +249,7 @@ function initiationMatch(initiationRequest, initiation) {
     logger.message(script_name + ": initiationRequestObj " + JSON.stringify(initiationRequestObj))
     logger.message(script_name + ": initiation " + JSON.stringify(initiation))
 
-    var match = deepCompare(initiationRequestObj, initiation)
-
+    var match = deepCompare(initiationRequestObj, initiation);
     if (!match) {
         logger.warning(script_name + ": Mismatch between request [" + JSON.stringify(initiationRequestObj) + "] and consent [" + JSON.stringify(initiation) + "]");
     }
@@ -291,7 +273,7 @@ if (intentType === "accountAccessIntent") {
     // The responseAttributes expected always and array as value
     var userResourceOwner = new Array(intent.user._id)
 
-    if (status != STATUS_AUTHORISED) {
+    if (statusList.indexOf(status) == -1) {
         logger.message(script_name + "-[Account Access]: Rejecting request - status [" + status + "]")
         authorized = false
     } else if (apiRequest.id == null) {
@@ -324,7 +306,7 @@ if (intentType === "accountAccessIntent") {
     var status = intent.Data.Status
     var userResourceOwner = new Array(intent.user._id)
 
-    if (status !== STATUS_AUTHORISED) {
+    if (statusList.indexOf(status) == -1) {
         logger.message(script_name + "-[Payments]: Rejecting request - status [" + status + "]")
         authorized = false
     } else {
