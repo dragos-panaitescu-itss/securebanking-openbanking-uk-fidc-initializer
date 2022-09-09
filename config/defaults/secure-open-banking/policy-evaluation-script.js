@@ -1,11 +1,24 @@
+// wrong implementation for temporary image to run the initializer, the templating isn't supported yet for that old version
+// function getIdmClientDetails() {
+//     return {
+//         "id": "{{ .Identity.IdmClientId }}",
+//         "secret": "{{ .Identity.IdmClientSecret }}",
+//         "endpoint": "http://am/am/oauth2/realms/root/realms/{{ .Identity.AmRealm }}/access_token",
+//         "scope": "fr:idm:*",
+//         "idmAdminUsername": "{{ .Ig.IgIdmUser }}",
+//         "idmAdminPassword": "{{ .Ig.IgIdmPassword }}"
+//     }
+// }
+
+// Temporary fix for that branch
 function getIdmClientDetails() {
     return {
-        "id": "{{ .Identity.IdmClientId }}",
-        "secret": "{{ .Identity.IdmClientSecret }}",
-        "endpoint": "http://am/am/oauth2/realms/root/realms/{{ .Identity.AmRealm }}/access_token",
+        "id": "{{IDM_CLIENT_ID}}",
+        "secret": "{{IDM_CLIENT_SECRET}}",
+        "endpoint": "http://am/am/oauth2/realms/root/realms/alpha/access_token",
         "scope": "fr:idm:*",
-        "idmAdminUsername": "{{ .Ig.IgIdmUser }}",
-        "idmAdminPassword": "{{ .Ig.IgIdmPassword }}"
+        "idmAdminUsername": "{{IG_IDM_USER}}",
+        "idmAdminPassword": "{{IG_IDM_PASSWORD}}"
     }
 }
 
