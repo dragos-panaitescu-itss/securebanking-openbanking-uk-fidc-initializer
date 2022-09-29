@@ -1,4 +1,11 @@
 cron: "* * * * *"
+  
+deployment:  
+  imageOverride:
+    enabled: true
+    repo: eu.gcr.io/sbat-gcr-develop/securebanking
+    iam_initializer_image_name: secureopenbanking-uk-iam-initializer
+    tag: latest
 
 # ** Value Name:** iam_initializer_image_location
 #

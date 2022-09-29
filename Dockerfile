@@ -1,5 +1,5 @@
 FROM alpine:3.16.0
-
+RUN apk update
 RUN apk --no-cache add curl libc6-compat gcompat
 RUN addgroup -S sob-group && adduser -S sob-user -G sob-group
 
