@@ -40,7 +40,10 @@ var accountsAndTransactionsPermissions = [
     {name: "READTRANSACTIONSDETAIL", property: {permission: "ReadTransactionsDetail", requestType: "transactions"}}
 ];
 
-var paymentsIntents = ["domesticPaymentIntent", "domesticScheduledPaymentIntent", "domesticStandingOrderIntent", "internationalPaymentIntent", "internationalScheduledPaymentIntent"];
+var paymentsIntents = [
+    "domesticPaymentIntent", "domesticScheduledPaymentIntent", "domesticStandingOrderIntent",
+    "internationalPaymentIntent", "internationalScheduledPaymentIntent", "internationalStandingOrderIntent"
+];
 
 function getPermissionAccountAndTransactions(name) {
     for (var i = 0; i < accountsAndTransactionsPermissions.length; i++) {
@@ -205,6 +208,8 @@ function findIntentType(api) {
         return "internationalPaymentIntent"
     } else if (api === "international-scheduled-payments" || api === "international-scheduled-payment-consents") {
         return "internationalScheduledPaymentIntent"
+    } else if (api == "international-standing-orders" || api == "international-standing-order-consents") {
+        return "internationalStandingOrderIntent"
     }
     return null
 }
