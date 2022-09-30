@@ -14,7 +14,7 @@ spec:
           containers:
             - name: {{ .Chart.Name }}
               {{- if .Values.deployment.imageOverride.enabled }}
-              image: "{{ .Values.deployment.imageOverride.repo }}/{{ .Values.deployment.imageOverride.iam_initializer_image_name}}:{{ .Values.deployment.imageOverride.iam-init.tag }}"
+              image: "{{ .Values.deployment.imageOverride.repo }}/{{ .Values.deployment.imageOverride.iam_initializer_image_name}}:{{ .Values.deployment.imageOverride.iam_initializer_image_tag }}"
               {{- else }}
               image: "eu.gcr.io/sbat-gcr-release/securebanking/{{ .Chart.Name }}:{{ .Chart.AppVersion }}"
               {{- end }}
