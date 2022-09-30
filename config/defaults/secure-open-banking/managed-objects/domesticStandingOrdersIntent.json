@@ -3,7 +3,7 @@
     "operation": "add",
     "field": "objects/-",
     "value": {
-      "name": "domesticStandingOrderIntent",
+      "name": "domesticStandingOrdersIntent",
       "schema": {
         "$schema": "http://forgerock.org/json-schema#",
         "type": "object",
@@ -949,7 +949,7 @@
             "userEditable": false,
             "returnByDefault": false,
             "reverseRelationship": true,
-            "reversePropertyName": "domesticStandingOrderIntents",
+            "reversePropertyName": "domesticStandingOrdersIntents",
             "validate": false,
             "properties": {
               "_ref": {
@@ -990,7 +990,7 @@
             "userEditable": false,
             "returnByDefault": false,
             "reverseRelationship": true,
-            "reversePropertyName": "domesticStandingOrderIntents",
+            "reversePropertyName": "domesticStandingOrdersIntents",
             "validate": false,
             "properties": {
               "_ref": {

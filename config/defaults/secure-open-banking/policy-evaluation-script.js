@@ -41,8 +41,8 @@ var accountsAndTransactionsPermissions = [
 ];
 
 var paymentsIntents = [
-    "domesticPaymentIntent", "domesticScheduledPaymentIntent", "domesticStandingOrderIntent",
-    "internationalPaymentIntent", "internationalScheduledPaymentIntent", "internationalStandingOrderIntent"
+    "domesticPaymentIntent", "domesticScheduledPaymentIntent", "domesticStandingOrdersIntent",
+    "internationalPaymentIntent", "internationalScheduledPaymentIntent", "internationalStandingOrdersIntent"
 ];
 
 function getPermissionAccountAndTransactions(name) {
@@ -203,13 +203,13 @@ function findIntentType(api) {
     } else if (api === "domestic-scheduled-payments" || api === "domestic-scheduled-payment-consents") {
         return "domesticScheduledPaymentIntent"
     } else if (api === "domestic-standing-orders" || api === "domestic-standing-order-consents") {
-        return "domesticStandingOrderIntent"
+        return "domesticStandingOrdersIntent"
     } else if (api === "international-payments" || api === "international-payment-consents") {
         return "internationalPaymentIntent"
     } else if (api === "international-scheduled-payments" || api === "international-scheduled-payment-consents") {
         return "internationalScheduledPaymentIntent"
     } else if (api == "international-standing-orders" || api == "international-standing-order-consents") {
-        return "internationalStandingOrderIntent"
+        return "internationalStandingOrdersIntent"
     }
     return null
 }
