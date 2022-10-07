@@ -217,7 +217,14 @@ function findIntentType(api) {
 function getIntent(intentId, intentType) {
     var accessToken = getIdmAccessToken();
     var request = new org.forgerock.http.protocol.Request();
-    var uri = "http://idm/openidm/managed/" + intentType + "/" + intentId + "?_fields=_id,_rev,Data,Risk,user/_id,accounts,apiClient/_id"
+
+    // Account Access Intent IDM schema has been restructured, therefore query fields are different
+    var uri
+    if (intentType === "accountAccessIntent") {
+        uri = "http://idm/openidm/managed/accountAccessIntent/" + intentId + "?_fields=_id,_rev,OBIntentObject,user/_id,accounts,apiClient/_id"
+    } else {
+        uri = "http://idm/openidm/managed/" + intentType + "/" + intentId + "?_fields=_id,_rev,Data,Risk,user/_id,accounts,apiClient/_id"
+    }
     logger.message(script_name + ": IDM fetch " + uri)
 
     request.setMethod('GET');
@@ -272,8 +279,9 @@ var intent = getIntent(intentId, intentType);
 if (intentType === "accountAccessIntent") {
     logger.message(script_name + ": Account Access Intent");
 
-    var status = intent.Data.Status
-    var permissions = intent.Data.Permissions
+    var obIntentObj = intent.OBIntentObject
+    var status = obIntentObj.Data.Status
+    var permissions = obIntentObj.Data.Permissions
     var accounts = intent.accounts
     // The responseAttributes expected always and array as value
     var userResourceOwner = new Array(intent.user._id)

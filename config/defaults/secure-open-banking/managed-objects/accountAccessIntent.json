@@ -11,110 +11,152 @@
           "description": "Account Access Intent",
           "icon": "fa-money",
           "properties": {
-            "Data": {
-              "title": "Data",
-              "type": "object",
+            "OBVersion": {
+              "title": "OB Version",
+              "description": "Open Banking API Version used to create this object",
+              "type": "string",
               "viewable": true,
-              "searchable": false,
-              "userEditable": true,
-              "properties": {
-                "ConsentId": {
-                  "title": "Account Access Consent Id",
-                  "type": "string",
-                  "viewable": true,
-                  "searchable": true,
-                  "userEditable": true,
-                  "description": null,
-                  "minLength": null,
-                  "isVirtual": false
-                },
-                "CreationDateTime": {
-                  "title": "Creation Date Time",
-                  "type": "string",
-                  "viewable": true,
-                  "searchable": true,
-                  "userEditable": true
-                },
-                "Status": {
-                  "title": "Account Access Status",
-                  "type": "string",
-                  "viewable": true,
-                  "searchable": true,
-                  "userEditable": true
-                },
-                "StatusUpdateDateTime": {
-                  "title": "Status Update Date Time",
-                  "type": "string",
-                  "viewable": true,
-                  "searchable": true,
-                  "userEditable": true,
-                  "description": null,
-                  "minLength": null,
-                  "isVirtual": false
-                },
-                "Permissions": {
-                  "title": "Permission",
-                  "type": "array",
-                  "viewable": true,
-                  "searchable": false,
-                  "userEditable": true,
-                  "items": {
-                    "type": "string"
-                  }
-                },
-                "ExpirationDateTime": {
-                  "title": "Expiration Date Time",
-                  "type": "string",
-                  "viewable": true,
-                  "searchable": false,
-                  "userEditable": true,
-                  "description": null,
-                  "minLength": null,
-                  "isVirtual": false
-                },
-                "TransactionFromDateTime": {
-                  "title": "Transaction From Date Time",
-                  "type": "string",
-                  "viewable": true,
-                  "searchable": false,
-                  "userEditable": true,
-                  "description": null,
-                  "minLength": null,
-                  "isVirtual": false
-                },
-                "TransactionToDateTime": {
-                  "title": "Transaction To Date Time",
-                  "type": "string",
-                  "viewable": true,
-                  "searchable": false,
-                  "userEditable": true,
-                  "description": null,
-                  "minLength": null,
-                  "isVirtual": false
-                }
-              },
-              "order": [
-                "ConsentId",
-                "CreationDateTime",
-                "Status",
-                "StatusUpdateDateTime",
-                "Permissions",
-                "ExpirationDateTime",
-                "TransactionFromDateTime",
-                "TransactionToDateTime"
-              ],
-              "description": null,
-              "isVirtual": false,
+              "searchable": true,
+              "userEditable": false,
+              "minLength": 1,
+              "maxLength": 16,
               "nullable": false
             },
-            "Risk": {
-              "title": "Risk",
+            "OBIntentObjectType": {
+              "title": "OB Intent Object Type",
+              "description": "Open Banking API Intent Object Type",
+              "type": "string",
+              "viewable": true,
+              "searchable": true,
+              "userEditable": false,
+              "minLength": 1,
+              "maxLength": 128,
+              "nullable": false
+            },
+            "OBIntentObject": {
+              "title": "OB Intent",
+              "description": "Open Banking Intent Object",
               "type": "object",
               "viewable": true,
               "searchable": false,
               "userEditable": true,
-              "properties": {},
-              "order": []
+              "isVirtual": false,
+              "nullable": false,
+              "properties": {
+                "Data": {
+                  "title": "Data",
+                  "type": "object",
+                  "viewable": true,
+                  "searchable": false,
+                  "userEditable": true,
+                  "properties": {
+                    "ConsentId": {
+                      "title": "Account Access Consent Id",
+                      "type": "string",
+                      "viewable": true,
+                      "searchable": true,
+                      "userEditable": true,
+                      "description": null,
+                      "minLength": null,
+                      "isVirtual": false
+                    },
+                    "CreationDateTime": {
+                      "title": "Creation Date Time",
+                      "type": "string",
+                      "viewable": true,
+                      "searchable": true,
+                      "userEditable": true
+                    },
+                    "Status": {
+                      "title": "Account Access Status",
+                      "type": "string",
+                      "viewable": true,
+                      "searchable": true,
+                      "userEditable": true
+                    },
+                    "StatusUpdateDateTime": {
+                      "title": "Status Update Date Time",
+                      "type": "string",
+                      "viewable": true,
+                      "searchable": true,
+                      "userEditable": true,
+                      "description": null,
+                      "minLength": null,
+                      "isVirtual": false
+                    },
+                    "Permissions": {
+                      "title": "Permission",
+                      "type": "array",
+                      "viewable": true,
+                      "searchable": false,
+                      "userEditable": true,
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "ExpirationDateTime": {
+                      "title": "Expiration Date Time",
+                      "type": "string",
+                      "viewable": true,
+                      "searchable": false,
+                      "userEditable": true,
+                      "description": null,
+                      "minLength": null,
+                      "isVirtual": false
+                    },
+                    "TransactionFromDateTime": {
+                      "title": "Transaction From Date Time",
+                      "type": "string",
+                      "viewable": true,
+                      "searchable": false,
+                      "userEditable": true,
+                      "description": null,
+                      "minLength": null,
+                      "isVirtual": false
+                    },
+                    "TransactionToDateTime": {
+                      "title": "Transaction To Date Time",
+                      "type": "string",
+                      "viewable": true,
+                      "searchable": false,
+                      "userEditable": true,
+                      "description": null,
+                      "minLength": null,
+                      "isVirtual": false
+                    }
+                  },
+                  "required": [
+                    "ConsentId",
+                    "Status"
+                  ],
+                  "order": [
+                    "ConsentId",
+                    "CreationDateTime",
+                    "Status",
+                    "StatusUpdateDateTime",
+                    "Permissions",
+                    "ExpirationDateTime",
+                    "TransactionFromDateTime",
+                    "TransactionToDateTime"
+                  ],
+                  "description": null,
+                  "isVirtual": false,
+                  "nullable": false
+                },
+                "Risk": {
+                  "title": "Risk",
+                  "type": "object",
+                  "viewable": true,
+                  "searchable": false,
+                  "userEditable": true,
+                  "properties": {},
+                  "order": []
+                }
+              },
+              "required": [
+                "Data",
+                "Risk"
+              ]
             },
             "user": {
               "title": "User",
@@ -219,15 +261,17 @@
             }
           },
           "order": [
-            "Data",
-            "Risk",
+            "OBVersion",
+            "OBIntentObjectType",
+            "OBIntentObject",
             "user",
             "apiClient",
             "accounts"
           ],
           "required": [
-            "Data",
-            "Risk"
+            "OBIntentObjectType",
+            "OBVersion",
+            "OBIntentObject"
           ]
         },
         "iconClass": "fa fa-database",
@@ -235,7 +279,7 @@
         "postCreate": {
           "type": "text/javascript",
           "globals": {},
-          "source": "object.Data.ConsentId = object._id\nopenidm.update(resourceName.toString(),null, object)"
+          "source": "object.OBIntentObject.Data.ConsentId = object._id\nopenidm.update(resourceName.toString(),null, object)"
         }
       }
     }
