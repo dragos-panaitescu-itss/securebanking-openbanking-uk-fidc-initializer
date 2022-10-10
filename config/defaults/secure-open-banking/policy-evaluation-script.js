@@ -227,17 +227,11 @@ function findIntentType(api) {
     return null
 }
 
-function getIntent(intentId, intentType) {
+function fetchIntentFromIdm(intentId, intentType) {
     var accessToken = getIdmAccessToken();
     var request = new org.forgerock.http.protocol.Request();
+    var uri ="http://idm/openidm/managed/" + intentType + "/" + intentId + "?_fields=_id,_rev,OBIntentObject,user/_id,accounts,apiClient/_id"
 
-    // Account Access Intent IDM schema has been restructured, therefore query fields are different
-    var uri
-    if (intentType === "accountAccessIntent") {
-        uri = "http://idm/openidm/managed/accountAccessIntent/" + intentId + "?_fields=_id,_rev,OBIntentObject,user/_id,accounts,apiClient/_id"
-    } else {
-        uri = "http://idm/openidm/managed/" + intentType + "/" + intentId + "?_fields=_id,_rev,Data,Risk,user/_id,accounts,apiClient/_id"
-    }
     logger.message(script_name + ": IDM fetch " + uri)
 
     request.setMethod('GET');
@@ -245,10 +239,9 @@ function getIntent(intentId, intentType) {
     request.getHeaders().add("Authorization", "Bearer " + accessToken);
 
     var response = httpClient.send(request).get();
-    logResponse("getIntent", response);
+    logResponse("fetchIntentFromIdm", response);
 
-    var intent = JSON.parse(response.getEntity().getString());
-    return intent
+    return JSON.parse(response.getEntity().getString());
 }
 
 function deepCompare(arg1, arg2) {
@@ -268,9 +261,6 @@ function deepCompare(arg1, arg2) {
 
 function initiationMatch(initiationRequest, initiation) {
     var initiationRequestObj = JSON.parse(stringFromArray(base64decode(initiationRequest)))
-    if (initiation.DebtorAccount && initiation.DebtorAccount.AccountId) {
-        delete initiation.DebtorAccount.AccountId;
-    }
     logger.message(script_name + ": initiationRequestObj " + JSON.stringify(initiationRequestObj))
     logger.message(script_name + ": initiation " + JSON.stringify(initiation))
 
@@ -287,17 +277,15 @@ var apiRequest = parseResourceUri()
 logger.message(script_name + ": req " + apiRequest.api + ":" + apiRequest.id + ":" + apiRequest.data);
 
 var intentType = findIntentType(apiRequest.api)
-var intent = getIntent(intentId, intentType);
-
+var intent = fetchIntentFromIdm(intentId, intentType);
+var obIntentObj = intent.OBIntentObject
+var status = obIntentObj.Data.Status
+// The responseAttributes expects each value to be an array
+var userResourceOwner = new Array(intent.user._id)
 if (intentType === "accountAccessIntent") {
     logger.message(script_name + ": Account Access Intent");
-
-    var obIntentObj = intent.OBIntentObject
-    var status = obIntentObj.Data.Status
     var permissions = obIntentObj.Data.Permissions
     var accounts = intent.accounts
-    // The responseAttributes expected always and array as value
-    var userResourceOwner = new Array(intent.user._id)
 
     if (statusList.indexOf(status) == -1) {
         logger.message(script_name + "-[Account Access]: Rejecting request - status [" + status + "]")
@@ -329,9 +317,6 @@ if (intentType === "accountAccessIntent") {
 } else if (paymentsIntents.indexOf(intentType) !== -1) {
     logger.message(script_name + ": Payments Intent");
 
-    var status = intent.Data.Status
-    var userResourceOwner = new Array(intent.user._id)
-
     if (statusList.indexOf(status) == -1) {
         logger.message(script_name + "-[Payments]: Rejecting request - status [" + status + "]")
         authorized = false
@@ -344,7 +329,7 @@ if (intentType === "accountAccessIntent") {
                 case "POST":
                     logger.message(script_name + "-[Payments]: POST request");
                     var initiation = environment.get("initiation").iterator().next()
-                    authorized = initiationMatch(initiation, intent.Data.Initiation)
+                    authorized = initiationMatch(initiation, obIntentObj.Data.Initiation)
                     break;
                 case "GET":
                     logger.message(script_name + "-[Payments]: GET request");
