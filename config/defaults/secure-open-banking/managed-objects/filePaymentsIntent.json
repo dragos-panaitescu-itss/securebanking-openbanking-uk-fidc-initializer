@@ -563,6 +563,12 @@
             "description": "Account id",
             "minLength": null,
             "isVirtual": false
+          },
+          "FileContent": {
+            "title": "File content",
+            "type": "string",
+            "description": "File content",
+            "isVirtual": false
           }
         },
         "order": [
