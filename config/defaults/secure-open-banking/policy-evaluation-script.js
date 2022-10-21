@@ -42,7 +42,7 @@ var accountsAndTransactionsPermissions = [
 
 var paymentsIntents = [
     "domesticPaymentIntent", "domesticScheduledPaymentIntent", "domesticStandingOrdersIntent",
-    "internationalPaymentIntent", "internationalScheduledPaymentIntent", "internationalStandingOrdersIntent"
+    "internationalPaymentIntent", "internationalScheduledPaymentIntent", "internationalStandingOrdersIntent", "filePaymentsIntent"
 ];
 
 function getPermissionAccountAndTransactions(name) {
@@ -210,7 +210,10 @@ function findIntentType(api) {
         return "internationalScheduledPaymentIntent"
     } else if (api == "international-standing-orders" || api == "international-standing-order-consents") {
         return "internationalStandingOrdersIntent"
+    } else if (api == "file-payments" || api == "file-payment-consents") {
+        return "filePaymentsIntent"
     }
+
     return null
 }
 
