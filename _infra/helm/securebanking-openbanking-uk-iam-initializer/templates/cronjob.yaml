@@ -32,6 +32,11 @@ spec:
                     configMapKeyRef:
                       name: securebanking-platform-config
                       key: IDENTITY_PLATFORM_FQDN
+                - name: HOSTS.IG_FQDN
+                  valueFrom:
+                    configMapKeyRef:
+                      name: securebanking-platform-config
+                      key: IG_FQDN
                 - name: HOSTS.IDENTITY_PLATFORM_FQDN
                   valueFrom:
                     configMapKeyRef:
