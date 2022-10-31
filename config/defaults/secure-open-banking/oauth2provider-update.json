@@ -85,17 +85,15 @@
       "A256CBC-HS512"
     ],
     "supportedIDTokenSigningAlgorithms": [
-      "PS256",
-      "ES256"        ]
+      "PS256"
+    ]
   },
   "advancedOIDCConfig": {
     "supportedTokenIntrospectionResponseSigningAlgorithms": [
-      "PS256",
-      "ES256"
+      "PS256"
     ],
     "supportedRequestParameterSigningAlgorithms": [
-      "PS256",      
-      "ES256"
+      "PS256"
     ],
     "idTokenInfoClientAuthenticationEnabled": true,
     "alwaysAddClaimsToToken": true,
@@ -104,8 +102,7 @@
       "urn:openbanking:psd2:ca": "PSD2CustomerAuthentication"
     },
     "supportedTokenEndpointAuthenticationSigningAlgorithms": [
-      "PS256",
-      "ES256"
+      "PS256"
     ],
     "supportedRequestParameterEncryptionAlgorithms": [
       "ECDH-ES+A256KW",
@@ -153,8 +150,7 @@
       "A256CBC-HS512"
     ],
     "supportedUserInfoSigningAlgorithms": [
-      "PS256",
-      "ES256"
+      "PS256"
     ],
     "supportedTokenIntrospectionResponseEncryptionEnc": [
       "A256GCM",
@@ -187,8 +183,7 @@
   },
   "cibaConfig": {
     "supportedCibaSigningAlgorithms": [
-      "PS256",
-      "ES256"
+      "PS256"
     ],
     "cibaAuthReqIdLifetime": 600,
     "cibaMinimumPollingInterval": 2
@@ -196,8 +191,7 @@
   "consent": {
     "clientsCanSkipConsent": false,
     "supportedRcsRequestSigningAlgorithms": [
-      "RS256",
-      "ES256"
+      "PS256"
     ],
     "supportedRcsRequestEncryptionMethods": [
       "A256GCM",
@@ -220,8 +214,7 @@
       "A192KW"
     ],
     "supportedRcsResponseSigningAlgorithms": [
-      "RS256",      
-      "ES256"
+      "PS256"
     ],
     "enableRemoteConsent": true,
     "supportedRcsResponseEncryptionAlgorithms": [
