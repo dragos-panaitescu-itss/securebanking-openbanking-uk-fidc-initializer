@@ -85,49 +85,17 @@
       "A256CBC-HS512"
     ],
     "supportedIDTokenSigningAlgorithms": [
-      "PS384",
-      "ES384",
-      "RS384",
-      "HS256",
-      "HS512",
-      "ES256",
-      "RS256",
-      "HS384",
-      "ES512",
       "PS256",
-      "PS512",
-      "RS512"
-    ]
+      "ES256"        ]
   },
   "advancedOIDCConfig": {
     "supportedTokenIntrospectionResponseSigningAlgorithms": [
-      "PS384",
-      "RS384",
-      "EdDSA",
-      "ES384",
-      "HS256",
-      "HS512",
-      "ES256",
-      "RS256",
-      "HS384",
-      "ES512",
       "PS256",
-      "PS512",
-      "RS512"
+      "ES256"
     ],
     "supportedRequestParameterSigningAlgorithms": [
-      "PS384",
-      "ES384",
-      "RS384",
-      "HS256",
-      "HS512",
-      "ES256",
-      "RS256",
-      "HS384",
-      "ES512",
-      "PS256",
-      "PS512",
-      "RS512"
+      "PS256",      
+      "ES256"
     ],
     "idTokenInfoClientAuthenticationEnabled": true,
     "alwaysAddClaimsToToken": true,
@@ -136,18 +104,8 @@
       "urn:openbanking:psd2:ca": "PSD2CustomerAuthentication"
     },
     "supportedTokenEndpointAuthenticationSigningAlgorithms": [
-      "PS384",
-      "ES384",
-      "RS384",
-      "HS256",
-      "HS512",
-      "ES256",
-      "RS256",
-      "HS384",
-      "ES512",
       "PS256",
-      "PS512",
-      "RS512"
+      "ES256"
     ],
     "supportedRequestParameterEncryptionAlgorithms": [
       "ECDH-ES+A256KW",
@@ -195,13 +153,8 @@
       "A256CBC-HS512"
     ],
     "supportedUserInfoSigningAlgorithms": [
-      "ES384",
-      "HS256",
-      "HS512",
-      "ES256",
-      "RS256",
-      "HS384",
-      "ES512"
+      "PS256",
+      "ES256"
     ],
     "supportedTokenIntrospectionResponseEncryptionEnc": [
       "A256GCM",
@@ -234,8 +187,8 @@
   },
   "cibaConfig": {
     "supportedCibaSigningAlgorithms": [
-      "ES256",
-      "PS256"
+      "PS256",
+      "ES256"
     ],
     "cibaAuthReqIdLifetime": 600,
     "cibaMinimumPollingInterval": 2
@@ -243,18 +196,8 @@
   "consent": {
     "clientsCanSkipConsent": false,
     "supportedRcsRequestSigningAlgorithms": [
-      "PS384",
-      "ES384",
-      "RS384",
-      "HS256",
-      "HS512",
-      "ES256",
       "RS256",
-      "HS384",
-      "ES512",
-      "PS256",
-      "PS512",
-      "RS512"
+      "ES256"
     ],
     "supportedRcsRequestEncryptionMethods": [
       "A256GCM",
@@ -277,18 +220,8 @@
       "A192KW"
     ],
     "supportedRcsResponseSigningAlgorithms": [
-      "PS384",
-      "ES384",
-      "RS384",
-      "HS256",
-      "HS512",
-      "ES256",
-      "RS256",
-      "HS384",
-      "ES512",
-      "PS256",
-      "PS512",
-      "RS512"
+      "RS256",      
+      "ES256"
     ],
     "enableRemoteConsent": true,
     "supportedRcsResponseEncryptionAlgorithms": [
