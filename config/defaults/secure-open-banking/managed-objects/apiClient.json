@@ -67,13 +67,7 @@
               "userEditable": true,
               "description": null,
               "minLength": null,
-              "isVirtual": false,
-              "policies": [
-                {
-                  "policyId": "unique",
-                  "params": {}
-                }
-              ]
+              "isVirtual": false
             },
             "apiClientOrg": {
               "title": "API Client Organisation",
@@ -233,7 +227,7 @@
             "domesticPaymentIntents",
             "accountAccessIntents"
           ],
-          "required": [],
+          "required": ["id", "name", "oauth2ClientId","ssa"],
           "mat-icon": null
         },
         "iconClass": "fa fa-database",
