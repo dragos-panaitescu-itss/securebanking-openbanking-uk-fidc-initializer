@@ -48,9 +48,7 @@
     ],
     "responseTypeClasses": [
       "code|org.forgerock.oauth2.core.AuthorizationCodeResponseTypeHandler",
-      "id_token|org.forgerock.openidconnect.IdTokenResponseTypeHandler",
-      "device_code|org.forgerock.oauth2.core.TokenResponseTypeHandler",
-      "token|org.forgerock.oauth2.core.TokenResponseTypeHandler"
+      "id_token|org.forgerock.openidconnect.IdTokenResponseTypeHandler"
     ],
     "tokenCompressionEnabled": false,
     "allowedAudienceValues": [],
