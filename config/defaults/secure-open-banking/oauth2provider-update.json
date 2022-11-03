@@ -51,7 +51,9 @@
       "id_token|org.forgerock.openidconnect.IdTokenResponseTypeHandler"
     ],
     "tokenCompressionEnabled": false,
-    "allowedAudienceValues": [],
+    "allowedAudienceValues": [
+      "https://{{.Hosts.IgFQDN}}:443/am/oauth2/realms/root/realms/alpha/access_token"
+    ],
     "scopeImplementationClass": "org.forgerock.openam.oauth2.OpenAMScopeValidator",
     "tlsCertificateRevocationCheckingEnabled": false
   },

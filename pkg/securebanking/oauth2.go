@@ -268,6 +268,7 @@ func CreateOIDCClaimsScript(cookie *http.Cookie) string {
 
 // UpdateOAuth2Provider - update the oauth 2 provider, must supply the claimScript ID
 func UpdateOAuth2Provider(claimsScriptID string) {
+	zap.S().Info("UpdateOAuth2Provider() Creating OAuth2Provider service in the " + common.Config.Identity.AmRealm + " realm")
 
 	oauth2Provider := &types.OAuth2Provider{}
 	err := common.Unmarshal(common.Config.Environment.Paths.ConfigSecureBanking+"oauth2provider-update.json", &common.Config, oauth2Provider)
@@ -276,18 +277,14 @@ func UpdateOAuth2Provider(claimsScriptID string) {
 	}
 
 	if oauth2ProviderExists(oauth2Provider.Type.ID) {
-		zap.L().Info("OAuth2 provider exists")
+		zap.L().Info("UpdateOAuth2Provider() OAuth2 provider exists")
 		return
 	}
 
-	for _, v := range common.Config.Hosts.IgAudienceFQDNs {
-		oauth2Provider.AdvancedOAuth2Config.AllowedAudienceValues = append(
-			oauth2Provider.AdvancedOAuth2Config.AllowedAudienceValues,
-			fmt.Sprintf("https://%s/am/oauth2/realms/root/realms/"+common.Config.Identity.AmRealm+"/access_token", v))
-	}
 	oauth2Provider.CoreOIDCConfig.OidcClaimsScript = claimsScriptID
-	zap.S().Infow("Updating OAuth2 provider", "claimScriptId", oauth2Provider.CoreOIDCConfig.OidcClaimsScript)
+	zap.S().Infow("UpdateOAuth2Provider() Updating OAuth2 provider", "claimScriptId", oauth2Provider.CoreOIDCConfig.OidcClaimsScript)
 	path := "/am/json/" + common.Config.Identity.AmRealm + "/realm-config/services/oauth-oidc"
+	zap.S().Info("UpdateOAuth2Provider() Updating OAuth2Provider via the following path {}", path)
 	s := httprest.Client.Put(path, oauth2Provider, map[string]string{
 		"Accept":           "*/*",
 		"Content-Type":     "application/json",
@@ -295,7 +292,7 @@ func UpdateOAuth2Provider(claimsScriptID string) {
 		"X-Requested-With": "ForgeRock Identity Cloud Postman Collection",
 	})
 
-	zap.S().Infow("OAuth2 provider", "statusCode", s)
+	zap.S().Infow("UpdateOAuth2Provider() OAuth2 provider", "statusCode", s)
 }
 
 func oauth2ProviderExists(id string) bool {
@@ -325,7 +322,8 @@ func CreateBaseURLSourceService(cookie *http.Cookie) {
 	if err != nil {
 		panic(err)
 	}
-	path := fmt.Sprintf("https://%s/am/json/realms/root/realms/"+common.Config.Identity.AmRealm+"/realm-config/services/baseurl?_action=create", common.Config.Hosts.IdentityPlatformFQDN)
+	path := fmt.Sprintf("https://%s/am/json/realms/root/realms/"+common.Config.Identity.AmRealm+"/realm-config/services/baseurl?_action=create",
+		common.Config.Hosts.IdentityPlatformFQDN)
 	resp, err := restClient.R().
 		SetHeader("Accept", "application/json").
 		SetHeader("Accept-API-Version", "protocol=1.0,resource=1.0").
