@@ -281,8 +281,8 @@ func UpdateOAuth2Provider(claimsScriptID string) {
 		return
 	}
 
-	oauth2Provider.CoreOIDCConfig.OidcClaimsScript = claimsScriptID
-	zap.S().Infow("UpdateOAuth2Provider() Updating OAuth2 provider", "claimScriptId", oauth2Provider.CoreOIDCConfig.OidcClaimsScript)
+	oauth2Provider.PluginsConfig.OidcClaimsScript = claimsScriptID
+	zap.S().Infow("UpdateOAuth2Provider() Updating OAuth2 provider", "claimScriptId", claimsScriptID)
 	path := "/am/json/" + common.Config.Identity.AmRealm + "/realm-config/services/oauth-oidc"
 	zap.S().Info("UpdateOAuth2Provider() Updating OAuth2Provider via the following path {}", path)
 	s := httprest.Client.Put(path, oauth2Provider, map[string]string{

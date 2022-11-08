@@ -1,6 +1,5 @@
 {
   "coreOAuth2Config": {
-    "accessTokenModificationScript": "d22f9a0c-426a-4466-b95e-d0f125b0d5fa",
     "usePolicyEngineForScope": false,
     "macaroonTokensEnabled": false,
     "statelessTokensEnabled": true,
@@ -54,11 +53,9 @@
     "allowedAudienceValues": [
       "https://{{.Hosts.IgFQDN}}:443/am/oauth2/realms/root/realms/alpha/access_token"
     ],
-    "scopeImplementationClass": "org.forgerock.openam.oauth2.OpenAMScopeValidator",
     "tlsCertificateRevocationCheckingEnabled": false
   },
   "coreOIDCConfig": {
-    "oidcClaimsScript": "",
     "supportedClaims": [
       "acr",
       "openbanking_intent_id"
@@ -242,6 +239,21 @@
   "deviceCodeConfig": {
     "devicePollInterval": 5,
     "deviceCodeLifetime": 300
+  },
+  "pluginsConfig" : {
+    "accessTokenModificationScript": "d22f9a0c-426a-4466-b95e-d0f125b0d5fa",
+    "accessTokenEnricherClass": "org.forgerock.openam.oauth2.OpenAMScopeValidator",
+    "accessTokenModificationPluginType": "SCRIPTED",
+    "accessTokenModifierClass": "org.forgerock.openam.oauth2.OpenAMScopeValidator",
+    "authorizeEndpointDataProviderClass": "org.forgerock.openam.oauth2.OpenAMScopeValidator",
+    "authorizeEndpointDataProviderPluginType": "JAVA",
+    "oidcClaimsScript" : "",
+    "oidcClaimsClass": "org.forgerock.openam.oauth2.OpenAMScopeValidator",
+    "oidcClaimsPluginType": "SCRIPTED",
+    "evaluateScopeClass": "org.forgerock.openam.oauth2.OpenAMScopeValidator",
+    "evaluateScopePluginType": "JAVA",
+    "validateScopeClass": "org.forgerock.openam.oauth2.OpenAMScopeValidator",
+    "validateScopePluginType": "JAVA"
   },
   "_id": "",
   "_type": {
