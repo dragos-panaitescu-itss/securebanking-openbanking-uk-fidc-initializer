@@ -1,0 +1,12 @@
+{
+  "cookieDomains": [
+    "{{.Hosts.BaseFQDN}}"
+  ],
+  "locale": "en_US",
+  "_id": "",
+  "_type": {
+    "_id": "platform",
+    "name": "Platform",
+    "collection": false
+  }
+}

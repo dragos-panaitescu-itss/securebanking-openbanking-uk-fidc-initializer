@@ -322,8 +322,10 @@ func CreateBaseURLSourceService(cookie *http.Cookie) {
 	if err != nil {
 		panic(err)
 	}
+
 	path := fmt.Sprintf("https://%s/am/json/realms/root/realms/"+common.Config.Identity.AmRealm+"/realm-config/services/baseurl?_action=create",
 		common.Config.Hosts.IdentityPlatformFQDN)
+
 	resp, err := restClient.R().
 		SetHeader("Accept", "application/json").
 		SetHeader("Accept-API-Version", "protocol=1.0,resource=1.0").

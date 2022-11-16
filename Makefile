@@ -1,5 +1,6 @@
 service := secureopenbanking-uk-iam-initializer
 gcr-repo := sbat-gcr-develop
+binary-name := initialize
 
 .PHONY: all
 all: mod build
@@ -7,8 +8,8 @@ all: mod build
 mod:
 	go mod download
 
-build: clean
-	go build -o initialize
+build: clean mod
+	go build -o ${binary-name}
 
 test:
 	go test ./...
@@ -19,7 +20,8 @@ test-ci: mod
 	PATH=$(PATH):${localPath}/pact/bin go test ./...
 
 clean:
-	rm -f initialize
+	go clean
+	rm -f ${binary-name}
 
 docker: clean mod
 ifndef tag

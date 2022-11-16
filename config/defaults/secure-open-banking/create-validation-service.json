@@ -1,0 +1,11 @@
+{
+  "validGotoDestinations": [
+    "https://{{.Hosts.IdentityPlatformFQDN}}/*?*",
+    "https://{{.Hosts.IgFQDN}}/am/*?*"
+  ],
+  "_type": {
+    "_id": "validation",
+    "name": "Validation Service",
+    "collection": false
+  }
+}
