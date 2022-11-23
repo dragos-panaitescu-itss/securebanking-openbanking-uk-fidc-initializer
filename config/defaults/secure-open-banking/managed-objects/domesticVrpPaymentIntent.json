@@ -102,6 +102,15 @@
                     "description": "Indicates whether information about RefundAccount should be included in the payment response.\nValues:\n - True\n - False",
                     "isVirtual": false
                   },
+                  "DebtorAccount": {
+                    "title": "Debtor Account",
+                    "type": "string",
+                    "viewable": true,
+                    "searchable": false,
+                    "userEditable": true,
+                    "description": "The approved DebtorAccount that the payment can be made from. The value must be populated for GET responses once the consent is approved.",
+                    "isVirtual": false
+                  },
                   "Initiation": {
                     "title": "Initiation",
                     "type": "object",
@@ -235,182 +244,134 @@
                         ],
                         "nullable": false
                       },
-                      "CreditorAgent": {
-                        "title": "Creditor Agent",
+                      "CreditorPostalAddress": {
+                        "title": "Creditor Postal Address",
                         "type": "object",
                         "viewable": true,
                         "searchable": false,
                         "userEditable": true,
                         "properties": {
-                          "Name": {
-                            "title": "Name",
+                          "AddressType": {
+                            "title": "Address Type",
                             "type": "string",
                             "viewable": true,
                             "searchable": false,
                             "userEditable": true,
-                            "minLength": 1,
-                            "maxLength": 140,
-                            "description": "Name by which a party is known and which is usually used to identify that party.",
+                            "description": "Identifies the nature of the postal address.",
                             "isVirtual": false
                           },
-                          "Identification": {
-                            "title": "Identification",
+                          "Department": {
+                            "title": "Department",
                             "type": "string",
                             "viewable": true,
                             "searchable": false,
                             "userEditable": true,
+                            "description": "Identification of a division of a large organisation or building.",
+                            "minLength": 1,
+                            "maxLength": 70,
+                            "isVirtual": false
+                          },
+                          "SubDepartment": {
+                            "title": "SubDepartment",
+                            "type": "string",
+                            "viewable": true,
+                            "searchable": false,
+                            "userEditable": true,
+                            "description": "Identification of a sub-division of a large organisation or building.",
+                            "minLength": 1,
+                            "maxLength": 70,
+                            "isVirtual": false
+                          },
+                          "StreetName": {
+                            "title": "Street Name",
+                            "type": "string",
+                            "viewable": true,
+                            "searchable": false,
+                            "userEditable": true,
+                            "description": "Name of a street or thoroughfare.",
+                            "minLength": 1,
+                            "maxLength": 70,
+                            "isVirtual": false
+                          },
+                          "BuildingNumber": {
+                            "title": "Building Number",
+                            "type": "string",
+                            "viewable": true,
+                            "searchable": false,
+                            "userEditable": true,
+                            "description": "Number that identifies the position of a building on a street.",
+                            "minLength": 1,
+                            "maxLength": 16,
+                            "isVirtual": false
+                          },
+                          "PostCode": {
+                            "title": "Post Code",
+                            "type": "string",
+                            "viewable": true,
+                            "searchable": false,
+                            "userEditable": true,
+                            "description": "Identifier consisting of a group of letters and/or numbers that is added to a postal address to assist the sorting of mail.",
+                            "minLength": 1,
+                            "maxLength": 16,
+                            "isVirtual": false
+                          },
+                          "TownName": {
+                            "title": "Town Name",
+                            "type": "string",
+                            "viewable": true,
+                            "searchable": false,
+                            "userEditable": true,
+                            "description": "Name of a built-up area, with defined boundaries, and a local government.",
                             "minLength": 1,
                             "maxLength": 35,
-                            "description": "Unique and unambiguous identification of a financial institution or a branch of a financial institution.",
                             "isVirtual": false
                           },
-                          "SchemeName": {
-                            "title": "Scheme Name",
+                          "CountrySubDivision": {
+                            "title": "Country Sub Division",
                             "type": "string",
                             "viewable": true,
                             "searchable": false,
                             "userEditable": true,
-                            "description": "Name of the identification scheme, in a coded form as published in an external list.\nValues:\n - UK.OBIE.BICFI",
+                            "description": "Identifies a subdivision of a country such as state, region, county.",
+                            "minLength": 1,
+                            "maxLength": 35,
                             "isVirtual": false
                           },
-                          "PostalAddress": {
-                            "title": "Postal Address",
-                            "type": "object",
+                          "Country": {
+                            "title": "Country",
+                            "type": "string",
                             "viewable": true,
                             "searchable": false,
                             "userEditable": true,
-                            "properties": {
-                              "AddressType": {
-                                "title": "Address Type",
-                                "type": "string",
-                                "viewable": true,
-                                "searchable": false,
-                                "userEditable": true,
-                                "description": "Identifies the nature of the postal address.",
-                                "isVirtual": false
-                              },
-                              "Department": {
-                                "title": "Department",
-                                "type": "string",
-                                "viewable": true,
-                                "searchable": false,
-                                "userEditable": true,
-                                "description": "Identification of a division of a large organisation or building.",
-                                "minLength": 1,
-                                "maxLength": 70,
-                                "isVirtual": false
-                              },
-                              "SubDepartment": {
-                                "title": "SubDepartment",
-                                "type": "string",
-                                "viewable": true,
-                                "searchable": false,
-                                "userEditable": true,
-                                "description": "Identification of a sub-division of a large organisation or building.",
-                                "minLength": 1,
-                                "maxLength": 70,
-                                "isVirtual": false
-                              },
-                              "StreetName": {
-                                "title": "Street Name",
-                                "type": "string",
-                                "viewable": true,
-                                "searchable": false,
-                                "userEditable": true,
-                                "description": "Name of a street or thoroughfare.",
-                                "minLength": 1,
-                                "maxLength": 70,
-                                "isVirtual": false
-                              },
-                              "BuildingNumber": {
-                                "title": "Building Number",
-                                "type": "string",
-                                "viewable": true,
-                                "searchable": false,
-                                "userEditable": true,
-                                "description": "Number that identifies the position of a building on a street.",
-                                "minLength": 1,
-                                "maxLength": 16,
-                                "isVirtual": false
-                              },
-                              "PostCode": {
-                                "title": "Post Code",
-                                "type": "string",
-                                "viewable": true,
-                                "searchable": false,
-                                "userEditable": true,
-                                "description": "Identifier consisting of a group of letters and/or numbers that is added to a postal address to assist the sorting of mail.",
-                                "minLength": 1,
-                                "maxLength": 16,
-                                "isVirtual": false
-                              },
-                              "TownName": {
-                                "title": "Town Name",
-                                "type": "string",
-                                "viewable": true,
-                                "searchable": false,
-                                "userEditable": true,
-                                "description": "Name of a built-up area, with defined boundaries, and a local government.",
-                                "minLength": 1,
-                                "maxLength": 35,
-                                "isVirtual": false
-                              },
-                              "CountrySubDivision": {
-                                "title": "Country Sub Division",
-                                "type": "string",
-                                "viewable": true,
-                                "searchable": false,
-                                "userEditable": true,
-                                "description": "Identifies a subdivision of a country such as state, region, county.",
-                                "minLength": 1,
-                                "maxLength": 35,
-                                "isVirtual": false
-                              },
-                              "Country": {
-                                "title": "Country",
-                                "type": "string",
-                                "viewable": true,
-                                "searchable": false,
-                                "userEditable": true,
-                                "description": "Nation with its own government.",
-                                "isVirtual": false
-                              },
-                              "AddressLine": {
-                                "title": "Address Line",
-                                "type": "array",
-                                "viewable": true,
-                                "searchable": false,
-                                "userEditable": true,
-                                "description": "Information that locates and identifies a specific address, as defined by postal services, presented in free format text.",
-                                "items": {
-                                  "type": "string"
-                                },
-                                "isVirtual": false
-                              }
+                            "description": "Nation with its own government.",
+                            "isVirtual": false
+                          },
+                          "AddressLine": {
+                            "title": "Address Line",
+                            "type": "array",
+                            "viewable": true,
+                            "searchable": false,
+                            "userEditable": true,
+                            "description": "Information that locates and identifies a specific address, as defined by postal services, presented in free format text.",
+                            "items": {
+                              "type": "string"
                             },
-                            "order": [
-                              "AddressType",
-                              "Department",
-                              "SubDepartment",
-                              "StreetName",
-                              "BuildingNumber",
-                              "PostCode",
-                              "TownName",
-                              "CountrySubDivision",
-                              "Country",
-                              "AddressLine"
-                            ],
-                            "description": "Information that locates and identifies a specific address, as defined by postal services.",
                             "isVirtual": false
                           }
                         },
                         "order": [
-                          "Identification",
-                          "Name",
-                          "SchemeName",
-                          "PostalAddress"
+                          "AddressLine",
+                          "AddressType",
+                          "BuildingNumber",
+                          "Country",
+                          "CountrySubDivision",
+                          "Department",
+                          "PostCode",
+                          "StreetName",
+                          "SubDepartment",
+                          "TownName"
                         ],
-                        "description": "Financial institution servicing an account for the creditor.",
+                        "description": "Information that locates and identifies a specific address, as defined by postal services.",
                         "isVirtual": false,
                         "nullable": false
                       },
@@ -472,6 +433,19 @@
                         "searchable": false,
                         "userEditable": true,
                         "description": "Indicates that the PSU authentication methods supported.",
+                        "items": {
+                          "type": "string"
+                        },
+                        "isVirtual": false,
+                        "nullable": false
+                      },
+                      "PSUInteractionTypes": {
+                        "title": "PSUInteractionTypes",
+                        "type": "array",
+                        "viewable": true,
+                        "searchable": false,
+                        "userEditable": true,
+                        "description": "Indicates interaction type, currently if customer is present or not present.",
                         "items": {
                           "type": "string"
                         },
@@ -626,6 +600,7 @@
                     },
                     "order": [
                       "PSUAuthenticationMethods",
+                      "PSUInteractionTypes",
                       "VRPType",
                       "ValidFromDateTime",
                       "ValidToDateTime",
@@ -635,9 +610,11 @@
                     ],
                     "required": [
                       "PSUAuthenticationMethods",
-                      "VRPType"
+                      "VRPType",
+                      "MaximumIndividualAmount",
+                      "PeriodicLimits"
                     ],
-                    "description": "The control parameters under which this VRP must operate",
+                    "description": "The control parameters under which this VRP must operate.",
                     "isVirtual": false
                   }
                 },
@@ -655,7 +632,6 @@
                   "CreationDateTime",
                   "Status",
                   "StatusUpdateDateTime",
-                  "DebtorAccount",
                   "Initiation",
                   "ControlParameters"
                 ]
@@ -674,6 +650,15 @@
                     "searchable": false,
                     "userEditable": true,
                     "description": "Specifies the payment context.",
+                    "isVirtual": false
+                  },
+                  "PaymentPurposeCode": {
+                    "title": "Payment Purpose Code",
+                    "type": "string",
+                    "viewable": true,
+                    "searchable": false,
+                    "userEditable": true,
+                    "description": "Category code, related to the type of services or goods that corresponds to the underlying purpose of the payment that conforms to Recommended UK Purpose Code in ISO 20022 Payment Messaging List.",
                     "isVirtual": false
                   },
                   "MerchantCategoryCode": {
@@ -696,6 +681,33 @@
                     "description": "The unique customer identifier of the PSU with the merchant.",
                     "minLength": 1,
                     "maxLength": 70,
+                    "isVirtual": false
+                  },
+                  "ContractPresentIndicator": {
+                    "title": "Contract Present Indicator",
+                    "type": "boolean",
+                    "viewable": true,
+                    "searchable": false,
+                    "userEditable": true,
+                    "description": "Indicates if Payee has a contractual relationship with the PISP.",
+                    "isVirtual": false
+                  },
+                  "BeneficiaryPrepopulatedIndicator": {
+                    "title": "Beneficiary Prepopulated Indicator",
+                    "type": "boolean",
+                    "viewable": true,
+                    "searchable": false,
+                    "userEditable": true,
+                    "description": "Indicates if PISP has immutably prepopulated payment details in for the PSU.",
+                    "isVirtual": false
+                  },
+                  "BeneficiaryAccountType": {
+                    "title": "BeneficiaryAccountType",
+                    "type": "string",
+                    "viewable": true,
+                    "searchable": false,
+                    "userEditable": true,
+                    "description": "Specifies the extended type of account.",
                     "isVirtual": false
                   },
                   "DeliveryAddress": {
@@ -802,8 +814,12 @@
                 },
                 "order": [
                   "PaymentContextCode",
+                  "PaymentPurposeCode",
                   "MerchantCategoryCode",
                   "MerchantCustomerIdentification",
+                  "ContractPresentIndicator",
+                  "BeneficiaryPrepopulatedIndicator",
+                  "BeneficiaryAccountType",
                   "DeliveryAddress"
                 ],
                 "description": "The consent payload is sent by the initiating party to the ASPSP. It is used to request a consent to move funds from the debtor account to a creditor.",
