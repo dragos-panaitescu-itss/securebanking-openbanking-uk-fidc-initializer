@@ -6,6 +6,7 @@
     "https://rs.{{- if .Hosts.WildcardFQDN -}}{{ .Hosts.WildcardFQDN }}{{- else -}}{{ .Hosts.BaseFQDN }}{{- end }}:443/open-banking/*/pisp/domestic-payment-consents/*/funds-confirmation",
     "https://rs.{{- if .Hosts.WildcardFQDN -}}{{ .Hosts.WildcardFQDN }}{{- else -}}{{ .Hosts.BaseFQDN }}{{- end }}:443/open-banking/*/pisp/international-payment-consents/*/funds-confirmation",
     "https://rs.{{- if .Hosts.WildcardFQDN -}}{{ .Hosts.WildcardFQDN }}{{- else -}}{{ .Hosts.BaseFQDN }}{{- end }}:443/open-banking/*/pisp/international-scheduled-payment-consents/*/funds-confirmation",
+    "https://rs.{{- if .Hosts.WildcardFQDN -}}{{ .Hosts.WildcardFQDN }}{{- else -}}{{ .Hosts.BaseFQDN }}{{- end }}:443/open-banking/*/pisp/domestic-vrp-consents/*/funds-confirmation",
     "https://rs.{{- if .Hosts.WildcardFQDN -}}{{ .Hosts.WildcardFQDN }}{{- else -}}{{ .Hosts.BaseFQDN }}{{- end }}:443/open-banking/*/pisp/domestic-payments",
     "https://rs.{{- if .Hosts.WildcardFQDN -}}{{ .Hosts.WildcardFQDN }}{{- else -}}{{ .Hosts.BaseFQDN }}{{- end }}:443/open-banking/*/pisp/domestic-payments/*",
     "https://rs.{{- if .Hosts.WildcardFQDN -}}{{ .Hosts.WildcardFQDN }}{{- else -}}{{ .Hosts.BaseFQDN }}{{- end }}:443/open-banking/*/pisp/domestic-payments/*/payment-details",
@@ -27,7 +28,10 @@
     "https://rs.{{- if .Hosts.WildcardFQDN -}}{{ .Hosts.WildcardFQDN }}{{- else -}}{{ .Hosts.BaseFQDN }}{{- end }}:443/open-banking/*/pisp/file-payments",
     "https://rs.{{- if .Hosts.WildcardFQDN -}}{{ .Hosts.WildcardFQDN }}{{- else -}}{{ .Hosts.BaseFQDN }}{{- end }}:443/open-banking/*/pisp/file-payments/*",
     "https://rs.{{- if .Hosts.WildcardFQDN -}}{{ .Hosts.WildcardFQDN }}{{- else -}}{{ .Hosts.BaseFQDN }}{{- end }}:443/open-banking/*/pisp/file-payments/*/report-file",
-    "https://rs.{{- if .Hosts.WildcardFQDN -}}{{ .Hosts.WildcardFQDN }}{{- else -}}{{ .Hosts.BaseFQDN }}{{- end }}:443/open-banking/*/pisp/file-payments/*/payment-details"
+    "https://rs.{{- if .Hosts.WildcardFQDN -}}{{ .Hosts.WildcardFQDN }}{{- else -}}{{ .Hosts.BaseFQDN }}{{- end }}:443/open-banking/*/pisp/file-payments/*/payment-details",
+    "https://rs.{{- if .Hosts.WildcardFQDN -}}{{ .Hosts.WildcardFQDN }}{{- else -}}{{ .Hosts.BaseFQDN }}{{- end }}:443/open-banking/*/pisp/domestic-vrps",
+    "https://rs.{{- if .Hosts.WildcardFQDN -}}{{ .Hosts.WildcardFQDN }}{{- else -}}{{ .Hosts.BaseFQDN }}{{- end }}:443/open-banking/*/pisp/domestic-vrps/*",
+    "https://rs.{{- if .Hosts.WildcardFQDN -}}{{ .Hosts.WildcardFQDN }}{{- else -}}{{ .Hosts.BaseFQDN }}{{- end }}:443/open-banking/*/pisp/domestic-vrps/*/payment-details"
   ],
   "applicationName": "Open Banking",
   "actionValues": {

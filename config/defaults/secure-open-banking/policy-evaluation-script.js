@@ -212,7 +212,7 @@ function findIntentType(api) {
         return "internationalStandingOrdersIntent"
     } else if (api == "file-payments" || api == "file-payment-consents") {
         return "filePaymentsIntent"
-    } else if (api == "domestic-vrp-payments" || api == "domestic-vrp-payment-consents") {
+    } else if (api == "domestic-vrps" || api == "domestic-vrp-consents") {
         return "domesticVrpPaymentIntent"
     }
 
