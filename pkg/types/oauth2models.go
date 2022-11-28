@@ -47,9 +47,11 @@ type (
 		HashSalt                                string        `json:"hashSalt"`
 		ModuleMessageEnabledInPasswordGrant     bool          `json:"moduleMessageEnabledInPasswordGrant"`
 		TLSCertificateBoundAccessTokensEnabled  bool          `json:"tlsCertificateBoundAccessTokensEnabled"`
+		NbfClaimRequiredInRequestObject         bool          `json:"nbfClaimRequiredInRequestObject"`
 		DisplayNameAttribute                    string        `json:"displayNameAttribute"`
 		SupportedScopes                         []string      `json:"supportedScopes"`
 		ResponseTypeClasses                     []string      `json:"responseTypeClasses"`
+		ExpClaimRequiredInRequestObject         bool          `json:"expClaimRequiredInRequestObject"`
 		TokenCompressionEnabled                 bool          `json:"tokenCompressionEnabled"`
 		AllowedAudienceValues                   []interface{} `json:"allowedAudienceValues"`
 		TLSCertificateRevocationCheckingEnabled bool          `json:"tlsCertificateRevocationCheckingEnabled"`

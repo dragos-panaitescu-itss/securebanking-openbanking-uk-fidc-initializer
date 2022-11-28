@@ -37,6 +37,7 @@
     "hashSalt": "gnsdjcwx1a1acia62voroervtgq0",
     "moduleMessageEnabledInPasswordGrant": false,
     "tlsCertificateBoundAccessTokensEnabled": true,
+    "nbfClaimRequiredInRequestObject": true,
     "displayNameAttribute": "cn",
     "supportedScopes": [
       "openid",
@@ -49,6 +50,7 @@
       "code|org.forgerock.oauth2.core.AuthorizationCodeResponseTypeHandler",
       "id_token|org.forgerock.openidconnect.IdTokenResponseTypeHandler"
     ],
+    "expClaimRequiredInRequestObject": true,
     "tokenCompressionEnabled": false,
     "allowedAudienceValues": [
       "https://{{.Hosts.IgFQDN}}:443/am/oauth2/realms/root/realms/alpha/access_token"
