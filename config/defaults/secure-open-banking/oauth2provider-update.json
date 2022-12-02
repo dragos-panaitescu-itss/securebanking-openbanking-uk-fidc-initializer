@@ -38,6 +38,7 @@
     "moduleMessageEnabledInPasswordGrant": false,
     "tlsCertificateBoundAccessTokensEnabled": true,
     "nbfClaimRequiredInRequestObject": true,
+    "maxDifferenceBetweenRequestObjectNbfAndExp": 60,
     "displayNameAttribute": "cn",
     "supportedScopes": [
       "openid",
