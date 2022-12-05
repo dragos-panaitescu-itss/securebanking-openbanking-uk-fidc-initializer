@@ -12,6 +12,7 @@
   "advancedOAuth2Config": {
     "tlsClientCertificateHeaderFormat": "URLENCODED_PEM",
     "supportedSubjectTypes": [
+      "public",
       "pairwise"
     ],
     "defaultScopes": [],
