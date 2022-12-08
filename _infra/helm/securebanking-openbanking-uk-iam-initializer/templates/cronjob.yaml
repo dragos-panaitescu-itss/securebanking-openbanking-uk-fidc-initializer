@@ -57,12 +57,12 @@ spec:
                   valueFrom:
                     secretKeyRef:
                       name: initializer-secret
-                      key: fr-platform-admin-password
+                      key: cdm-admin-password
                 - name: USERS.FR_PLATFORM_ADMIN_USERNAME
                   valueFrom:
                     secretKeyRef:
                       name: initializer-secret
-                      key: fr-platform-admin-user
+                      key: cdm-admin-user
                 {{- else }}
                 - name: USERS.FR_PLATFORM_ADMIN_PASSWORD
                   valueFrom:
