@@ -10,6 +10,7 @@
     "issueRefreshToken": true
   },
   "advancedOAuth2Config": {
+    "tlsClientCertificateTrustedHeader": "{{.TLS.ClientCertHeaderName}}",
     "tlsClientCertificateHeaderFormat": "URLENCODED_PEM",
     "supportedSubjectTypes": [
       "public",

@@ -35,27 +35,28 @@ type (
 	}
 
 	AdvancedOAuth2Config struct {
-		TLSClientCertificateHeaderFormat              string        `json:"tlsClientCertificateHeaderFormat"`
-		SupportedSubjectTypes                         []string      `json:"supportedSubjectTypes"`
-		DefaultScopes                                 []interface{} `json:"defaultScopes"`
-		MacaroonTokenFormat                           string        `json:"macaroonTokenFormat"`
-		CodeVerifierEnforced                          string        `json:"codeVerifierEnforced"`
-		GrantTypes                                    []string      `json:"grantTypes"`
-		AuthenticationAttributes                      []string      `json:"authenticationAttributes"`
-		TokenSigningAlgorithm                         string        `json:"tokenSigningAlgorithm"`
-		TokenEncryptionEnabled                        bool          `json:"tokenEncryptionEnabled"`
-		HashSalt                                      string        `json:"hashSalt"`
-		ModuleMessageEnabledInPasswordGrant           bool          `json:"moduleMessageEnabledInPasswordGrant"`
-		TLSCertificateBoundAccessTokensEnabled        bool          `json:"tlsCertificateBoundAccessTokensEnabled"`
-		NbfClaimRequiredInRequestObject               bool          `json:"nbfClaimRequiredInRequestObject"`
-		MaxDifferenceBetweenRequestObjectNbfAndExp    int           `json:"maxDifferenceBetweenRequestObjectNbfAndExp"`
-		DisplayNameAttribute                          string        `json:"displayNameAttribute"`
-		SupportedScopes                               []string      `json:"supportedScopes"`
-		ResponseTypeClasses                           []string      `json:"responseTypeClasses"`
-		ExpClaimRequiredInRequestObject               bool          `json:"expClaimRequiredInRequestObject"`
-		TokenCompressionEnabled                       bool          `json:"tokenCompressionEnabled"`
-		AllowedAudienceValues                         []interface{} `json:"allowedAudienceValues"`
-		TLSCertificateRevocationCheckingEnabled       bool          `json:"tlsCertificateRevocationCheckingEnabled"`
+		TlsClientCertificateTrustedHeader          string        `json:"tlsClientCertificateTrustedHeader"`
+		TLSClientCertificateHeaderFormat           string        `json:"tlsClientCertificateHeaderFormat"`
+		SupportedSubjectTypes                      []string      `json:"supportedSubjectTypes"`
+		DefaultScopes                              []interface{} `json:"defaultScopes"`
+		MacaroonTokenFormat                        string        `json:"macaroonTokenFormat"`
+		CodeVerifierEnforced                       string        `json:"codeVerifierEnforced"`
+		GrantTypes                                 []string      `json:"grantTypes"`
+		AuthenticationAttributes                   []string      `json:"authenticationAttributes"`
+		TokenSigningAlgorithm                      string        `json:"tokenSigningAlgorithm"`
+		TokenEncryptionEnabled                     bool          `json:"tokenEncryptionEnabled"`
+		HashSalt                                   string        `json:"hashSalt"`
+		ModuleMessageEnabledInPasswordGrant        bool          `json:"moduleMessageEnabledInPasswordGrant"`
+		TLSCertificateBoundAccessTokensEnabled     bool          `json:"tlsCertificateBoundAccessTokensEnabled"`
+		NbfClaimRequiredInRequestObject            bool          `json:"nbfClaimRequiredInRequestObject"`
+		MaxDifferenceBetweenRequestObjectNbfAndExp int           `json:"maxDifferenceBetweenRequestObjectNbfAndExp"`
+		DisplayNameAttribute                       string        `json:"displayNameAttribute"`
+		SupportedScopes                            []string      `json:"supportedScopes"`
+		ResponseTypeClasses                        []string      `json:"responseTypeClasses"`
+		ExpClaimRequiredInRequestObject            bool          `json:"expClaimRequiredInRequestObject"`
+		TokenCompressionEnabled                    bool          `json:"tokenCompressionEnabled"`
+		AllowedAudienceValues                      []interface{} `json:"allowedAudienceValues"`
+		TLSCertificateRevocationCheckingEnabled    bool          `json:"tlsCertificateRevocationCheckingEnabled"`
 	}
 
 	CoreOIDCConfig struct {

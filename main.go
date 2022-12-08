@@ -81,6 +81,9 @@ func main() {
 	fmt.Println("Attempting to configure AM Global Services Platform")
 	securebanking.ConfigureAmPlatformService(session.Cookie)
 
+	fmt.Println("Attempting to configure Google Secret Store(s)")
+	securebanking.ConfigureGoogleSecretStores(session.Cookie)
+
 	fmt.Println("Attempt PSD2 authentication trees initialization...")
 	securebanking.CreateSecureBankingPSD2AuthenticationTrees()
 	fmt.Println("Attempt to create secure banking remote consent...")

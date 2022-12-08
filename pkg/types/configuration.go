@@ -12,6 +12,7 @@ type Configuration struct {
 	Identity    identity    `mapstructure:"IDENTITY"`
 	Ig          ig          `mapstructure:"IG"`
 	Users       users       `mapstructure:"USERS"`
+	TLS         tls         `mapstructure:"TLS"`
 }
 
 type hosts struct {
@@ -25,16 +26,31 @@ type hosts struct {
 }
 
 type identity struct {
-	AmRealm                      string `mapstructure:"AM_REALM"`
-	IdmClientId                  string `mapstructure:"IDM_CLIENT_ID"`
-	IdmClientSecret              string `mapstructure:"IDM_CLIENT_SECRET"`
-	PolicyClientSecret           string `mapstructure:"POLICY_CLIENT_SECRET"`
-	RemoteConsentId              string `mapstructure:"REMOTE_CONSENT_ID"`
-	ObriSoftwarePublisherAgent   string `mapstructure:"OBRI_SOFTWARE_PUBLISHER_AGENT_NAME"`
-	TestSoftwarePublisherAgent   string `mapstructure:"TEST_SOFTWARE_PUBLISHER_AGENT_NAME"`
-	ServiceAccountPolicyUser     string `mapstructure:"SERVICE_ACCOUNT_POLICY_USER"`
-	ServiceAccountPolicyPassword string `mapstructure:"SERVICE_ACCOUNT_POLICY_PASSWORD"`
-	ServiceAccountPolicyEmail    string `mapstructure:"SERVICE_ACCOUNT_POLICY_EMAIL"`
+	AmRealm                      string              `mapstructure:"AM_REALM"`
+	IdmClientId                  string              `mapstructure:"IDM_CLIENT_ID"`
+	IdmClientSecret              string              `mapstructure:"IDM_CLIENT_SECRET"`
+	PolicyClientSecret           string              `mapstructure:"POLICY_CLIENT_SECRET"`
+	RemoteConsentId              string              `mapstructure:"REMOTE_CONSENT_ID"`
+	ObriSoftwarePublisherAgent   string              `mapstructure:"OBRI_SOFTWARE_PUBLISHER_AGENT_NAME"`
+	TestSoftwarePublisherAgent   string              `mapstructure:"TEST_SOFTWARE_PUBLISHER_AGENT_NAME"`
+	ServiceAccountPolicyUser     string              `mapstructure:"SERVICE_ACCOUNT_POLICY_USER"`
+	ServiceAccountPolicyPassword string              `mapstructure:"SERVICE_ACCOUNT_POLICY_PASSWORD"`
+	ServiceAccountPolicyEmail    string              `mapstructure:"SERVICE_ACCOUNT_POLICY_EMAIL"`
+	GoogleSecretStores           []GoogleSecretStore `mapstructure:"GOOGLE_SECRET_STORES"`
+}
+
+type GoogleSecretStore struct {
+	Name                  string          `mapstructure:"NAME"`
+	ServiceAccount        string          `mapstructure:"SERVICE_ACCOUNT"`
+	Project               string          `mapstructure:"PROJECT"`
+	SecretFormat          string          `mapstructure:"SECRET_FORMAT"`
+	ExpiryDurationSeconds int             `mapstructure:"EXPIRY_DURATION_SECONDS"`
+	SecretMappings        []SecretMapping `mapstructure:"SECRET_MAPPINGS"`
+}
+
+type SecretMapping struct {
+	SecretId string `mapstructure:"SECRET_ID"`
+	Alias    string `mapstructure:"ALIAS"`
 }
 
 type ig struct {
@@ -63,4 +79,8 @@ type paths struct {
 type users struct {
 	FrPlatformAdminUsername string `mapstructure:"FR_PLATFORM_ADMIN_USERNAME"`
 	FrPlatformAdminPassword string `mapstructure:"FR_PLATFORM_ADMIN_PASSWORD"`
+}
+
+type tls struct {
+	ClientCertHeaderName string `mapstructure:"CLIENT_CERT_HEADER_NAME"`
 }
