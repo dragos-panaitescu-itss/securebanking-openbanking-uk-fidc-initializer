@@ -43,15 +43,16 @@ IDENTITY: # Root key for parameter values related with identity platform configu
   REMOTE_CONSENT_ID: secure-open-banking-rcs # Identification of remote consent agent
   OBRI_SOFTWARE_PUBLISHER_AGENT_NAME: OBRI # software publisher agent name
   TEST_SOFTWARE_PUBLISHER_AGENT_NAME: test-publisher # test software publisher agent
-  GOOGLE_SECRET_STORES: # Configure one or more Google Secret Stores
-    NAME: Open Banking Trust Store
-    SERVICE_ACCOUNT: default
-    PROJECT: sbat-dev
-    SECRET_FORMAT: PEM
-    EXPIRY_DURATION_SECONDS: 1800
-    SECRET_MAPPINGS: # Map one or more secrets to the store
-      SECRET_ID: am.services.oauth2.tls.client.cert.authentication
-      ALIAS: oauth2-ob-ca-certs # name of the secret in google secrets manager
+#  Example Google Secrets Configuration, uncomment once: https://github.com/SecureApiGateway/SecureApiGateway/issues/703 is completed
+#  GOOGLE_SECRET_STORES: # Configure one or more Google Secret Stores
+#    NAME: Open Banking Trust Store
+#    SERVICE_ACCOUNT: default
+#    PROJECT: sbat-dev
+#    SECRET_FORMAT: PEM
+#    EXPIRY_DURATION_SECONDS: 1800
+#    SECRET_MAPPINGS: # Map one or more secrets to the store
+#      SECRET_ID: am.services.oauth2.tls.client.cert.authentication
+#      ALIAS: oauth2-ob-ca-certs # name of the secret in google secrets manager
 USERS: # Root key users to be created or to authenticate and authorize flows
   FR_PLATFORM_ADMIN_USERNAME: amadmin # Identity platform Username with admin grants (must exist previously)
   FR_PLATFORM_ADMIN_PASSWORD: replace-me # Identity platform User password with admin grants (must exist previously)
