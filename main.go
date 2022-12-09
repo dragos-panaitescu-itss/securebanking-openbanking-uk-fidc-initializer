@@ -78,8 +78,10 @@ func main() {
 	fmt.Println("Attempting to create AM Validation Service")
 	securebanking.CreateAmValidationService(session.Cookie)
 
-	fmt.Println("Attempting to configure AM Global Services Platform")
-	securebanking.ConfigureAmPlatformService(session.Cookie)
+	if common.Config.Environment.Type != "FIDC" {
+		fmt.Println("Attempting to configure AM Global Services Platform")
+		securebanking.ConfigureAmPlatformService(session.Cookie)
+	}
 
 	fmt.Println("Attempting to configure Google Secret Store(s)")
 	securebanking.ConfigureGoogleSecretStores(session.Cookie)

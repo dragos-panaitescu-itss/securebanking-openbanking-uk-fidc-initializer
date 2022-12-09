@@ -74,6 +74,7 @@ type paths struct {
 	ConfigBaseDirectory    string `mapstructure:"CONFIG_BASE_DIRECTORY"`
 	ConfigSecureBanking    string `mapstructure:"CONFIG_SECURE_BANKING"`
 	ConfigIdentityPlatform string `mapstructure:"CONFIG_IDENTITY_PLATFORM"`
+	ConfigAuthHelper       string `mapstructure:"CONFIG_AUTH_HELPER"`
 }
 
 type users struct {

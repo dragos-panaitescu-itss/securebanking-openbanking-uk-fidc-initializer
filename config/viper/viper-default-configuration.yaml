@@ -15,6 +15,7 @@ ENVIRONMENT: # Root key to define the environment program properties
     CONFIG_BASE_DIRECTORY: config/defaults/ # Base configuration path folder
     CONFIG_SECURE_BANKING: config/defaults/secure-open-banking/ # Path folder for secure banking
     CONFIG_IDENTITY_PLATFORM: config/defaults/identity-platform/ # Path folder for generic platform configuration
+    CONFIG_AUTH_HELPER: config/defaults/auth-helper/  # Path for json to help with auth on FIdC platform
 HOSTS:
   BASE_FQDN: dev.forgerock.financial
   WILDCARD_FQDN: "*.forgerock.financial" # If set allows resources in AISP/PISP access to RC/RCS in all subdomains
