@@ -23,6 +23,10 @@ func CreatePolicyServiceUser() {
 	serviceUser := &types.ServiceUser{}
 	common.Unmarshal(common.Config.Environment.Paths.ConfigSecureBanking+"create-policy-service-user.json", &common.Config, serviceUser)
 	path := "/openidm/managed/user/?_action=create"
+	//FIDC IDM default user managed objects use a different naming pattern <realm>_user Eg:alpha_user
+	if common.Config.Environment.Type == "FIDC" {
+		path = "/openidm/managed/" + common.Config.Identity.AmRealm + "_user/?_action=create"
+	}
 	_, s := httprest.Client.Post(path, serviceUser, map[string]string{
 		"Accept":       "*/*",
 		"Content-Type": "application/json",
